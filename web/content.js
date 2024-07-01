@@ -62,7 +62,7 @@ async function speakTransactions(transactions) {
 function readVietnameseNumber(number) {
   const units = ['', 'nghin', 'trieu', 'ty'];
   const digits = ['khong', 'mot', '2', '3', '4', '5', '6', '7', '8', '9'];
-  
+
   if (number === 0) return ['0'];
   const result = [];
   let unitIndex = 0;
@@ -121,15 +121,15 @@ function readThreeDigits(number) {
 
 // Hàm định dạng thời gian
 function formatDate(timestamp) {
-  
+
   const date = new Date(timestamp * 1000);
-  
+
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-  
+
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
@@ -144,10 +144,10 @@ function showTransactionDialog(transactions) {
   // Tạo dialog mới
   const dialog = document.createElement('div');
   dialog.className = 'vietqr-dialog';
-  
+
   // Lấy giao dịch mới nhất (giả sử là giao dịch đầu tiên trong mảng)
   const transaction = transactions[0];
-  
+
   // Tạo nội dung HTML cho dialog
   const popupHTML = `
     <div class="popup">
@@ -179,30 +179,30 @@ function showTransactionDialog(transactions) {
       </div>
     </div>
   `;
-  
+
   dialog.innerHTML = popupHTML;
   document.body.appendChild(dialog);
-  
+
   // Xử lý sự kiện đóng popup
   const closeBtn = dialog.querySelector('.close');
-  closeBtn.addEventListener('click', function() {
+  closeBtn.addEventListener('click', function () {
     dialog.remove();
   });
 
   // Xử lý sự kiện cho nút đóng ở dưới
   const homeBtnBot = dialog.querySelector('.close-btn-bottom');
-  
-  homeBtnBot.addEventListener('click', function() {
+
+  homeBtnBot.addEventListener('click', function () {
     dialog.remove();
   });
-  
+
 
   // Gọi hàm đọc số tiền
   speakTransactions([transaction]);
 }
 
 // Lắng nghe tin nhắn từ background script
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "showDialog") {
     showTransactionDialog(request.transactions);
   }

@@ -6,13 +6,13 @@
     "content_security_policy": {
         "extension_pages": "script-src 'self' ; object-src 'self'"
     },
-    "permissions": [
-        "alarms",
-        "storage"
-    ],
     "host_permissions": [
         "https://api.vietqr.org/*",
         "https://*.kiotviet.vn/*"
+    ],
+    "permissions": [
+        "alarms",
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
@@ -20,10 +20,13 @@
     "content_scripts": [
         {
             "matches": [
-                "<all_urls>"
+                "https://*.kiotviet.vn/sale/*"
             ],
             "js": [
                 "content.js"
+            ],
+            "css": [
+                "dialog.css"
             ]
         }
     ],

@@ -45,8 +45,6 @@ function checkForNewTransactions() {
         });
         // Cập nhật lastTransactions với dữ liệu mới nhất
         lastTransactions = data;
-        console.log("new trans");
-        console.log(data);
       }
     })
     .catch(error => console.error('Error:', error));
