@@ -6,6 +6,37 @@
     "content_security_policy": {
         "extension_pages": "script-src 'self' ; object-src 'self'"
     },
+    "permissions": [
+        "alarms",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://api.vietqr.org/*",
+        "https://*.kiotviet.vn/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "audio/*"
+            ],
+            "matches": [
+                "https://*.kiotviet.vn/*"
+            ]
+        }
+    ],
     "action": {
         "default_popup": "index.html",
         "default_icon": {
