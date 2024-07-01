@@ -34,7 +34,7 @@ class _PhoneInputWidget extends State<PhoneInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.width,
       height: widget.height,
       child: Column(

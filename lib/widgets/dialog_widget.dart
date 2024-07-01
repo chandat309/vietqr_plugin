@@ -247,4 +247,81 @@ class DialogWidget {
           );
         });
   }
+
+  void openMsgDialog({required String title, required String message}) async {
+    return await showDialog(
+        barrierDismissible: true,
+        context: NavigationService.navigatorKey.currentContext!,
+        builder: (BuildContext context) {
+          return Material(
+            color: AppColor.TRANSPARENT,
+            child: Center(
+              child: Container(
+                width: 250,
+                height: 320,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    Image.asset(
+                      'assets/images/ic-notice.png',
+                      width: 80,
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 5)),
+                    Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                    const Spacer(),
+                    ButtonWidget(
+                      text: 'Trang chủ',
+                      height: 40,
+                      width: 200,
+                      borderRadius: 5,
+                      fontSize: 13,
+                      textColor: AppColor.WHITE,
+                      bgColor: AppColor.BLUE_TEXT,
+                      function: () async {
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      },
+                    ),
+                    const Padding(padding: EdgeInsets.only(bottom: 5)),
+                    ButtonWidget(
+                      text: 'Đóng',
+                      height: 40,
+                      width: 200,
+                      borderRadius: 5,
+                      fontSize: 13,
+                      textColor: AppColor.BLACK,
+                      bgColor: AppColor.GREY_VIEW,
+                      function: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Padding(padding: EdgeInsets.only(bottom: 20)),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
 }

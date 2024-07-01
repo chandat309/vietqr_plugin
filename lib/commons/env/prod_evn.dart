@@ -15,4 +15,9 @@ class ProdEnv implements Env {
   String getUrl() {
     return 'https://api.vietqr.org/vqr/';
   }
+
+  @override
+  String getImagePrefixUrl() {
+    return 'https://api.vietqr.org/vqr/api/images/';
+  }
 }

@@ -15,7 +15,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String imgId = UserHelper.instance.getAccountInformation().imgId;
-    print('imgId: $imgId');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,
@@ -65,20 +64,10 @@ class HomeView extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(top: 20),
             ),
-            const Text(
-              'Danh sách tài khoản ngân hàng',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-            ),
             Expanded(
               child: BankListWidget(
                 width: width,
-                height: 510,
+                height: 450,
               ),
             ),
           ],

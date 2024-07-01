@@ -15,4 +15,9 @@ class StgEnv implements Env {
   String getUrl() {
     return 'https://dev.vietqr.org/vqr/api';
   }
+
+  @override
+  String getImagePrefixUrl() {
+    return 'https://dev.vietqr.org/vqr/api/images/';
+  }
 }

@@ -14,20 +14,24 @@ class LoginView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,
-      body: SizedBox(
+      body: Container(
         width: width,
         height: height,
-        child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          // physics: const NeverScrollableScrollPhysics(),
+          // shrinkWrap: true,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
               padding: EdgeInsets.only(top: 30),
             ),
-            UnconstrainedBox(
-              child: Image.asset(
-                'assets/images/logo-vietqr.png',
-                width: 150,
+            Center(
+              child: UnconstrainedBox(
+                child: Image.asset(
+                  'assets/images/logo-vietqr.png',
+                  width: 150,
+                ),
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 30)),

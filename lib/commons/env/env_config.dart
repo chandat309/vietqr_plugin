@@ -18,6 +18,10 @@ class EnvConfig {
     return _env.getUrl();
   }
 
+  static String getImagePrefixUrl() {
+    return _env.getImagePrefixUrl();
+  }
+
   static EnvType getEnv() {
     // const EnvType env = EnvType.STG;
     const EnvType env = EnvType.PROD;

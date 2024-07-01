@@ -5,4 +5,5 @@ abstract class Env {
   String getBaseUrl();
   String getBankUrl();
   String getUrl();
+  String getImagePrefixUrl();
 }

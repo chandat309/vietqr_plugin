@@ -1,3 +1,5 @@
+import 'package:viet_qr_plugin/enums/text_data.dart';
+
 class StringUtils {
   const StringUtils._privateConsrtructor();
 
@@ -17,5 +19,15 @@ class StringUtils {
       }
       return numericString;
     }
+  }
+
+  String removeDiacritic(String input) {
+    String result = '';
+    for (int i = 0; i < input.length; i++) {
+      final char = input[i];
+      final replacedChar = diacriticsMap[char] ?? char;
+      result += replacedChar;
+    }
+    return result;
   }
 }

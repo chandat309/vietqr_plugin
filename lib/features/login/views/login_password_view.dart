@@ -21,12 +21,14 @@ class LoginPasswordView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,
-      body: SizedBox(
+      body: Container(
         width: width,
         height: height,
-        child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // physics: const NeverScrollableScrollPhysics(),
+          // padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const Padding(
               padding: EdgeInsets.only(top: 10),
