@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e2ea91-f823-4204-b163-d2b06adf05a1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/.filecache" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/.filecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/flutter_assets.d" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/flutter_assets.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/web_release_bundle.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/5389598c2a36d064db55a8edf57e320f/web_release_bundle.stamp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/web/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/flutter_bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/web/flutter_bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/flutter_service_worker.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/web/flutter_service_worker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/web/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/background.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,18 +45,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "RudomotojiNguyen"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;RudomotojiNguyen&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/duchieupham/vietqr_plugin.git",
-    "accountId": "cff9a105-302f-421d-bc2f-a7c8dcd25eb2"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/duchieupham/vietqr_plugin.git&quot;,
+    &quot;accountId&quot;: &quot;cff9a105-302f-421d-bc2f-a7c8dcd25eb2&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -68,27 +76,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.main.dart.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/chrome__plugin",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/admin/Desktop/work/vietQR/vietqr_plugin/web",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "dart.settings",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.main.dart.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/chrome__plugin&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/admin/Desktop/work/vietQR/vietqr_plugin/web&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/web" />
     </key>
   </component>
