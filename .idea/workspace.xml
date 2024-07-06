@@ -1,5 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a0e2ea91-f823-4204-b163-d2b06adf05a1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/js/main.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/services/js/js_interop_services.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/0.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/10.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/3.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/4.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/5.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/6.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/7.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/8.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/9.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/dong.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/le.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/linh.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/mot.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/muoi.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/nghin.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/tram.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/trieu.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/audio/ty.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/background.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/content.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/dialog.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/images/icon-128.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/images/icon-16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/images/icon-32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/images/icon-48.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/.filecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/app.dill" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/app.dill.deps" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/dart2js.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/dart2js.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/flutter_assets.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/gen_localizations.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/main.dart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/main.dart.js.deps" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/outputs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/service_worker.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_entrypoint.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_plugin_registrant.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_release_bundle.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_resources.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_service_worker.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/f3c1565a477d756ae8f15aaf65a35dbd/web_static_assets.stamp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/.last_build_id" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/AssetManifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/FontManifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/NOTICES" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/bg-qr-vqr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-avatar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-back-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-back.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-copy-blue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-napas247.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/ic-viet-qr-small.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/logo-register-user.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/logo-vietqr-small-hor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/assets/images/logo-vietqr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/fonts/MaterialIcons-Regular.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/packages/fluttertoast/assets/toastify.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/assets/packages/fluttertoast/assets/toastify.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/canvaskit/canvaskit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/canvaskit/canvaskit.wasm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/canvaskit/profiling/canvaskit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/canvaskit/profiling/canvaskit.wasm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/flutter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/flutter_service_worker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/icons/chromextension128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/icons/chromextension16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/icons/chromextension32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/icons/chromextension48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/main.dart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/web/version.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/commons/configurations/theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/commons/configurations/theme.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/widgets/bank_list_widgets.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/widgets/bank_list_widgets.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/login/views/login_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/login/views/login_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/qr/widgets/viet_qr_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/qr/widgets/viet_qr_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viet_qr_plugin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/viet_qr_plugin.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/manifest.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="main.dart" pinned="false" current-in-tab="true">
@@ -13,24 +120,132 @@
       </file>
     </leaf>
   </component>
-  <component name="ToolWindowManager">
-    <editor active="true" />
-    <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-    </layout>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "RudomotojiNguyen"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/duchieupham/vietqr_plugin.git",
+    "accountId": "cff9a105-302f-421d-bc2f-a7c8dcd25eb2"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2irJci2VFxfh7eIx1udFmek4gRK" />
+  <component name="ProjectReloadState">
+    <option name="STATE" value="1" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-    </navigator>
+    <navigator currentView="ProjectPane" proportions="" version="1" />
     <panes>
       <pane id="ProjectPane">
         <option name="show-excluded-files" value="false" />
       </pane>
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="dart.analysis.tool.window.force.activate" value="true" />
-    <property name="show.migrate.to.gradle.popup" value="false" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Flutter.main.dart.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/chrome__plugin",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/admin/Desktop/work/vietQR/vietqr_plugin/web",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a0e2ea91-f823-4204-b163-d2b06adf05a1" name="Changes" comment="" />
+      <created>1720242843708</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1720242843708</updated>
+      <workItem from="1720242845369" duration="17363000" />
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="GitHub.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/assets/js/main.js</url>
+          <line>9</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/assets/js/main.js</url>
+          <line>26</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

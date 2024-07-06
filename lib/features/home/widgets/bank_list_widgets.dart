@@ -63,8 +63,9 @@ class _BankListWidget extends State<BankListWidget> {
               itemCount: _banks.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
+                BankAccountDTO bank = _banks[index];
                 return Hero(
-                  tag: _banks[index].id,
+                  tag: bank.id,
                   flightShuttleBuilder: (flightContext, animation,
                       flightDirection, fromHeroContext, toHeroContext) {
                     // Tạo và trả về một widget mới để tham gia vào hiệu ứng chuyển động
@@ -86,12 +87,12 @@ class _BankListWidget extends State<BankListWidget> {
                   child: InkWell(
                     onTap: () {
                       VietQRWidgetDTO dto = VietQRWidgetDTO(
-                        qrCode: _banks[index].qrCode,
-                        bankAccount: _banks[index].bankAccount,
-                        userBankName: _banks[index].userBankName,
-                        bankName: _banks[index].bankName,
-                        bankShortName: _banks[index].bankShortName,
-                        imgId: _banks[index].imgId,
+                        qrCode: bank.qrCode,
+                        bankAccount: bank.bankAccount,
+                        userBankName: bank.userBankName,
+                        bankName: bank.bankName,
+                        bankShortName: bank.bankShortName,
+                        imgId: bank.imgId,
                         amount: '',
                         content: '',
                       );
@@ -99,7 +100,7 @@ class _BankListWidget extends State<BankListWidget> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => QRBankView(
-                            widgetKey: _banks[index].id,
+                            widgetKey: bank.id,
                             dto: dto,
                           ),
                         ),
@@ -117,87 +118,83 @@ class _BankListWidget extends State<BankListWidget> {
                         borderRadius: BorderRadius.circular(5),
                         color: AppColor.WHITE,
                         border: Border.all(
-                          color: _banks[index].bankColor ?? AppColor.GREY_VIEW,
+                          color: bank.bankColor ?? AppColor.GREY_VIEW,
                         ),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: widget.width,
-                            height: 30,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColor.WHITE,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _banks[index].bankColor ??
-                                          AppColor.GREY_VIEW,
-                                    ),
-                                    // shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.contain,
-                                      image: ImageUtils.instance
-                                          .getImageNetWork(_banks[index].imgId),
-                                    ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: AppColor.WHITE,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: bank.bankColor ??
+                                        AppColor.GREY_VIEW,
+                                  ),
+                                  // shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: ImageUtils.instance
+                                        .getImageNetWork(bank.imgId),
                                   ),
                                 ),
-                                const Padding(
-                                    padding: EdgeInsets.only(left: 10)),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _banks[index].bankShortName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                        ),
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.only(left: 10)),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      bank.bankShortName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
                                       ),
-                                      Text(
-                                        _banks[index].bankName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                        ),
+                                    ),
+                                    Text(
+                                      bank.bankName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           const Padding(padding: EdgeInsets.only(top: 10)),
                           _buildDescriptionWidget(
                             width: widget.width,
                             title: 'Tài khoản',
-                            description: _banks[index].bankAccount,
+                            description: bank.bankAccount,
                           ),
                           _buildDescriptionWidget(
                             width: widget.width,
                             title: 'Tên TK',
                             description:
-                                _banks[index].userBankName.toUpperCase(),
+                                bank.userBankName.toUpperCase(),
                           ),
-                          (_banks[index].bankTypeStatus == 1)
+                          (bank.bankTypeStatus == 1)
                               ? _buildDescriptionWidget(
                                   width: widget.width,
                                   title: 'Trạng thái',
-                                  description: (_banks[index].isAuthenticated)
+                                  description: (bank.isAuthenticated)
                                       ? 'Đã liên kết'
                                       : 'Chưa liên kết',
-                                  color: (_banks[index].isAuthenticated)
+                                  color: (bank.isAuthenticated)
                                       ? AppColor.BLUE_TEXT
                                       : AppColor.BLACK,
                                 )
