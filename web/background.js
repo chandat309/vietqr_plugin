@@ -115,7 +115,7 @@ async function checkForNewTransactions() {
 }
 
 // Tạo một alarm để chạy hàm kiểm tra mỗi 5 giây (1/12 phút)
-chrome.alarms.create('checkTransactions', {periodInMinutes: 1 / 4});
+chrome.alarms.create('checkTransactions', {periodInMinutes: 1 / 12});
 
 // Lắng nghe sự kiện alarm
 chrome.alarms.onAlarm.addListener((alarm) => {
