@@ -12,10 +12,10 @@ async function checkForNewTransactions() {
     // Định dạng ngày cho URL (YYYY-MM-DD)
     const dateString = `${year}-${month}-${day}`;
     // Tạo URL API với ngày hôm nay
-    const url = `https://api.vietqr.org/vqr/api/transactions/list?bankId=6a261989-ff95-4497-b5b8-a51135593e91&type=9&offset=0&value=&from=${dateString}%2000:00:00&to=${dateString}%2023:59:59`;
+    const url = `https://api.vietqr.org/vqr/api/transactions/list?bankId=b93246bb-3b94-492e-a774-5ef50c4b619d&type=5&offset=0&value=1&from=${dateString}%2000:00:00&to=${dateString}%2023:59:59`;
 
     // Token xác thực Bearer
-    const Bearer = 'eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbklkIjoic3lzdGVtLWFkbWluLTAxIiwibmFtZSI6IlN1cGVyIEFkbWluIiwicm9sZSI6MSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTcyMDI1MjIxNCwiZXhwIjoxNzIxMTUyMjE0fQ.DsAIv7JTuSI84NqH4pjr4PjBbM-7Tz61UslW6oUjJezMp8MUH3QAm3ui4QnHnHIsjAXz21-Bug6D0uWeAUt0WA';
+    const Bearer = 'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOiI2NDhkY2EwNi00ZjcyLTRkZjgtYjk4Zi00MjlmNDc3N2ZiZGEiLCJwaG9uZU5vIjoiMDM3MzU2ODk0NCIsImZpcnN0TmFtZSI6IkxpbmgiLCJtaWRkbGVOYW1lIjoiTmjhuq10IiwibGFzdE5hbWUiOiJOZ3V54buFbiIsImJpcnRoRGF0ZSI6IjI2LzAyLzIwMDEiLCJnZW5kZXIiOjEsImFkZHJlc3MiOiJTYWkgZ29uIiwiZW1haWwiOiJ2YW5wcXNlMTUwNTA1QGZwdC5lZHUudm4iLCJpbWdJZCI6IiIsImNhcnJpZXJUeXBlSWQiOiIxIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTcyMDM2NzEyNn0.dzUs9zImK2Gu0-zmaIZVKBcOMJfM97LngRPDZ5nQunK5d8XJpdchWDHyLM-7jxbVNVs7zh5PgsmydkfqrCFR2g';
 
     // Gọi API để lấy danh sách giao dịch
     fetch(url, {
@@ -37,16 +37,16 @@ async function checkForNewTransactions() {
             if (newTransactions.length > 0) {
                 // Tìm tất cả các tab đang mở trang kiotviet.vn
                 try {
-                    let tabs = await chrome.tabs.query({url: "https://*.kiotviet.vn/*"});
+                    let tabs = await chrome.tabs.query({ url: "https://*.kiotviet.vn/*" });
                     // Cập nhật lastTransactions với dữ liệu mới nhất
                     lastTransactions = data;
                     tabs.forEach((tab) => {
                         try {
                             chrome.scripting.executeScript({
-                                target: {tabId: tab.id},
+                                target: { tabId: tab.id },
                                 files: ["content.js"]  // Replace with your content script file name
                             }, () => {
-                                chrome.tabs.sendMessage(tab.id, {action: "showDialog", transactions: newTransactions});
+                                chrome.tabs.sendMessage(tab.id, { action: "showDialog", transactions: newTransactions });
                             });
                         } catch (error) {
                             console.error('Error injecting script:', error);
@@ -61,7 +61,7 @@ async function checkForNewTransactions() {
 }
 
 // Tạo một alarm để chạy hàm kiểm tra mỗi 5 giây (1/12 phút)
-chrome.alarms.create('checkTransactions', {periodInMinutes: 1 / 12});
+chrome.alarms.create('checkTransactions', { periodInMinutes: 1 / 12 });
 
 // Lắng nghe sự kiện alarm
 chrome.alarms.onAlarm.addListener((alarm) => {
