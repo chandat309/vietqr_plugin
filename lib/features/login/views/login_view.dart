@@ -43,11 +43,9 @@ class LoginView extends StatelessWidget {
                 height: 1.25,
               ),
             ),
-            Expanded(
-              child: PhoneInputWidget(
-                width: width,
-                height: 320,
-              ),
+            PhoneInputWidget(
+              width: width,
+              height: 320,
             ),
             const Padding(
               padding: EdgeInsets.only(bottom: 50),

@@ -64,12 +64,11 @@ class LoginPasswordView extends StatelessWidget {
                 height: 1.25,
               ),
             ),
-            Expanded(
-              child: PaswordInputWidget(
-                width: width,
-                height: 350,
-                phoneNo: infoUser.phoneNo ?? '',
-              ),
+
+            PaswordInputWidget(
+              width: width,
+              height: 350,
+              phoneNo: infoUser.phoneNo ?? '',
             ),
             const Padding(
               padding: EdgeInsets.only(bottom: 50),

@@ -2,7 +2,45 @@
     "name": "VietQR",
     "description": "VietQR",
     "version": "0.0.0.2",
+    "description": "Tiện ích VietQR",
+    "version": "0.0.0.1",
     "manifest_version": 3,
+    "permissions": [
+        "alarms",
+        "storage",
+        "scripting",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "https://api.vietqr.org/*",
+        "https://*.kiotviet.vn/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.kiotviet.vn/sale/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "dialog.css"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "audio/*"
+            ],
+            "matches": [
+                "https://*.kiotviet.vn/*"
+            ]
+        }
+    ],
     "content_security_policy": {
         "extension_pages": "script-src 'self' ; object-src 'self'"
     },

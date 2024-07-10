@@ -133,14 +133,14 @@ class VietQRWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Padding(padding: EdgeInsets.only(top: paddingTopQR)),
-                QrImage(
+                QrImageView(
                   size: qrWidth,
                   data: dto.qrCode,
                   version: QrVersions.auto,
                   embeddedImage:
                       const AssetImage('assets/images/ic-viet-qr-small.png'),
-                  embeddedImageStyle: QrEmbeddedImageStyle(
-                    size: const Size(
+                  embeddedImageStyle: const QrEmbeddedImageStyle(
+                    size: Size(
                       qrLogoMidSize,
                       qrLogoMidSize,
                     ),
