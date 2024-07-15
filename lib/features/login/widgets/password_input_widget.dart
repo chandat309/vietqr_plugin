@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_js/flutter_js.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/home/views/home_view.dart';
 import 'package:viet_qr_plugin/features/login/repositories/login_repository.dart';
@@ -31,7 +30,7 @@ class PaswordInputWidget extends StatefulWidget {
 }
 
 class _PasswordInputWidget extends State<PaswordInputWidget> {
-  JavascriptRuntime jsRuntime = getJavascriptRuntime();
+  // JavascriptRuntime jsRuntime = getJavascriptRuntime();
   bool _isEnableButton = false;
   bool _isErrPassword = false;
 
@@ -121,7 +120,7 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
         setState(() {
           _isErrPassword = false;
         });
-        await loadAndExecuteJs();
+        // await loadAndExecuteJs();
         //navigate to home
         print('navigate to home');
         Navigator.push(
@@ -144,14 +143,14 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
     }
   }
 
-  Future<void> loadAndExecuteJs() async {
-    String jsCode =
-        await DefaultAssetBundle.of(context).loadString('web/background.js');
-    jsRuntime.evaluate(jsCode);
+  // Future<void> loadAndExecuteJs() async {
+  //   String jsCode =
+  //       await DefaultAssetBundle.of(context).loadString('web/background.js');
+  //   jsRuntime.evaluate(jsCode);
 
-    String bearerToken = AccountHelper.instance.getToken();
-    var result =
-        await jsRuntime.evaluate('checkForNewTransactions("$bearerToken");');
-    print(result.stringResult);
-  }
+  //   String bearerToken = AccountHelper.instance.getToken();
+  //   var result =
+  //       await jsRuntime.evaluate('checkForNewTransactions("$bearerToken");');
+  //   print(result.stringResult);
+  // }
 }
