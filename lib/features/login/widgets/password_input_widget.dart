@@ -3,12 +3,15 @@ import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/home/views/home_view.dart';
 import 'package:viet_qr_plugin/features/login/repositories/login_repository.dart';
 import 'package:viet_qr_plugin/models/account_login_dto.dart';
+import 'package:viet_qr_plugin/services/js/js_interop_services.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper%20copy.dart';
+import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/encrypt_utils.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
 import 'package:viet_qr_plugin/widgets/button_widget.dart';
 import 'package:viet_qr_plugin/widgets/dialog_widget.dart';
 import 'package:viet_qr_plugin/widgets/pin_code_input.dart';
+import 'dart:js' as js;
 
 class PaswordInputWidget extends StatefulWidget {
   final double width;
@@ -89,7 +92,22 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
             bgColor:
                 (_isEnableButton) ? AppColor.BLUE_TEXT : AppColor.GREY_BUTTON,
             function: () async {
-              await login(widget.phoneNo, widget.passwordController.text);
+              await login(widget.phoneNo, widget.passwordController.text).then(
+                (value) {
+                  if (value) {
+                    // final JsInteropService jsInteropService =
+                    //     JsInteropService();
+                    // jsInteropService
+                    //     .setToken();
+                    // jsInteropService.setUserId(UserHelper.instance.getUserId());
+                    // jsInteropService.connectWebSocket();
+
+                    // setToken(AccountHelper.instance.getToken());
+                    // setUserId(UserHelper.instance.getUserId());
+                    // connectWebSocket();
+                  }
+                },
+              );
             },
           )
         ],
@@ -97,7 +115,7 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
     );
   }
 
-  Future<void> login(String phoneNo, String password) async {
+  Future<bool> login(String phoneNo, String password) async {
     try {
       String passwordEncrypted =
           EncryptUtils.instance.encrypted(phoneNo, password);
@@ -120,6 +138,10 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
         setState(() {
           _isErrPassword = false;
         });
+        js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
+        js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
+        js.context.callMethod('connectWebSocket');
+
         // await loadAndExecuteJs();
         //navigate to home
         print('navigate to home');
@@ -129,6 +151,7 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
             builder: (_) => HomeView(),
           ),
         );
+        return true;
       } else {
         //notify wrong password
         print('wrong password');
@@ -137,10 +160,12 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
           widget.passwordFocus.requestFocus();
           _isErrPassword = true;
         });
+        return false;
       }
     } catch (e) {
       LOG.error(e.toString());
     }
+    return false;
   }
 
   // Future<void> loadAndExecuteJs() async {

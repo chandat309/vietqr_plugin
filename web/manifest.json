@@ -9,11 +9,13 @@
         "alarms",
         "storage",
         "scripting",
-        "activeTab"
+        "activeTab",
+        "declarativeNetRequestWithHostAccess"
     ],
     "host_permissions": [
         "https://api.vietqr.org/*",
-        "https://*.kiotviet.vn/*"
+        "https://*.kiotviet.vn/*",
+        "*://api.vietqr.org/vqr/"
     ],
     "background": {
         "service_worker": "background.js"

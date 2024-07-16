@@ -6,6 +6,7 @@ import 'package:viet_qr_plugin/models/account_information_dto.dart';
 import 'package:viet_qr_plugin/models/account_login_dto.dart';
 import 'package:viet_qr_plugin/models/info_user_dto.dart';
 import 'package:viet_qr_plugin/models/response_message_dto.dart';
+import 'package:viet_qr_plugin/services/js/js_interop_services.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper%20copy.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
@@ -72,6 +73,7 @@ class LoginRepository {
         Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
         AccountInformationDTO accountInformationDTO =
             AccountInformationDTO.fromJson(decodedToken);
+
         await AccountHelper.instance.setFcmToken(fcmToken);
         await AccountHelper.instance.setToken(token);
         await AccountHelper.instance.setTokenFree('');
