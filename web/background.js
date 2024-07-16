@@ -1,54 +1,30 @@
-// Mảng lưu trữ các giao dịch đã xử lý trước đó
 
-let bearerToken = null;
-let idUser = null;
+let ws;
 
 async function setUserId(userId) {
-  idUser = userId;
+  // idUser = userId;
+  await chrome.storage.local.set({ idUser: userId });
   // console.log("UserId:", userId);
 }
 
 async function setToken(token) {
-  bearerToken = token;
+  // bearerToken = token;
+  await chrome.storage.local.set({ bearerToken: token });
   // console.log("Bearer:", bearerToken);
 }
 
-function convertCurrencyToText(amount) {
-  // Convert the number to a string and add " đồng" (Vietnamese currency unit)
-  return "Cảm ơn quý khách đã thanh toán " + amount.toString() + " đồng";
-}
-
-function onSpeak(amount) {
-  // Remove commas from the input for proper conversion
-  const currencyAmount = amount.replace(/,/g, "");
-
-  // Convert the currency amount to a spoken text
-  const speechText = convertCurrencyToText(currencyAmount);
-  console.log("Amount:", speechText);
-
-  // Create a new SpeechSynthesisUtterance object
-  const utterance = new SpeechSynthesisUtterance(speechText);
-
-  // Set the language to Vietnamese
-  utterance.lang = "vi-VN";
-
-  // Speak the text
-  window.speechSynthesis.speak(utterance);
-  console.log("TTS");
-}
-
-async function connectWebSocket() {
-  if (!idUser) {
+async function connectWebSocket(userId, token) {
+  if (!userId) {
     console.error("UserId is not set");
     return;
   }
-  const url = `wss://api.vietqr.org/vqr/socket?userId=${idUser}`;
-  const ws = new WebSocket(url);
+  const url = `wss://api.vietqr.org/vqr/socket?userId=${userId}`;
+  ws = new WebSocket(url);
 
   ws.onopen = () => {
     console.log("WebSocket connection opened");
-    if (bearerToken) {
-      ws.send(JSON.stringify({ type: "auth", token: bearerToken }));
+    if (token) {
+      ws.send(JSON.stringify({ type: "auth", token: token }));
     }
   };
 
@@ -72,13 +48,13 @@ async function connectWebSocket() {
                 action: "showDialog",
                 transactions: message,
               });
+              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
             }
           );
         } catch (error) {
           console.error("Error injecting script:", error);
         }
       });
-      onSpeak(message.amount)
     }
   };
 
@@ -91,9 +67,69 @@ async function connectWebSocket() {
   };
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  connectWebSocket();
+async function logoutUser() {
+  await chrome.storage.local.remove(["idUser", "bearerToken"]);
+  // await chrome.storage.local.set({ idUser: null });
+  // await chrome.storage.local.set({ bearerToken: null });
+  // listenWss();
+}
+
+async function listenWss() {
+  const storage = await chrome.storage.local.get(["idUser", "bearerToken"]);
+  const idUser = storage.idUser;
+  const bearerToken = storage.bearerToken;
+  if (!idUser) {
+    if (ws) {
+      if (
+        ws.readyState === WebSocket.OPEN ||
+        ws.readyState === WebSocket.CONNECTING
+      ) {
+        ws.close();
+        console.log("WebSocket is closed");
+      }
+    }
+  } else {
+    if (!ws || ws.readyState === WebSocket.CLOSED) {
+      console.log("WebSocket is closed, reconnecting...");
+      connectWebSocket(idUser, bearerToken);
+    } else {
+      // console.log("WebSocket is open, no need to reconnect.");
+    }
+  }
+  setTimeout(listenWss, 1000);
+}
+
+chrome.runtime.onInstalled.addListener(async () => {
+  listenWss();
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "speak") {
+    const speechText = request.text;
+    let utterance = new SpeechSynthesisUtterance(speechText);
+    utterance.lang = "vi-VN";
+    window.speechSynthesis.speak(utterance);
+    sendResponse({ status: "spoken" });
+  }
+});
+
+// chrome.runtime.onStartup.addListener(() => {
+//   console.log("Browser startup detected");
+//   listenWss();
+// });
+
+// chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+//   console.log("Message received:", request);
+//   if (request.action === 'logout') {
+//     if (ws) {
+//       ws.close();
+//       console.log("WebSocket connection closed due to logout");
+//     }
+
+//     await chrome.storage.local.remove(['idUser', 'bearerToken']);
+//     sendResponse({ status: 'WebSocket closed and tokens reset' });
+//   }
+// });
 
 // connectWebSocket();
 
@@ -166,46 +202,3 @@ async function checkForNewTransactions() {
     })
     .catch((error) => console.error("Error:", error));
 }
-
-// // Tạo một alarm để chạy hàm kiểm tra mỗi 5 giây (1/12 phút)
-// // chrome.alarms.create('checkTransactions', { periodInMinutes: 1 / 12 });
-
-// // // Lắng nghe sự kiện alarm
-// // chrome.alarms.onAlarm.addListener((alarm) => {
-// //     // Nếu là alarm 'checkTransactions', gọi hàm kiểm tra
-// //     if (alarm.name === 'checkTransactions') {
-// //         checkForNewTransactions();
-// //     }
-// // });
-
-// // Chạy hàm kiểm tra lần đầu khi script được tải
-// checkForNewTransactions();
-
-// background.js
-// background.js
-// const triggerSetToken = (token) => {
-//     if (window._setToken) {
-//         window._setToken(token);
-//     } else {
-//         console.error('Function _setToken is not defined');
-//     }
-// }
-
-// const logUserId = () => {
-//     if (window._setUserId) {
-//         window._setUserId();
-//     } else {
-//         console.error('Function _setUseId is not defined');
-//     }
-// }
-
-// const triggerConnectWebSocket = () => {
-//     if (window._connectWebSocket) {
-//         window._connectWebSocket();
-//     } else {
-//         console.error('Function _connectWebSocket is not defined');
-//     }
-// }
-
-// logUserId();
-// triggerConnectWebSocket();

@@ -9,6 +9,7 @@ import 'package:viet_qr_plugin/services/shared_preferences/user_information_help
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/utils/string_utils.dart';
 import 'package:viet_qr_plugin/widgets/button_widget.dart';
+import 'dart:js' as js;
 
 class DialogWidget {
   //
@@ -149,16 +150,20 @@ class DialogWidget {
                       textColor: AppColor.RED_TEXT,
                       bgColor: AppColor.TRANSPARENT,
                       function: () async {
-                        bool result = await _logoutRepository.logout();
-                        Navigator.pop(context);
-                        if (result) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => LoginView(),
-                            ),
-                          );
-                        }
+                        await _logoutRepository.logout().then(
+                          (value) {
+                            js.context.callMethod('logoutUser');
+                            Navigator.pop(context);
+                            if (value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const LoginView(),
+                                ),
+                              );
+                            }
+                          },
+                        );
                       },
                     ),
                     const Padding(padding: EdgeInsets.only(bottom: 10)),

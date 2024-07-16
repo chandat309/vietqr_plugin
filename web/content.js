@@ -198,8 +198,8 @@ function showTransactionDialog(transaction) {
   });
 
   // Gọi hàm đọc số tiền
-  speakTransactions([transaction]);
-  //   onSpeak(transaction.amount);
+  //   speakTransactions([transaction]);
+  // onSpeak(transaction.amount);
 }
 
 // Lắng nghe tin nhắn từ background script
@@ -207,5 +207,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "showDialog") {
     console.log("open dialog", request.transactions);
     showTransactionDialog(request.transactions);
+  }
+
+  if (request.action === "speak") {
+
+    // const speechText = request.text;
+    const currencyAmount = request.text.replace(/,/g, "");
+    // Convert the currency amount to a spoken text
+    const speechText =
+      "Cảm ơn quý khách đã thanh toán số tiền " +
+      currencyAmount.toString() +
+      " đồng.";
+    let utterance = new SpeechSynthesisUtterance(speechText);
+    utterance.lang = "vi-VN";
+
+    window.speechSynthesis.speak(utterance);
+    sendResponse({ status: "spoken" });
   }
 });

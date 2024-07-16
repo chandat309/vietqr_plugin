@@ -140,11 +140,10 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
         });
         js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
         js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
-        js.context.callMethod('connectWebSocket');
+        // js.context.callMethod('listenWss');
 
-        // await loadAndExecuteJs();
         //navigate to home
-        print('navigate to home');
+        // print('navigate to home');
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -4,6 +4,7 @@ import 'package:viet_qr_plugin/services/shared_preferences/account_helper%20copy
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
+import 'dart:js' as js;
 
 class LogoutRepository {
   const LogoutRepository();
