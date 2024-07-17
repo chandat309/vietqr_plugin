@@ -1,4 +1,3 @@
-
 let ws;
 
 async function setUserId(userId) {
@@ -32,48 +31,74 @@ async function connectWebSocket(userId, token) {
     const message = JSON.parse(event.data);
     console.log("WebSocket message received:", message);
     if (message.notificationType == "N05" && message.transType == "C") {
-      let vietQRTabs = await chrome.tabs.query({
-        url: "https://vietqr.vn/*",
-      });
-      vietQRTabs.forEach((tab) => {
-        try {
-          chrome.scripting.executeScript(
-            {
-              target: { tabId: tab.id },
-              files: ["content.js"], // Replace with your content script file name
-            },
-            () => {
-              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
+      chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+        if (tabs.length === 0) return;
+
+        const activeTab = tabs[0];
+        const currentUrl = activeTab.url;
+
+        console.log("Current URL:", currentUrl);
+
+        // Perform your URL checks here
+        if (currentUrl.includes("vietqr.vn")) {
+          let vietQRTabs = await chrome.tabs.query({
+            url: "https://vietqr.vn/*",
+          });
+          vietQRTabs.forEach((tab) => {
+            try {
+              chrome.scripting.executeScript(
+                {
+                  target: { tabId: tab.id },
+                  files: ["content.js"], // Replace with your content script file name
+                },
+                () => {
+                  chrome.tabs.sendMessage(tab.id, {
+                    action: "speak",
+                    text: message.amount,
+                  });
+                }
+              );
+            } catch (error) {
+              console.error("Error injecting script:", error);
             }
-          );
-        } catch (error) {
-          console.error("Error injecting script:", error);
+          });
+        } else if (currentUrl.includes("kiotviet.vn")) {
+          let kiotvietTabs = await chrome.tabs.query({
+            url: "https://*.kiotviet.vn/*",
+          });
+          kiotvietTabs.forEach((tab) => {
+            try {
+              chrome.scripting.executeScript(
+                {
+                  target: { tabId: tab.id },
+                  files: ["content.js"], // Replace with your content script file name
+                },
+                async () => {
+                  await chrome.scripting.insertCSS({
+                    target: { tabId: tab.id },
+                    files: ["dialog.css"],
+                  });
+                  chrome.tabs.sendMessage(tab.id, {
+                    action: "showDialog",
+                    transactions: message,
+                  });
+                  chrome.tabs.sendMessage(tab.id, {
+                    action: "speak",
+                    text: message.amount,
+                  });
+                }
+              );
+            } catch (error) {
+              console.error("Error injecting script:", error);
+            }
+          });
+        } else {
+          console.log("URL does not match");
+          // Perform actions for other URLs
         }
       });
 
-      let kiotvietTabs = await chrome.tabs.query({
-        url: "https://*.kiotviet.vn/*",
-      });
       // Cập nhật lastTransactions với dữ liệu mới nhất
-      kiotvietTabs.forEach((tab) => {
-        try {
-          chrome.scripting.executeScript(
-            {
-              target: { tabId: tab.id },
-              files: ["content.js"], // Replace with your content script file name
-            },
-            () => {
-              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
-              chrome.tabs.sendMessage(tab.id, {
-                action: "showDialog",
-                transactions: message,
-              });
-            }
-          );
-        } catch (error) {
-          console.error("Error injecting script:", error);
-        }
-      });
     }
   };
 

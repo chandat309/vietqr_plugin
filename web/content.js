@@ -161,7 +161,7 @@ function showTransactionDialog(transaction) {
             </div>
             <div class="detail-row">
               <span class="label">Ngân hàng</span>
-              <span class="value">${transaction.bankShortName || ""}</span>
+              <span class="value">${transaction.bankName || ""}</span>
             </div>
             <div class="detail-row">
               <span class="label">Thời gian</span>
