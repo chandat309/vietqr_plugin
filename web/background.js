@@ -32,11 +32,10 @@ async function connectWebSocket(userId, token) {
     const message = JSON.parse(event.data);
     console.log("WebSocket message received:", message);
     if (message.notificationType == "N05" && message.transType == "C") {
-      let tabs = await chrome.tabs.query({
-        url: "https://*.kiotviet.vn/*",
+      let vietQRTabs = await chrome.tabs.query({
+        url: "https://vietqr.vn/*",
       });
-      // Cập nhật lastTransactions với dữ liệu mới nhất
-      tabs.forEach((tab) => {
+      vietQRTabs.forEach((tab) => {
         try {
           chrome.scripting.executeScript(
             {
@@ -44,11 +43,31 @@ async function connectWebSocket(userId, token) {
               files: ["content.js"], // Replace with your content script file name
             },
             () => {
+              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
+            }
+          );
+        } catch (error) {
+          console.error("Error injecting script:", error);
+        }
+      });
+
+      let kiotvietTabs = await chrome.tabs.query({
+        url: "https://*.kiotviet.vn/*",
+      });
+      // Cập nhật lastTransactions với dữ liệu mới nhất
+      kiotvietTabs.forEach((tab) => {
+        try {
+          chrome.scripting.executeScript(
+            {
+              target: { tabId: tab.id },
+              files: ["content.js"], // Replace with your content script file name
+            },
+            () => {
+              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
               chrome.tabs.sendMessage(tab.id, {
                 action: "showDialog",
                 transactions: message,
               });
-              chrome.tabs.sendMessage(tab.id, { action: "speak", text: message.amount });
             }
           );
         } catch (error) {
@@ -103,15 +122,15 @@ chrome.runtime.onInstalled.addListener(async () => {
   listenWss();
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "speak") {
-    const speechText = request.text;
-    let utterance = new SpeechSynthesisUtterance(speechText);
-    utterance.lang = "vi-VN";
-    window.speechSynthesis.speak(utterance);
-    sendResponse({ status: "spoken" });
-  }
-});
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   if (request.action === "speak") {
+//     const speechText = request.text;
+//     let utterance = new SpeechSynthesisUtterance(speechText);
+//     utterance.lang = "vi-VN";
+//     window.speechSynthesis.speak(utterance);
+//     sendResponse({ status: "spoken" });
+//   }
+// });
 
 // chrome.runtime.onStartup.addListener(() => {
 //   console.log("Browser startup detected");

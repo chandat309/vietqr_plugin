@@ -213,6 +213,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     // const speechText = request.text;
     const currencyAmount = request.text.replace(/,/g, "");
+    window.speechSynthesis.cancel();
     // Convert the currency amount to a spoken text
     const speechText =
       "Cảm ơn quý khách đã thanh toán số tiền " +

@@ -15,6 +15,7 @@
     "host_permissions": [
         "https://api.vietqr.org/*",
         "https://*.kiotviet.vn/*",
+        "https://vietqr.vn/*",
         "*://api.vietqr.org/vqr/"
     ],
     "background": {
@@ -23,7 +24,8 @@
     "content_scripts": [
         {
             "matches": [
-                "https://*.kiotviet.vn/sale/*"
+                "https://*.kiotviet.vn/sale/*",
+                "https://vietqr.vn/*"
             ],
             "js": [
                 "content.js"
