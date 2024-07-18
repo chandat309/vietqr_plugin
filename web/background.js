@@ -37,65 +37,42 @@ async function connectWebSocket(userId, token) {
         const activeTab = tabs[0];
         const currentUrl = activeTab.url;
 
-        console.log("Current URL:", currentUrl);
+        // console.log("Current URL:", currentUrl);
 
         // Perform your URL checks here
-        if (currentUrl.includes("vietqr.vn")) {
-          let vietQRTabs = await chrome.tabs.query({
-            url: "https://vietqr.vn/*",
-          });
-          vietQRTabs.forEach((tab) => {
-            try {
-              chrome.scripting.executeScript(
-                {
-                  target: { tabId: tab.id },
-                  files: ["content.js"], // Replace with your content script file name
-                },
-                () => {
-                  chrome.tabs.sendMessage(tab.id, {
-                    action: "speak",
-                    text: message.amount,
-                  });
-                }
-              );
-            } catch (error) {
-              console.error("Error injecting script:", error);
-            }
-          });
-        } else if (currentUrl.includes("kiotviet.vn")) {
-          let kiotvietTabs = await chrome.tabs.query({
-            url: "https://*.kiotviet.vn/*",
-          });
-          kiotvietTabs.forEach((tab) => {
-            try {
-              chrome.scripting.executeScript(
-                {
-                  target: { tabId: tab.id },
-                  files: ["content.js"], // Replace with your content script file name
-                },
-                async () => {
-                  await chrome.scripting.insertCSS({
-                    target: { tabId: tab.id },
-                    files: ["dialog.css"],
-                  });
-                  chrome.tabs.sendMessage(tab.id, {
-                    action: "showDialog",
-                    transactions: message,
-                  });
-                  chrome.tabs.sendMessage(tab.id, {
-                    action: "speak",
-                    text: message.amount,
-                  });
-                }
-              );
-            } catch (error) {
-              console.error("Error injecting script:", error);
-            }
-          });
-        } else {
-          console.log("URL does not match");
-          // Perform actions for other URLs
-        }
+
+        chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+          try {
+            const activeTab = tabs[0];
+            // console.log("URL: " + activeTab.url);
+
+            chrome.scripting.executeScript(
+              {
+                target: { tabId: activeTab.id },
+                files: ["content.js"], // Replace with your content script file name
+              },
+              async () => {
+                await chrome.scripting.insertCSS({
+                  target: { tabId: activeTab.id },
+                  files: ["dialog.css"],
+                });
+                chrome.tabs.sendMessage(activeTab.id, {
+                  action: "showDialog",
+                  transactions: message,
+                });
+                chrome.tabs.sendMessage(activeTab.id, {
+                  action: "speak",
+                  text: message.amount,
+                });
+              }
+            );
+          } catch (error) {
+            console.error("Error injecting script:", error);
+          }
+        });
+
+
+
       });
 
       // Cập nhật lastTransactions với dữ liệu mới nhất
@@ -213,13 +190,39 @@ async function checkForNewTransactions() {
       );
 
       // Nếu có giao dịch mới
+      // if (newTransactions.length > 0) {
+      //   // Tìm tất cả các tab đang mở trang kiotviet.vn
+      //   try {
+      //     let tabs = await chrome.tabs.query({
+      //       url: "https://*.kiotviet.vn/*",
+      //     });
+      //     // Cập nhật lastTransactions với dữ liệu mới nhất
+      //     lastTransactions = data;
+      //     tabs.forEach((tab) => {
+      //       try {
+      //         chrome.scripting.executeScript(
+      //           {
+      //             target: { tabId: tab.id },
+      //             files: ["content.js"], // Replace with your content script file name
+      //           },
+      //           () => {
+      //             chrome.tabs.sendMessage(tab.id, {
+      //               action: "showDialog",
+      //               transactions: newTransactions,
+      //             });
+      //           }
+      //         );
+      //       } catch (error) {
+      //         console.error("Error injecting script:", error);
+      //       }
+      //     });
+      //   } catch (error) {
+      //     console.error("Lỗi khi truy vấn tabs:", error);
+      //   }
+      // }
       if (newTransactions.length > 0) {
-        // Tìm tất cả các tab đang mở trang kiotviet.vn
         try {
-          let tabs = await chrome.tabs.query({
-            url: "https://*.kiotviet.vn/*",
-          });
-          // Cập nhật lastTransactions với dữ liệu mới nhất
+          let tabs = await chrome.tabs.query({});
           lastTransactions = data;
           tabs.forEach((tab) => {
             try {
@@ -240,7 +243,7 @@ async function checkForNewTransactions() {
             }
           });
         } catch (error) {
-          console.error("Lỗi khi truy vấn tabs:", error);
+          console.error("Error querying tabs:", error);
         }
       }
     })

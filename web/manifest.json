@@ -2,8 +2,6 @@
     "name": "VietQR",
     "description": "VietQR",
     "version": "0.0.0.2",
-    "description": "Tiện ích VietQR",
-    "version": "0.0.0.1",
     "manifest_version": 3,
     "permissions": [
         "alarms",
@@ -13,10 +11,7 @@
         "declarativeNetRequestWithHostAccess"
     ],
     "host_permissions": [
-        "https://api.vietqr.org/*",
-        "https://*.kiotviet.vn/*",
-        "https://vietqr.vn/*",
-        "*://api.vietqr.org/vqr/"
+        "<all_urls>"
     ],
     "background": {
         "service_worker": "background.js"

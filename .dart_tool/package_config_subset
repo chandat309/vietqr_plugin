@@ -310,6 +310,14 @@ web
 3.3
 file:///Users/admin/.pub-cache/hosted/pub.dev/web-0.5.1/
 file:///Users/admin/.pub-cache/hosted/pub.dev/web-0.5.1/lib/
+web_socket
+3.3
+file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket-0.1.6/
+file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket-0.1.6/lib/
+web_socket_channel
+3.3
+file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.1/
+file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.1/lib/
 win32
 3.4
 file:///Users/admin/.pub-cache/hosted/pub.dev/win32-5.5.1/

@@ -494,6 +494,18 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "web_socket",
+      "rootUri": "file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket-0.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "web_socket_channel",
+      "rootUri": "file:///Users/admin/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "win32",
       "rootUri": "file:///Users/admin/.pub-cache/hosted/pub.dev/win32-5.5.1",
       "packageUri": "lib/",
@@ -518,7 +530,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-07-10T10:06:01.414785Z",
+  "generated": "2024-07-18T04:03:33.806283Z",
   "generator": "pub",
   "generatorVersion": "3.4.1",
   "flutterRoot": "file:///Users/admin/Documents/flutter",
