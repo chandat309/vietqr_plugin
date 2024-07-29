@@ -4,11 +4,9 @@
     "version": "0.0.0.2",
     "manifest_version": 3,
     "permissions": [
-        "alarms",
         "storage",
         "scripting",
-        "activeTab",
-        "declarativeNetRequestWithHostAccess"
+        "activeTab"
     ],
     "host_permissions": [
         "<all_urls>"
@@ -16,30 +14,6 @@
     "background": {
         "service_worker": "background.js"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "https://*.kiotviet.vn/*",
-                "https://vietqr.vn/*"
-            ],
-            "js": [
-                "content.js"
-            ],
-            "css": [
-                "dialog.css"
-            ]
-        }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "audio/*"
-            ],
-            "matches": [
-                "https://*.kiotviet.vn/*"
-            ]
-        }
-    ],
     "content_security_policy": {
         "extension_pages": "script-src 'self' ; object-src 'self'"
     },
