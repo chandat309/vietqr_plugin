@@ -34,7 +34,7 @@ function createDialogHTML(transaction) {
   return `
     <div class="vietqr-popup">
       <div class="vietqr-popup-content">
-        <span class="close">&times;</span>
+        <span class="vietqr-close">&times;</span>
         <h3>Giao dịch thành công</h3>
         <div class="vietqr-amount">+ ${transaction.amount} VND</div>
         <div class="vietqr-transaction-details">
@@ -78,7 +78,7 @@ function addDialogEventListeners(dialog) {
 
 // Function to speak the transaction amount using Web Speech API
 function speakTransactionAmount(amount) {
-  const speechText = `Số tiền giao dịch của bạn là ${amount} đồng.`;
+  const speechText = `Tôi là Kiên mập ${amount} kí.`;
   const utterance = new SpeechSynthesisUtterance(speechText);
   utterance.lang = 'vi-VN'; // Set to Vietnamese
 

@@ -123,3 +123,51 @@ chrome.runtime.onInstalled.addListener(async () => {
     console.error('Error:', error);
   }
 });
+
+chrome.runtime.onStartup.addListener(async () => {
+  console.log('Extension started');
+  try {
+    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+      const { idUser, bearerToken } = result;
+      console.log('Storage retrieved', result);
+
+      // Check if idUser is available in storage
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(() => {
+          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+            const { idUser, bearerToken } = result;
+            if (idUser) {
+              listenWebSocket({ token: bearerToken, userId: idUser });
+            }
+          });
+        }, 1000);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+chrome.runtime.onConnect.addListener(async () => {
+  console.log('Extension started');
+  try {
+    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+      const { idUser, bearerToken } = result;
+      console.log('Storage retrieved', result);
+
+      // Check if idUser is available in storage
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(() => {
+          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+            const { idUser, bearerToken } = result;
+            if (idUser) {
+              listenWebSocket({ token: bearerToken, userId: idUser });
+            }
+          });
+        }, 1000);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
