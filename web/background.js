@@ -1,4 +1,5 @@
 let getLocalStorageInterval;
+let getCurrentTabInterval;
 
 async function setUserId(userId) {
   // idUser = userId;
@@ -14,6 +15,17 @@ async function setToken(token) {
 
 async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
+}
+
+const activeTabs = [];
+async function getActiveTab() {
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    // Handle tab switch
+    console.log('Tab switched to:', activeInfo.tabId);
+    if (!activeTabs.includes(activeInfo.tabId)) {
+      activeTabs.push(activeInfo.tabId);
+    }
+  });
 }
 
 const listenWebSocket = ({ token, userId }) => {
@@ -111,12 +123,3 @@ chrome.runtime.onInstalled.addListener(async () => {
     console.error('Error:', error);
   }
 });
-
-// chrome.runtime.onStartup.addListener(() => {
-//   chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
-//     const { idUser, bearerToken } = result;
-//     if (idUser && bearerToken) {
-//       listenWebSocket({ token: bearerToken, userId: idUser });
-//     }
-//   });
-// });

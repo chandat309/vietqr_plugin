@@ -32,33 +32,33 @@ function showTransactionDialog(transaction) {
 // Generate HTML content for the dialog
 function createDialogHTML(transaction) {
   return `
-    <div class="popup">
-      <div class="popup-content">
+    <div class="vietqr-popup">
+      <div class="vietqr-popup-content">
         <span class="close">&times;</span>
         <h3>Giao dịch thành công</h3>
-        <div class="amount">+ ${transaction.amount} VND</div>
-        <div class="transaction-details">
-          <div class="detail-row">
-            <span class="label">Đến TK</span>
-            <span class="value">${transaction.bankAccount || ''}</span>
+        <div class="vietqr-amount">+ ${transaction.amount} VND</div>
+        <div class="vietqr-transaction-details">
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Đến TK</span>
+            <span class="vietqr-value">${transaction.bankAccount || ''}</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Ngân hàng</span>
-            <span class="value">${transaction.bankName || ''}</span>
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Ngân hàng</span>
+            <span class="vietqr-value">${transaction.bankName || ''}</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Thời gian</span>
-            <span class="value">${
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Thời gian</span>
+            <span class="vietqr-value">${
               transaction.time ? formatDate(transaction.timePaid) : ''
             }</span>
           </div>
-          <div class="detail-row">
-            <span class="label">Nội dung</span>
-            <span class="value">${transaction.content || ''}</span>
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Nội dung</span>
+            <span class="vietqr-value">${transaction.content || ''}</span>
           </div>
         </div>
-        <div class="buttons">
-          <button class="close-btn-bottom">Đóng</button>
+        <div class="vietqr-buttons">
+          <button class="vietqr-close-btn-bottom">Đóng</button>
         </div>
       </div>
     </div>`;
@@ -66,8 +66,8 @@ function createDialogHTML(transaction) {
 
 // Function to handle dialog events like close
 function addDialogEventListeners(dialog) {
-  const closeBtn = dialog.querySelector('.close');
-  const closeBtnBottom = dialog.querySelector('.close-btn-bottom');
+  const closeBtn = dialog.querySelector('.vietqr-close');
+  const closeBtnBottom = dialog.querySelector('.vietqr-close-btn-bottom');
 
   // Close the dialog when close buttons are clicked
   const closeDialog = () => dialog.remove();

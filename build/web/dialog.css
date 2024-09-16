@@ -11,7 +11,7 @@
   z-index: 9999;
 }
 
-.popup {
+.vietqr-popup {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -20,7 +20,7 @@
   position: relative;
 }
 
-.close {
+.vietqr-close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -28,12 +28,12 @@
   cursor: pointer;
 }
 
-h3 {
+.vietqr-popup-content h3 {
   text-align: center;
   margin-bottom: 10px;
 }
 
-.amount {
+.vietqr-amount {
   text-align: center;
   font-size: 40px;
   font-weight: bold;
@@ -41,37 +41,37 @@ h3 {
   margin-bottom: 10px;
 }
 
-.transaction-details {
+.vietqr-transaction-details {
   margin-bottom: 10px;
 }
 
-.detail-row {
+.vietqr-detail-row {
   display: flex;
   margin-bottom: 10px;
 }
 
-.label {
+.vietqr-label {
   flex: 1;
   font-weight: bold;
 }
 
-.value {
+.vietqr-value {
   flex: 2;
 }
 
-.buttons {
+.vietqr-buttons {
   display: flex;
   justify-content: center;
 }
 
-button {
+.vietqr-buttons button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.close-btn-bottom {
+.vietqr-close-btn-bottom {
   background-color: #f1f1f1;
   color: black;
 }
