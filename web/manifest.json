@@ -3,7 +3,7 @@
   "description": "VietQR",
   "version": "0.0.0.2",
   "manifest_version": 3,
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "scripting", "activeTab", "tabs"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"

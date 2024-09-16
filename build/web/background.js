@@ -1,16 +1,14 @@
-// let ws;
+async function setUserId(userId) {
+  // idUser = userId;
+  await chrome.storage.local.set({ idUser: userId });
+  // console.log("UserId:", userId);
+}
 
-// async function setUserId(userId) {
-//   // idUser = userId;
-//   await chrome.storage.local.set({ idUser: userId });
-//   // console.log("UserId:", userId);
-// }
-
-// async function setToken(token) {
-//   // bearerToken = token;
-//   await chrome.storage.local.set({ bearerToken: token });
-//   // console.log("Bearer:", bearerToken);
-// }
+async function setToken(token) {
+  // bearerToken = token;
+  await chrome.storage.local.set({ bearerToken: token });
+  // console.log("Bearer:", bearerToken);
+}
 
 // async function connectWebSocket(userId, token) {
 //   if (!userId) {
@@ -88,67 +86,64 @@
 //   };
 // }
 
-// async function logoutUser() {
-//   await chrome.storage.local.remove(['idUser', 'bearerToken']);
-// }
-
-// async function listenWss() {
-//   const storage = await chrome.storage.local.get(['idUser', 'bearerToken']);
-//   const idUser = storage.idUser;
-//   const bearerToken = storage.bearerToken;
-//   if (!idUser) {
-//     if (ws) {
-//       if (
-//         ws.readyState === WebSocket.OPEN ||
-//         ws.readyState === WebSocket.CONNECTING
-//       ) {
-//         ws.close();
-//         console.log('WebSocket is closed');
-//       }
-//     }
-//   } else {
-//     if (!ws || ws.readyState === WebSocket.CLOSED) {
-//       console.log('WebSocket is closed, reconnecting...');
-//       connectWebSocket(idUser, bearerToken);
-//     } else {
-//       // console.log("WebSocket is open, no need to reconnect.");
-//     }
-//   }
-//   setTimeout(listenWss, 1000);
-// }
-
-// chrome.runtime.onInstalled.addListener(async () => {
-//   listenWss();
-// });
+async function logoutUser() {
+  await chrome.storage.local.remove(['idUser', 'bearerToken']);
+}
 
 const listenWebSocket = ({ token, userId }) => {
   let socket;
   if (userId) {
     socket = new WebSocket(`wss://api.vietqr.org/vqr/socket?userId=${userId}`);
     socket.onopen = () => {
-      // console.log('WebSocket connection established');
       const message = JSON.stringify({
         type: 'auth',
         token
       });
       socket.send(message);
+      console.log('WebSocket connection established');
     };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('WebSocket message received:', data);
-      if (data.notificationType == 'N05') {
-        // TODO: show dialog
+      if (data.notificationType === 'N05') {
+        // TODO: Show dialog
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           if (tabs.length > 0) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-              action: 'showDialog',
-              transaction: data
-            });
+            const activeTab = tabs[0].id;
+            // Inject content.js into the active tab (if needed)
+            chrome.scripting.executeScript(
+              {
+                target: { tabId: activeTab },
+                files: ['content.js']
+              },
+              () => {
+                // Send message to content script to show dialog
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'showDialog',
+                  transaction: data
+                });
+
+                // Send message to content script to speak the amount
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'speak',
+                  text: data.amount // Assuming amount is in the data
+                });
+
+                console.log(
+                  'Content script injected and messages sent successfully'
+                );
+              }
+            );
+          } else {
+            console.log('No active tab found.');
           }
         });
+      } else {
+        console.log('No userId provided. WebSocket not initialized.');
       }
     };
+
     socket.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
@@ -157,23 +152,33 @@ const listenWebSocket = ({ token, userId }) => {
       console.log('WebSocket connection closed:', event);
     };
   }
-  if (!userId) {
-    if (socket) {
-      socket.close();
-    }
-  }
 
-  return { closeSocket: () => socket.close() };
+  return {
+    closeSocket: () => {
+      if (socket) socket.close();
+    }
+  };
 };
 
 chrome.runtime.onInstalled.addListener(async () => {
-  chrome.storage.local.get(['userId', 'token'], (result) => {
-    const { userId, token } = result;
+  console.log('Extension installed/reloaded');
+  chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+    const { idUser, bearerToken } = result;
+    console.log('Storage retrieved', result);
 
-    if (userId && token) {
-      listenWebSocket({ token, userId });
+    if (idUser && bearerToken) {
+      listenWebSocket({ token: bearerToken, userId: idUser });
     } else {
       console.log('No userId or token available in storage.');
     }
   });
 });
+
+// chrome.runtime.onStartup.addListener(() => {
+//   chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+//     const { idUser, bearerToken } = result;
+//     if (idUser && bearerToken) {
+//       listenWebSocket({ token: bearerToken, userId: idUser });
+//     }
+//   });
+// });
