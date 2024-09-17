@@ -28,4 +28,8 @@ class SettingRepository {
     }
     return result;
   }
+
+  
 }
+
+
