@@ -41,7 +41,9 @@ class _SettingPopupBankViewState extends State<SettingPopupBankView> {
     setState(() {
       _listBankAuthen = List.generate(
         filterListAuten.length,
-        (index) => BankSelection(bank: result[index]),
+        (index) => BankSelection(
+            bank: result[index],
+            value: result[index].pushNotification == 1 ? true : false),
       );
     });
   }
