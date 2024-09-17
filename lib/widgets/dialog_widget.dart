@@ -5,6 +5,7 @@ import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/login/views/login_view.dart';
 import 'package:viet_qr_plugin/features/logout/repositories/logout_repository.dart';
 import 'package:viet_qr_plugin/main.dart';
+import 'package:viet_qr_plugin/navigator/app_navigator.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/utils/string_utils.dart';

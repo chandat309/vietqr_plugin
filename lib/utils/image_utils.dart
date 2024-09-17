@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
-import 'package:viet_qr_plugin/services/shared_preferences/account_helper%20copy.dart';
+import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:uuid/uuid.dart';
 

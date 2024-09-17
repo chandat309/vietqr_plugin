@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:viet_qr_plugin/main.dart';
+import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 
 class AccountHelper {
   const AccountHelper._privateConsrtructor();
@@ -9,6 +12,7 @@ class AccountHelper {
   Future<void> initialAccountHelper() async {
     await sharedPrefs.setString('TOKEN', '');
     await sharedPrefs.setString('FCM_TOKEN', '');
+    await sharedPrefs.setString('TOKEN_FREE', '');
   }
 
   Future<void> setToken(String value) async {
@@ -17,6 +21,18 @@ class AccountHelper {
 
   String getToken() {
     return sharedPrefs.getString('TOKEN')!;
+  }
+
+  Future<void> setAccountSetting(SettingAccountDTO dto) async {
+    await sharedPrefs.setString('SETTING_ACCOUNT', jsonEncode(dto.toJson()));
+  }
+
+  Future<SettingAccountDTO?> getAccountSetting() async {
+    String? endcoded = sharedPrefs.getString('SETTING_ACCOUNT');
+    if (endcoded != null) {
+      return SettingAccountDTO.fromJson(jsonDecode(endcoded));
+    }
+    return null;
   }
 
   Future<void> setFcmToken(String token) async {

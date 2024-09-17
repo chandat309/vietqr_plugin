@@ -4,7 +4,7 @@ import 'package:viet_qr_plugin/features/home/views/home_view.dart';
 import 'package:viet_qr_plugin/features/login/repositories/login_repository.dart';
 import 'package:viet_qr_plugin/models/account_login_dto.dart';
 import 'package:viet_qr_plugin/services/js/js_interop_services.dart';
-import 'package:viet_qr_plugin/services/shared_preferences/account_helper%20copy.dart';
+import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/encrypt_utils.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
@@ -147,7 +147,7 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HomeView(),
+            builder: (_) => const HomeView(),
           ),
         );
         return true;
