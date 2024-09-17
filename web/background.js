@@ -38,40 +38,37 @@ const listenWebSocket = ({ token, userId }) => {
       console.log('WebSocket message received:', data);
       if (data.notificationType === 'N05') {
         // TODO: Show dialog
-        chrome.tabs.query(
-          { active: true, currentWindow: true, lastFocusedWindow: 'true' },
-          (tabs) => {
-            if (tabs.length > 0) {
-              const activeTab = tabs[0].id;
-              // Inject content.js into the active tab (if needed)
-              chrome.scripting.executeScript(
-                {
-                  target: { tabId: activeTab },
-                  files: ['content.js']
-                },
-                () => {
-                  // Send message to content script to show dialog
-                  chrome.tabs.sendMessage(activeTab, {
-                    action: 'showDialog',
-                    transaction: data
-                  });
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs.length > 0) {
+            const activeTab = tabs[0].id;
+            // Inject content.js into the active tab (if needed)
+            chrome.scripting.executeScript(
+              {
+                target: { tabId: activeTab },
+                files: ['content.js']
+              },
+              () => {
+                // Send message to content script to show dialog
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'showDialog',
+                  transaction: data
+                });
 
-                  // Send message to content script to speak the amount
-                  chrome.tabs.sendMessage(activeTab, {
-                    action: 'speak',
-                    text: data.amount // Assuming amount is in the data
-                  });
+                // Send message to content script to speak the amount
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'speak',
+                  text: data.amount // Assuming amount is in the data
+                });
 
-                  console.log(
-                    'Content script injected and messages sent successfully'
-                  );
-                }
-              );
-            } else {
-              console.log('No active tab found.');
-            }
+                console.log(
+                  'Content script injected and messages sent successfully'
+                );
+              }
+            );
+          } else {
+            console.log('No active tab found.');
           }
-        );
+        });
       } else {
         console.log('No userId provided. WebSocket not initialized.');
       }
@@ -132,10 +129,12 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 // // Listen for changes in storage
+// ! Duplicated interval check for idUser
 // chrome.storage.onChanged.addListener((changes, namespace) => {
 //   console.log('Storage changed:', changes, namespace);
 //   checkStorageAndListenWebSocket();
 // });
 
 // // Runs every time the background script starts
+// ! Duplicate of the interval check for idUser
 // checkStorageAndListenWebSocket();
