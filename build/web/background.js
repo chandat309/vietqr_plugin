@@ -1,3 +1,6 @@
+let getLocalStorageInterval;
+let getCurrentTabInterval;
+
 async function setUserId(userId) {
   // idUser = userId;
   await chrome.storage.local.set({ idUser: userId });
@@ -10,89 +13,26 @@ async function setToken(token) {
   // console.log("Bearer:", bearerToken);
 }
 
-// async function connectWebSocket(userId, token) {
-//   if (!userId) {
-//     console.error('UserId is not set');
-//     return;
-//   }
-//   const url = `wss://api.vietqr.org/vqr/socket?userId=${userId}`;
-//   ws = new WebSocket(url);
-
-//   ws.onopen = () => {
-//     console.log('WebSocket connection opened');
-//     if (token) {
-//       ws.send(JSON.stringify({ type: 'auth', token: token }));
-//     }
-//   };
-
-//   ws.onmessage = async (event) => {
-//     const message = JSON.parse(event.data);
-//     console.log('WebSocket message received:', message);
-//     if (message.notificationType == 'N05' && message.transType == 'C') {
-//       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-//         if (tabs.length === 0) return;
-
-//         const activeTab = tabs[0];
-//         const currentUrl = activeTab.url;
-
-//         // console.log("Current URL:", currentUrl);
-
-//         // Perform your URL checks here
-
-//         chrome.tabs.query(
-//           { active: true, currentWindow: true },
-//           async (tabs) => {
-//             try {
-//               const activeTab = tabs[0];
-//               // console.log("URL: " + activeTab.url);
-
-//               chrome.scripting.executeScript(
-//                 {
-//                   target: { tabId: activeTab.id },
-//                   files: ['content.js'] // Replace with your content script file name
-//                 },
-//                 async () => {
-//                   await chrome.scripting.insertCSS({
-//                     target: { tabId: activeTab.id },
-//                     files: ['dialog.css']
-//                   });
-//                   chrome.tabs.sendMessage(activeTab.id, {
-//                     action: 'showDialog',
-//                     transactions: message
-//                   });
-//                   chrome.tabs.sendMessage(activeTab.id, {
-//                     action: 'speak',
-//                     text: message.amount
-//                   });
-//                 }
-//               );
-//             } catch (error) {
-//               console.error('Error injecting script:', error);
-//             }
-//           }
-//         );
-//       });
-
-//       // Cập nhật lastTransactions với dữ liệu mới nhất
-//     }
-//   };
-
-//   ws.onclose = () => {
-//     console.log('WebSocket connection closed');
-//   };
-
-//   ws.onerror = (error) => {
-//     console.error('WebSocket error:', error);
-//   };
-// }
-
 async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
 }
 
+const activeTabs = [];
+async function getActiveTab() {
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    // Handle tab switch
+    console.log('Tab switched to:', activeInfo.tabId);
+    if (!activeTabs.includes(activeInfo.tabId)) {
+      activeTabs.push(activeInfo.tabId);
+    }
+  });
+}
+
 const listenWebSocket = ({ token, userId }) => {
   let socket;
+
   if (userId) {
+    if (getLocalStorageInterval) clearInterval(getLocalStorageInterval); // Clear the interval
     socket = new WebSocket(`wss://api.vietqr.org/vqr/socket?userId=${userId}`);
     socket.onopen = () => {
       const message = JSON.stringify({
@@ -162,23 +102,72 @@ const listenWebSocket = ({ token, userId }) => {
 
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('Extension installed/reloaded');
-  chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
-    const { idUser, bearerToken } = result;
-    console.log('Storage retrieved', result);
+  try {
+    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+      const { idUser, bearerToken } = result;
+      console.log('Storage retrieved', result);
 
-    if (idUser && bearerToken) {
-      listenWebSocket({ token: bearerToken, userId: idUser });
-    } else {
-      console.log('No userId or token available in storage.');
-    }
-  });
+      // Check if idUser is available in storage
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(() => {
+          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+            const { idUser, bearerToken } = result;
+            if (idUser) {
+              listenWebSocket({ token: bearerToken, userId: idUser });
+            }
+          });
+        }, 1000);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });
 
-// chrome.runtime.onStartup.addListener(() => {
-//   chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
-//     const { idUser, bearerToken } = result;
-//     if (idUser && bearerToken) {
-//       listenWebSocket({ token: bearerToken, userId: idUser });
-//     }
-//   });
-// });
+chrome.runtime.onStartup.addListener(async () => {
+  console.log('Extension started');
+  try {
+    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+      const { idUser, bearerToken } = result;
+      console.log('Storage retrieved', result);
+
+      // Check if idUser is available in storage
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(() => {
+          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+            const { idUser, bearerToken } = result;
+            if (idUser) {
+              listenWebSocket({ token: bearerToken, userId: idUser });
+            }
+          });
+        }, 1000);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+chrome.runtime.onConnect.addListener(async () => {
+  console.log('Extension started');
+  try {
+    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+      const { idUser, bearerToken } = result;
+      console.log('Storage retrieved', result);
+
+      // Check if idUser is available in storage
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(() => {
+          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+            const { idUser, bearerToken } = result;
+            if (idUser) {
+              listenWebSocket({ token: bearerToken, userId: idUser });
+            }
+          });
+        }, 1000);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
