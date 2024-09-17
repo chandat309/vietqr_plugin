@@ -1,5 +1,4 @@
 let getLocalStorageInterval;
-let getCurrentTabInterval;
 
 async function setUserId(userId) {
   // idUser = userId;
@@ -17,22 +16,13 @@ async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
 }
 
-const activeTabs = [];
-async function getActiveTab() {
-  chrome.tabs.onActivated.addListener((activeInfo) => {
-    // Handle tab switch
-    console.log('Tab switched to:', activeInfo.tabId);
-    if (!activeTabs.includes(activeInfo.tabId)) {
-      activeTabs.push(activeInfo.tabId);
-    }
-  });
-}
+const clearLocalStorageInterval = (getLocalStorageInterval) => {
+  if (getLocalStorageInterval) clearInterval(getLocalStorageInterval);
+};
 
 const listenWebSocket = ({ token, userId }) => {
   let socket;
-
   if (userId) {
-    if (getLocalStorageInterval) clearInterval(getLocalStorageInterval); // Clear the interval
     socket = new WebSocket(`wss://api.vietqr.org/vqr/socket?userId=${userId}`);
     socket.onopen = () => {
       const message = JSON.stringify({
@@ -91,8 +81,9 @@ const listenWebSocket = ({ token, userId }) => {
     socket.onclose = (event) => {
       console.log('WebSocket connection closed:', event);
     };
-  }
 
+    clearLocalStorageInterval(); // Clear the interval if it's running
+  }
   return {
     closeSocket: () => {
       if (socket) socket.close();
@@ -100,26 +91,49 @@ const listenWebSocket = ({ token, userId }) => {
   };
 };
 
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log('Extension installed/reloaded');
+const checkStorageAndListenWebSocket = async () => {
   try {
-    chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
+    await chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
       const { idUser, bearerToken } = result;
       console.log('Storage retrieved', result);
 
       // Check if idUser is available in storage
       if (!idUser) {
-        getLocalStorageInterval = setInterval(() => {
-          chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
-            const { idUser, bearerToken } = result;
-            if (idUser) {
-              listenWebSocket({ token: bearerToken, userId: idUser });
+        getLocalStorageInterval = setInterval(async () => {
+          await chrome.storage.local.get(
+            ['idUser', 'bearerToken'],
+            (result) => {
+              const { idUser, bearerToken } = result;
+              if (idUser) {
+                listenWebSocket({ token: bearerToken, userId: idUser });
+              }
             }
-          });
-        }, 1000);
+          );
+        }, 2000);
       }
     });
   } catch (error) {
     console.error('Error:', error);
   }
+};
+
+// Run the function on extension install/reload
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed/reloaded');
+  checkStorageAndListenWebSocket();
 });
+
+// Run the function on extension startup
+chrome.runtime.onStartup.addListener(() => {
+  console.log('Extension started');
+  checkStorageAndListenWebSocket();
+});
+
+// Listen for changes in storage
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log('Storage changed:', changes, namespace);
+  checkStorageAndListenWebSocket();
+});
+
+// // Runs every time the background script starts
+// checkStorageAndListenWebSocket();

@@ -1,16 +1,4 @@
-.vietqr-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
+/* General Dialog Styles */
 .vietqr-popup {
   background-color: white;
   padding: 20px;
@@ -18,17 +6,22 @@
   width: 80%;
   max-width: 500px;
   position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.vietqr-close {
+span.vietqr-close {
   position: absolute;
   top: 10px;
   right: 10px;
   font-size: 20px;
   cursor: pointer;
+  color: #333 !important;
 }
 
 .vietqr-popup-content h3 {
+  color: #333 !important;
+  font-weight: bold;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -39,6 +32,7 @@
   font-weight: bold;
   color: #4CAF50;
   margin-bottom: 10px;
+  transition: color 0.3s ease;
 }
 
 .vietqr-transaction-details {
@@ -50,18 +44,25 @@
   margin-bottom: 10px;
 }
 
+.vietqr-detail-row span {
+  color: #333;
+}
+
 .vietqr-label {
   flex: 1;
   font-weight: bold;
+  color: #333 !important;
 }
 
 .vietqr-value {
   flex: 2;
+  color: #333 !important;
 }
 
 .vietqr-buttons {
   display: flex;
   justify-content: center;
+  margin-top: 15px;
 }
 
 .vietqr-buttons button {
@@ -69,9 +70,89 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .vietqr-close-btn-bottom {
   background-color: #f1f1f1;
   color: black;
+}
+
+/* Dark Theme */
+.theme-dark .vietqr-popup {
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.theme-dark .vietqr-close {
+  color: #fff;
+}
+
+.theme-dark .vietqr-amount {
+  color: #76FF03;
+  /* Light green */
+}
+
+.theme-dark .vietqr-detail-row span {
+  color: #fff;
+}
+
+.theme-dark .vietqr-buttons button {
+  background-color: #444;
+  color: #fff;
+}
+
+.theme-dark .vietqr-buttons button:hover {
+  background-color: #555;
+}
+
+/* Light Theme */
+.theme-light .vietqr-popup {
+  background-color: #f9f9f9;
+  color: #333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .vietqr-close {
+  color: #333;
+}
+
+.theme-light .vietqr-amount {
+  color: #4CAF50;
+}
+
+.theme-light .vietqr-detail-row span {
+  color: #333;
+}
+
+.theme-light .vietqr-buttons button {
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+.theme-light .vietqr-buttons button:hover {
+  background-color: #d6d6d6;
+}
+
+/* Overlay Background */
+.vietqr-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: background-color 0.3s ease;
+}
+
+.vietqr-dialog.theme-dark {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.vietqr-dialog.theme-light {
+  background-color: rgba(255, 255, 255, 0.8);
 }
