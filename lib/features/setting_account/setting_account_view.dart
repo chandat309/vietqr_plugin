@@ -49,6 +49,7 @@ class _SettingAccountViewState extends State<SettingAccountView> {
         ],
       ),
       body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -56,7 +57,7 @@ class _SettingAccountViewState extends State<SettingAccountView> {
           children: [
             const Text(
               'Cài đặt giọng nói',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             _buildBgItem(
               customPadding:
