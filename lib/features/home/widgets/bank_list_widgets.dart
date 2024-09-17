@@ -41,21 +41,12 @@ class _BankListWidget extends State<BankListWidget> {
   void initState() {
     super.initState();
     getBanks();
-    getSettingAccount();
   }
 
   Future<void> getBanks() async {
     String userId = UserHelper.instance.getUserId();
     _banks = await widget.bankListRepository.getListBankAccount(userId);
     await getColors();
-  }
-
-  Future<void> getSettingAccount() async {
-    SettingRepository setting = SettingRepository();
-    final result = await setting.getSettingAccount();
-    if (result.userId.isNotEmpty) {
-      await AccountHelper.instance.setAccountSetting(result);
-    }
   }
 
   Future<void> getColors() async {
@@ -208,7 +199,7 @@ class _BankListWidget extends State<BankListWidget> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Hero(
-                      tag: _banks[index].id,
+                      tag: _banks[index].bankId,
                       flightShuttleBuilder: (flightContext, animation,
                           flightDirection, fromHeroContext, toHeroContext) {
                         // Tạo và trả về một widget mới để tham gia vào hiệu ứng chuyển động
@@ -243,7 +234,7 @@ class _BankListWidget extends State<BankListWidget> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => QRBankView(
-                                widgetKey: _banks[index].id,
+                                widgetKey: _banks[index].bankId,
                                 dto: dto,
                               ),
                             ),

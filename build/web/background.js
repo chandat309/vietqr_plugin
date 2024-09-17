@@ -16,7 +16,7 @@ async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
 }
 
-const clearLocalStorageInterval = (getLocalStorageInterval) => {
+const clearLocalStorageInterval = () => {
   if (getLocalStorageInterval) clearInterval(getLocalStorageInterval);
 };
 
@@ -81,8 +81,6 @@ const listenWebSocket = ({ token, userId }) => {
     socket.onclose = (event) => {
       console.log('WebSocket connection closed:', event);
     };
-
-    clearLocalStorageInterval(); // Clear the interval if it's running
   }
   return {
     closeSocket: () => {
@@ -106,6 +104,7 @@ const checkStorageAndListenWebSocket = async () => {
               const { idUser, bearerToken } = result;
               if (idUser) {
                 listenWebSocket({ token: bearerToken, userId: idUser });
+                clearLocalStorageInterval(); // Clear the interval if it's running
               }
             }
           );
@@ -129,11 +128,13 @@ chrome.runtime.onStartup.addListener(() => {
   checkStorageAndListenWebSocket();
 });
 
-// Listen for changes in storage
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  console.log('Storage changed:', changes, namespace);
-  checkStorageAndListenWebSocket();
-});
+// // Listen for changes in storage
+// ! Duplicated interval check for idUser
+// chrome.storage.onChanged.addListener((changes, namespace) => {
+//   console.log('Storage changed:', changes, namespace);
+//   checkStorageAndListenWebSocket();
+// });
 
 // // Runs every time the background script starts
+// ! Duplicate of the interval check for idUser
 // checkStorageAndListenWebSocket();
