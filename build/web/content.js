@@ -1,3 +1,15 @@
+// Utility function to format date (assuming it's a Unix timestamp)
+const formatTransactionDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  return new Date(date).toLocaleDateString('vi-VN', options);
+};
+
 // Listen for messages from background.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
@@ -11,18 +23,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.warn('Unknown action:', request?.action);
   }
 });
-
-// Utility function to format date (assuming it's a Unix timestamp)
-const formatDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  };
-  return new Date(date).toLocaleDateString('vi-VN', options);
-};
 
 // Function to show the transaction dialog
 const showTransactionDialog = (transaction, type) => {
@@ -55,7 +55,7 @@ const createDialogHTML = (transaction, transType) => {
   console.log('transaction', transaction);
 
   const isUnclassified = isTransUnclassified(transaction);
-  const formatTimePaid = formatDate(transaction.timePaid);
+  const timePaid = formatTransactionDate(transaction?.timePaid * 1000);
   return `
     <div class="vietqr-popup">
       <div class="vietqr-popup-content">
@@ -76,23 +76,23 @@ const createDialogHTML = (transaction, transType) => {
           }
         </h3>
         <div class="vietqr-amount">
-        ${transType === 'C' ? '+' : '-'} ${transaction.amount} VND</div>
+        ${transType === 'C' ? '+' : '-'} ${transaction?.amount} VND</div>
         <div class="vietqr-transaction-details">
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Tới tài khoản</span>
-            <span class="vietqr-value">${transaction.bankAccount || ''}</span>
+            <span class="vietqr-value">${transaction?.bankAccount || ''}</span>
           </div>
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Ngân hàng</span>
-            <span class="vietqr-value">${transaction.bankName || ''}</span>
+            <span class="vietqr-value">${transaction?.bankName || ''}</span>
           </div>
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Thời gian</span>
-            <span class="vietqr-value">${formatTimePaid}</span>
+            <span class="vietqr-value">${timePaid}</span> 
           </div>
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Nội dung chuyển khoản</span>
-            <span class="vietqr-value">${transaction.content || ''}</span>
+            <span class="vietqr-value">${transaction?.content || ''}</span>
           </div>
         </div>
         <div class="vietqr-buttons">
@@ -122,7 +122,7 @@ const addDialogEventListeners = (dialog) => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDialog();
   });
-  // Close the dialog after 10 seconds
+  // Close the dialog after 15 seconds
   setTimeout(closeDialog, 15000);
 };
 
