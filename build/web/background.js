@@ -39,7 +39,7 @@ const listenWebSocket = ({ token, userId }) => {
       if (data.notificationType === 'N05') {
         // TODO: Show dialog
         chrome.tabs.query(
-          { active: true, currentWindow: true, lastFocusedWindow: 'true' },
+          { active: true, currentWindow: true, lastFocusedWindow: true },
           (tabs) => {
             if (tabs.length > 0) {
               const activeTab = tabs[0].id;
@@ -132,10 +132,12 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 // // Listen for changes in storage
+// ! Duplicated interval check for idUser
 // chrome.storage.onChanged.addListener((changes, namespace) => {
 //   console.log('Storage changed:', changes, namespace);
 //   checkStorageAndListenWebSocket();
 // });
 
 // // Runs every time the background script starts
+// ! Duplicate of the interval check for idUser
 // checkStorageAndListenWebSocket();
