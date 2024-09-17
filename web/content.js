@@ -106,15 +106,14 @@ const addDialogEventListeners = (dialog) => {
     if (e.key === 'Escape') closeDialog();
   });
   // Close the dialog after 10 seconds
-  // setTimeout(closeDialog, 10000);
+  setTimeout(closeDialog, 15000);
 };
 
 // Function to speak the transaction amount using Web Speech API
 const speakTransactionAmount = (amount) => {
-  // 
   const speechText = `Tôi là Kiên mập ${amount} kí.`;
   const utterance = new SpeechSynthesisUtterance(speechText);
-  utterance.lang = 'ko-KR'; // Set to Vietnamese
+  utterance.lang = 'vi-VN'; // Set to Vietnamese
 
   // Stop any previous speech and speak the new text
   window.speechSynthesis.cancel();
