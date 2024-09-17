@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/stringify.dart';
 import 'package:viet_qr_plugin/main.dart';
 import 'package:viet_qr_plugin/models/notify_trans_dto.dart';
+import 'package:viet_qr_plugin/navigator/app_navigator.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

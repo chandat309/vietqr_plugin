@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viet_qr_plugin/features/home/views/home_view.dart';
 import 'package:viet_qr_plugin/features/login/views/login_view.dart';
+import 'package:viet_qr_plugin/navigator/app_navigator.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
@@ -29,10 +30,6 @@ Future<void> _initialServiceHelper() async {
       sharedPrefs.getString('USER_ID') == null) {
     await UserHelper.instance.initialUserInformationHelper();
   }
-}
-
-class NavigationService {
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
 class VietQRPlugin extends StatefulWidget {
@@ -68,6 +65,8 @@ class _VietQRPlugin extends State<VietQRPlugin> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.navigatorKey,
+      initialRoute: '/',
+      onGenerateRoute: NavigationService.onIniRoute,
       home: _mainScreen,
     );
   }
