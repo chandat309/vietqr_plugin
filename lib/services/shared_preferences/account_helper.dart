@@ -29,10 +29,8 @@ class AccountHelper {
 
   Future<SettingAccountDTO?> getAccountSetting() async {
     String? endcoded = sharedPrefs.getString('SETTING_ACCOUNT');
-    if (endcoded != null) {
-      return SettingAccountDTO.fromJson(jsonDecode(endcoded));
-    }
-    return null;
+    return endcoded != null ? SettingAccountDTO.fromJson(jsonDecode(endcoded)) : null;
+
   }
 
   Future<void> setFcmToken(String token) async {
