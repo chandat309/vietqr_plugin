@@ -28,4 +28,40 @@ class SettingRepository {
     }
     return result;
   }
+
+  Future<bool> setNotificationBDSD(int value) async {
+    try {
+      Map<String, dynamic> body = {};
+      body['value'] = value;
+      final String url =
+          '${EnvConfig.getBaseUrl()}account-bank/user/$userId/update-noti';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: body,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> setBankNotiBDSD(String bankId, int value) async {
+    try {
+      Map<String, dynamic> body = {};
+      body['value'] = value;
+      final String url =
+          '${EnvConfig.getBaseUrl()}account-bank/update-noti/$bankId';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: body,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
 }

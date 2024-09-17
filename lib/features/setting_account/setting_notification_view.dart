@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/commons/widgets/my_separator_widget.dart';
+import 'package:viet_qr_plugin/features/setting_account/views/setting_popup_bank_view.dart';
 
 class SettingNotificationView extends StatelessWidget {
   const SettingNotificationView({super.key});
@@ -43,27 +44,37 @@ class SettingNotificationView extends StatelessWidget {
         const MySeparator(
           color: AppColor.GREY_DADADA,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/ic-popup-settings.png',
-                height: 40,
-                // color: AppColor.BLUE_TEXT,
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SettingPopupBankView(),
               ),
-              const SizedBox(width: 4),
-              const Expanded(
-                child: Text(
-                  'Hiển thị Pop-up thông báo BĐSD',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/ic-popup-settings.png',
+                  height: 40,
+                  // color: AppColor.BLUE_TEXT,
+                ),
+                const SizedBox(width: 4),
+                const Expanded(
+                  child: Text(
+                    'Hiển thị Pop-up thông báo BĐSD',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
-              ),
-              const Icon(Icons.chevron_right)
-            ],
+                const Icon(Icons.chevron_right)
+              ],
+            ),
           ),
         ),
       ],

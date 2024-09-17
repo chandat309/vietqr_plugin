@@ -3,7 +3,7 @@ import 'package:viet_qr_plugin/commons/configurations/numeral.dart';
 import 'package:viet_qr_plugin/commons/configurations/route.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/home/widgets/bank_list_widgets.dart';
-import 'package:viet_qr_plugin/features/setting_account/setting_account_view.dart';
+import 'package:viet_qr_plugin/features/setting_account/views/setting_voice_bank_view.dart';
 import 'package:viet_qr_plugin/features/setting_account/setting_notification_view.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
