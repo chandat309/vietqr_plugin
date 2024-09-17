@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/route.dart';
 import 'package:viet_qr_plugin/features/home/views/home_view.dart';
-import 'package:viet_qr_plugin/features/setting_account/setting_account_view.dart';
+import 'package:viet_qr_plugin/features/setting_account/views/setting_voice_bank_view.dart';
 import 'package:viet_qr_plugin/main.dart';
 
 class NavigationService {
@@ -17,7 +17,7 @@ class NavigationService {
       case Routes.DASHBOARD:
         return _buildRoute(settings, const HomeView());
       case Routes.SETTING:
-        return _buildRoute(settings, const SettingAccountView());
+        return _buildRoute(settings, const SettingVoiceBankView());
       default:
         return null;
     }

@@ -3,14 +3,14 @@ import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 
-class SettingAccountView extends StatefulWidget {
-  const SettingAccountView({super.key});
+class SettingVoiceBankView extends StatefulWidget {
+  const SettingVoiceBankView({super.key});
 
   @override
-  State<SettingAccountView> createState() => _SettingAccountViewState();
+  State<SettingVoiceBankView> createState() => _SettingVoiceBankViewState();
 }
 
-class _SettingAccountViewState extends State<SettingAccountView> {
+class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   SettingAccountDTO settingAccount = SettingAccountDTO();
 
   @override
