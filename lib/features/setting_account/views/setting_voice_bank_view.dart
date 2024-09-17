@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
+import 'package:viet_qr_plugin/widgets/separator_widget.dart';
 
 class SettingVoiceBankView extends StatefulWidget {
   const SettingVoiceBankView({super.key});
@@ -12,7 +13,12 @@ class SettingVoiceBankView extends StatefulWidget {
 
 class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   SettingAccountDTO settingAccount = SettingAccountDTO();
-
+  bool isChecked1 = false;
+  bool isChecked2 = false;
+  bool isChecked3 = false;
+  bool isChecked4 = false;
+  bool isChecked5 = false;
+  bool isChecked6 = false;
   @override
   void initState() async {
     super.initState();
@@ -96,6 +102,84 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                 ],
               ),
             ),
+            const SizedBox(height: 15),
+            const Text(
+              'Cấu hình thông báo loại giao dịch',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildCheckboxRow('Giao dịch có đối soát', isChecked1, (value) {
+                  setState(() {
+                    isChecked1 = value ?? true;
+                  });
+                }),
+                // InkWell(
+                //   onTap: () {
+                //     // DialogWidget.instance.showModelBottomSheet(
+                //     //   borderRadius: BorderRadius.circular(16),
+                //     //   widget: const PopUpConfirm(),
+                //     //   // height: MediaQuery.of(context).size.height * 0.6,
+                //     // );
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.all(4),
+                //     height: 30,
+                //     width: 30,
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(100),
+                //         gradient: const LinearGradient(
+                //             colors: [
+                //               Color(0xFFE1EFFF),
+                //               Color(0xFFE5F9FF),
+                //             ],
+                //             begin: Alignment.centerLeft,
+                //             end: Alignment.centerRight)),
+                //     child:
+                //         const XImage(imagePath: 'assets/images/ic-i-black.png'),
+                //   ),
+                // ),
+              ],
+            ),
+            const MySeparator(color: AppColor.GREY_DADADA),
+            buildCheckboxRow('Giao dịch nhận tiền đến (+)', isChecked2,
+                (value) {
+              setState(() {
+                isChecked2 = value ?? true;
+              });
+            }),
+            const MySeparator(color: AppColor.GREY_DADADA),
+            buildCheckboxRow('Giao dịch chuyển tiền đi (−)', isChecked3,
+                (value) {
+              setState(() {
+                isChecked3 = value ?? true;
+              });
+            }),
+            const SizedBox(height: 20),
+            const Text(
+              'Cấu hình thông báo thông tin giao dịch',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+            const SizedBox(height: 10),
+            buildCheckboxRow('Số tiền', isChecked4, (value) {
+              setState(() {
+                isChecked4 = value ?? true;
+              });
+            }),
+            const MySeparator(color: AppColor.GREY_DADADA),
+            buildCheckboxRow('Nội dung thanh toán', isChecked5, (value) {
+              setState(() {
+                isChecked5 = value ?? true;
+              });
+            }),
+            const MySeparator(color: AppColor.GREY_DADADA),
+            buildCheckboxRow('Mã giao dịch', isChecked6, (value) {
+              setState(() {
+                isChecked6 = value ?? true;
+              });
+            }),
           ],
         ),
       ),
@@ -110,6 +194,34 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: AppColor.WHITE),
       child: child,
+    );
+  }
+
+  Widget buildCheckboxRow(
+      String text, bool isChecked, ValueChanged<bool?> onChanged) {
+    return Row(
+      children: [
+        Theme(
+          data: ThemeData(
+            unselectedWidgetColor: AppColor.GREY_DADADA,
+            checkboxTheme: CheckboxThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(3.0),
+              ),
+            ),
+          ),
+          child: Checkbox(
+            value: isChecked,
+            onChanged: onChanged,
+            checkColor: AppColor.WHITE,
+            activeColor: AppColor.BLUE_TEXT,
+          ),
+        ),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+        ),
+      ],
     );
   }
 }
