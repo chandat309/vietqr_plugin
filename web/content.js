@@ -2,7 +2,7 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
     case 'showDialog':
-      showTransactionDialog(request?.transaction, request?.type);
+      showTransactionDialog(request?.transaction, request?.transType);
       break;
     case 'speak':
       speakTransactionAmount(request?.text);
@@ -45,41 +45,58 @@ const showTransactionDialog = (transaction, type) => {
   addDialogEventListeners(dialog);
 };
 
+// Function to check if a transaction is unclassified
+const isTransUnclassified = (transaction) => {
+  return !transaction.terminalCode && !transaction.orderId;
+};
+
 // Generate HTML content for the dialog
-const createDialogHTML = (transaction, type) => {
+const createDialogHTML = (transaction, transType) => {
   console.log('transaction', transaction);
+
+  const isUnclassified = isTransUnclassified(transaction);
+  const formatTimePaid = formatDate(transaction.timePaid);
   return `
     <div class="vietqr-popup">
       <div class="vietqr-popup-content">
         <span class="vietqr-close">&times;</span>
-        <h3>${
-          type === '2' ? 'Giao dịch thành công' : 'Decrease Transaction'
-        }</h3>
-        <div class="vietqr-amount">${type === '2' ? '+' : '-'} ${
-    transaction.amount
-  } VND</div>
+      <h3 class="transaction-title ${
+        transType === 'C'
+          ? isUnclassified
+            ? 'incoming-unclassified'
+            : 'incoming-classified'
+          : 'outgoing'
+      }">
+          ${
+            transType === 'C'
+              ? isUnclassified
+                ? 'Giao dịch đến (+) không đối soát'
+                : 'Giao dịch đến (+) có đối soát'
+              : 'Giao dịch đi (-)'
+          }
+        </h3>
+        <div class="vietqr-amount">
+        ${transType === 'C' ? '+' : '-'} ${transaction.amount} VND</div>
         <div class="vietqr-transaction-details">
           <div class="vietqr-detail-row">
-            <span class="vietqr-label">To Account</span>
+            <span class="vietqr-label">Tới tài khoản</span>
             <span class="vietqr-value">${transaction.bankAccount || ''}</span>
           </div>
           <div class="vietqr-detail-row">
-            <span class="vietqr-label">Bank</span>
+            <span class="vietqr-label">Ngân hàng</span>
             <span class="vietqr-value">${transaction.bankName || ''}</span>
           </div>
           <div class="vietqr-detail-row">
-            <span class="vietqr-label">Time</span>
-            <span class="vietqr-value">${
-              transaction.timePaid ? formatDate(transaction.timePaid) : ''
-            }</span>
+            <span class="vietqr-label">Thời gian</span>
+            <span class="vietqr-value">${formatTimePaid}</span>
           </div>
           <div class="vietqr-detail-row">
-            <span class="vietqr-label">Content</span>
+            <span class="vietqr-label">Nội dung chuyển khoản</span>
             <span class="vietqr-value">${transaction.content || ''}</span>
           </div>
         </div>
         <div class="vietqr-buttons">
-          <button class="vietqr-close-btn-bottom">Close</button>
+          <button class="vietqr-close-btn-bottom">Đóng</button>
         </div>
       </div>
     </div>`;

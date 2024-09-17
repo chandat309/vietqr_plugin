@@ -26,6 +26,23 @@ span.vietqr-close {
   margin-bottom: 10px;
 }
 
+/* Tag h3 transaction title */
+.vietqr-popup h3.transaction-title {
+  font-weight: bold;
+}
+
+.vietqr-popup h3.transaction-title.incoming-unclassified {
+  color: red !important;
+}
+
+.vietqr-popup h3.transaction-title.incoming-classified {
+  color: green !important;
+}
+
+.vietqr-popup h3.transaction-title.outgoing {
+  color: blue !important;
+}
+
 .vietqr-amount {
   text-align: center;
   font-size: 40px;
@@ -41,7 +58,7 @@ span.vietqr-close {
 
 .vietqr-detail-row {
   display: flex;
-  margin-bottom: 10px;  
+  margin-bottom: 10px;
 }
 
 .vietqr-detail-row span {
