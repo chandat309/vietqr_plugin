@@ -21,6 +21,7 @@ class BankAccountDTO {
   final int unlinkedType;
   final bool isAuthenticated;
   final int pushNotification;
+  final bool enableVoice;
 
   // Dùng cho detail store
   final String terminalId;
@@ -52,6 +53,7 @@ class BankAccountDTO {
     this.isAuthenticated = false,
     this.terminalId = '',
     this.pushNotification = 0,
+    this.enableVoice = true,
   });
 
   setColor(value) {
@@ -80,6 +82,7 @@ class BankAccountDTO {
       unlinkedType: json["unlinkedType"] ?? 0,
       isAuthenticated: json["authenticated"] ?? false,
       pushNotification: json["pushNotification"],
+      enableVoice: json["enableVoice"],
     );
   }
 
@@ -104,5 +107,6 @@ class BankAccountDTO {
         "unlinkedType": unlinkedType,
         "authenticated": isAuthenticated,
         "pushNotification": pushNotification,
+        "enableVoice": enableVoice,
       };
 }

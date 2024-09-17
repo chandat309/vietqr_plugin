@@ -64,6 +64,24 @@ class SettingRepository {
     }
     return false;
   }
+
+  
+  Future<bool> enableVoiceSetting(Map<String, dynamic> param) async {
+    try {
+      final String url =
+          '${EnvConfig.getBaseUrl()}account-bank/sound-noti/enable';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+        body: param,
+      );
+    return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+      return false;
+    }
+  }
+
 }
 
 

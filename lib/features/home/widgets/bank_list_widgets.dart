@@ -1,23 +1,15 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
-import 'package:viet_qr_plugin/commons/env/env_config.dart';
-import 'package:viet_qr_plugin/enums/authentication_type.dart';
 import 'package:viet_qr_plugin/features/add_bank/views/add_bank_s1_view.dart';
 import 'package:viet_qr_plugin/features/home/repositories/bank_list_repository.dart';
 import 'package:viet_qr_plugin/features/qr/views/qr_bank_view.dart';
-import 'package:viet_qr_plugin/features/setting_account/repositories/setting_repository.dart';
 import 'package:viet_qr_plugin/models/bank_account_dto.dart';
-import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
-import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
-import 'package:viet_qr_plugin/utils/base_api.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 
 import 'package:palette_generator/palette_generator.dart';
-import 'package:viet_qr_plugin/utils/log.dart';
 
 class BankListWidget extends StatefulWidget {
   final double width;

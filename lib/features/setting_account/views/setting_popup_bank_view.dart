@@ -174,7 +174,7 @@ class _SettingPopupBankViewState extends State<SettingPopupBankView> {
                 ),
                 // Placeholder for bank logo
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 5),
               SizedBox(
                 width: 150,
                 child: Column(
