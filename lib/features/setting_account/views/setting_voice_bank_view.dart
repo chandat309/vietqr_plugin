@@ -22,7 +22,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   String userId = UserHelper.instance.getUserId();
   final SettingRepository _settingRepository = SettingRepository();
   List<BankSelection> _listBankAuthen = [];
-  List<String> _listBankId = [];
+  // List<String> _listBankId = [];
 
   bool isChecked1 = false;
   bool isChecked2 = false;
@@ -35,6 +35,17 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   void initState() async {
     super.initState();
     getBanks();
+  }
+
+  List<String> getListId() {
+    Set<String> bankIdSet = <String>{};
+    final list =
+        _listBankAuthen.where((element) => element.value == true).toList();
+    for (BankSelection selection in list) {
+      bankIdSet.add(selection.bank.bankId);
+    }
+
+    return bankIdSet.toList(); // Convert set to list and return
   }
 
   Future<void> getBanks() async {
@@ -55,7 +66,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
             value: filterListAuten[index].enableVoice),
       );
     });
-    _updateListId(_listBankAuthen);
   }
 
   @override
@@ -110,16 +120,21 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                 getSwitch(
                   _listBankAuthen.every((element) => element.value),
                   (value) async {
-                    _updateEnableVoiceItem(value);
-                    _updateListId(_listBankAuthen);
+                    setState(() {
+                      _listBankAuthen = List.generate(
+                        _listBankAuthen.length,
+                        (index) => BankSelection(
+                            bank: _listBankAuthen[index].bank, value: value),
+                      ).toList();
+                    });
                     Map<String, dynamic> paramEnable = {};
-                    paramEnable['bankIds'] = _listBankId;
+                    paramEnable['bankIds'] = getListId();
                     paramEnable['userId'] = UserHelper.instance.getUserId();
                     _settingRepository.enableVoiceSetting(paramEnable).then(
                       (isSuccess) {
                         if (isSuccess) {
                           js.context.callMethod(
-                              'setListBankVoice', [jsonEncode(_listBankId)]);
+                              'setListBankVoice', [jsonEncode(getListId)]);
                           // _settingRepository.getListBankNotify();
                         }
                       },
@@ -300,15 +315,15 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                 _listBankAuthen[index] =
                     BankSelection(bank: dto.bank, value: value);
               });
-              _updateListId(_listBankAuthen);
+
               Map<String, dynamic> paramEnable = {};
-              paramEnable['bankIds'] = _listBankId;
+              paramEnable['bankIds'] = getListId();
               paramEnable['userId'] = UserHelper.instance.getUserId();
               _settingRepository.enableVoiceSetting(paramEnable).then(
                 (isSuccess) {
                   if (isSuccess) {
                     js.context.callMethod(
-                        'setListBankVoice', [jsonEncode(_listBankId)]);
+                        'setListBankVoice', [jsonEncode(getListId)]);
                     // _settingRepository.getListBankNotify();
                   }
                 },
@@ -318,35 +333,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
         ],
       ),
     );
-  }
-
-  void _updateListId(List<BankSelection> listBankAuthen) {
-    Set<String> bankIdSet = <String>{};
-    if (listBankAuthen.isNotEmpty) {
-      final list =
-          listBankAuthen.where((element) => element.value == true).toList();
-      for (BankSelection selection in list) {
-        // ignore: unnecessary_null_comparison
-        if (selection.bank != null) {
-          bankIdSet.add(selection.bank.bankId);
-        }
-      }
-      setState(() {
-        _listBankId = bankIdSet.toList();
-      });
-      js.context.callMethod('setListBankVoice', [jsonEncode(_listBankId)]);
-      // _settingRepository.getListBankNotify();
-    }
-  }
-
-  void _updateEnableVoiceItem(bool value) {
-    setState(() {
-      _listBankAuthen = List.generate(
-        _listBankAuthen.length,
-        (index) =>
-            BankSelection(bank: _listBankAuthen[index].bank, value: value),
-      ).toList();
-    });
   }
 
   Switch getSwitch(bool value, Function(bool) onChange) {

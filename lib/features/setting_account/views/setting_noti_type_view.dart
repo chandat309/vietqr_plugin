@@ -123,8 +123,11 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   }
 
   Widget _itemBank(BankAccountDTO dto, int index) {
-    BankEnableType enableType = BankEnableType(bankId: '');
-    enableType = listType.firstWhere((element) => element.bankId == dto.bankId);
+    BankEnableType? enableType = listType.firstWhere(
+      (element) => element.bankId == dto.bankId,
+      orElse: () => BankEnableType(bankId: ''),
+    );
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
