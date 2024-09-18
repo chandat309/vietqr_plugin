@@ -9,7 +9,7 @@ import 'package:viet_qr_plugin/features/setting_account/views/setting_popup_bank
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/widgets/separator_widget.dart';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 
 class SettingVoiceBankView extends StatefulWidget {
   const SettingVoiceBankView({super.key});
@@ -120,8 +120,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                         if (isSuccess) {
                           // js.context.callMethod('setListBankEnableVoiceId',
                           //     [jsonEncode(_listBankId)]);
-                          js.context.callMethod(
-                              'getListBankNotificationTypes', [userId]);
+                          // js.context.callMethod(
+                          //     'getListBankNotificationTypes', [userId]);
                         }
                       },
                     );
@@ -310,8 +310,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                   if (isSuccess) {
                     // js.context.callMethod(
                     //     'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
-                    js.context
-                        .callMethod('getListBankNotificationTypes', [userId]);
+                    // js.context
+                    //     .callMethod('getListBankNotificationTypes', [userId]);
                   }
                 },
               );
@@ -338,7 +338,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       });
       // js.context.callMethod(
       //     'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
-      js.context.callMethod('getListBankNotificationTypes', [userId]);
+      // js.context.callMethod('getListBankNotificationTypes', [userId]);
     }
   }
 

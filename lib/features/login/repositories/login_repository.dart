@@ -53,8 +53,10 @@ class LoginRepository {
       String device = '';
       String sharingCode = '';
       platform = 'CHROMEPLUGIN';
-      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
-      device = webBrowserInfo.userAgent.toString();
+      // WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+      // device = webBrowserInfo.userAgent.toString();
+      WindowsDeviceInfo webBrowserInfo = await deviceInfo.windowsInfo;
+      device = webBrowserInfo.deviceId.toString();
       AccountLoginDTO loginDTO = AccountLoginDTO(
         phoneNo: dto.phoneNo,
         password: dto.password,

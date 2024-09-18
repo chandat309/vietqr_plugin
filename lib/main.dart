@@ -10,7 +10,7 @@ import 'package:viet_qr_plugin/navigator/app_navigator.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 
 //Share Preferences
 late SharedPreferences sharedPrefs;
@@ -48,14 +48,14 @@ class _VietQRPlugin extends State<VietQRPlugin> {
   String token = AccountHelper.instance.getToken() ?? '';
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     // SocketService.instance.init();
     _mainScreen = (userId.isNotEmpty) ? const HomeView() : const LoginView();
 
     if (userId.isNotEmpty && token.isNotEmpty) {
-      js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
-      js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
+      // js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
+      // js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
       // List<String> listBankId = await UserHelper.instance.retrieveList();
       // js.context.callMethod(
       //     'setListBankEnableVoiceId', [jsonEncode(listBankId)]);

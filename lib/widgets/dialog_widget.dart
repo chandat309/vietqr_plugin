@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
@@ -10,7 +10,7 @@ import 'package:viet_qr_plugin/services/shared_preferences/user_information_help
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/utils/string_utils.dart';
 import 'package:viet_qr_plugin/widgets/button_widget.dart';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 
 class DialogWidget {
   //
@@ -153,7 +153,7 @@ class DialogWidget {
                       function: () async {
                         await _logoutRepository.logout().then(
                           (value) {
-                            js.context.callMethod('logoutUser');
+                            // js.context.callMethod('logoutUser');
                             Navigator.pop(context);
                             if (value) {
                               Navigator.push(
@@ -229,7 +229,7 @@ class DialogWidget {
                       function: () async {
                         String url =
                             'https://vietqr.vn/register'; // Đường liên kết bạn muốn mở
-                        window.open(url, '_blank');
+                        // window.open(url, '_blank');
                       },
                     ),
                     const Padding(padding: EdgeInsets.only(bottom: 5)),

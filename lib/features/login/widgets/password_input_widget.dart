@@ -11,7 +11,7 @@ import 'package:viet_qr_plugin/utils/log.dart';
 import 'package:viet_qr_plugin/widgets/button_widget.dart';
 import 'package:viet_qr_plugin/widgets/dialog_widget.dart';
 import 'package:viet_qr_plugin/widgets/pin_code_input.dart';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 
 class PaswordInputWidget extends StatefulWidget {
   final double width;
@@ -138,8 +138,8 @@ class _PasswordInputWidget extends State<PaswordInputWidget> {
         setState(() {
           _isErrPassword = false;
         });
-        js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
-        js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
+        // js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
+        // js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
         // js.context.callMethod('listenWss');
 
         //navigate to home

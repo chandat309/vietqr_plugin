@@ -10,7 +10,7 @@ import 'package:viet_qr_plugin/models/bank_account_dto.dart';
 import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 import 'package:palette_generator/palette_generator.dart';
 
 class BankListWidget extends StatefulWidget {
@@ -50,7 +50,7 @@ class _BankListWidget extends State<BankListWidget> {
     //     bankIdSet.add(dto.bankId);
     //   }
     // }
-    js.context.callMethod('getListBankNotificationTypes', [userId]);
+    // js.context.callMethod('getListBankNotificationTypes', [userId]);
     await getColors();
   }
 
