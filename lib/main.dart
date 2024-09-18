@@ -48,7 +48,7 @@ class _VietQRPlugin extends State<VietQRPlugin> {
   String token = AccountHelper.instance.getToken() ?? '';
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     // SocketService.instance.init();
     _mainScreen = (userId.isNotEmpty) ? const HomeView() : const LoginView();
@@ -56,8 +56,9 @@ class _VietQRPlugin extends State<VietQRPlugin> {
     if (userId.isNotEmpty && token.isNotEmpty) {
       js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
       js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
-      js.context.callMethod('setListBankEnableVoiceId',
-          [jsonEncode(UserHelper.instance.retrieveList())]);
+      // List<String> listBankId = await UserHelper.instance.retrieveList();
+      // js.context.callMethod(
+      //     'setListBankEnableVoiceId', [jsonEncode(listBankId)]);
     }
   }
 

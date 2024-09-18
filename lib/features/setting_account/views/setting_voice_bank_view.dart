@@ -121,7 +121,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                     _settingRepository.enableVoiceSetting(paramEnable).then(
                       (isSuccess) {
                         if (isSuccess) {
-                          UserHelper.instance.storeList(_listBankId);
                           js.context.callMethod('setListBankEnableVoiceId',
                               [jsonEncode(_listBankId)]);
                         }
@@ -310,7 +309,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
               _settingRepository.enableVoiceSetting(paramEnable).then(
                 (isSuccess) {
                   if (isSuccess) {
-                    UserHelper.instance.storeList(_listBankId);
                     js.context.callMethod(
                         'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
                   }
@@ -336,9 +334,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       setState(() {
         _listBankId = bankIdSet.toList();
       });
-      UserHelper.instance.storeList(bankIdSet.toList());
-      js.context
-          .callMethod('setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
+      js.context.callMethod(
+          'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
     }
   }
 

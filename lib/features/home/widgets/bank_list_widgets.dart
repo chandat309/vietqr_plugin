@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
@@ -8,7 +9,7 @@ import 'package:viet_qr_plugin/models/bank_account_dto.dart';
 import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
-
+import 'dart:js' as js;
 import 'package:palette_generator/palette_generator.dart';
 
 class BankListWidget extends StatefulWidget {
@@ -38,6 +39,18 @@ class _BankListWidget extends State<BankListWidget> {
   Future<void> getBanks() async {
     String userId = UserHelper.instance.getUserId();
     _banks = await widget.bankListRepository.getListBankAccount(userId);
+    final listBankEnableVoice = _banks.where(
+      (element) =>
+          element.isOwner && element.isAuthenticated && element.enableVoice,
+    );
+    Set<String> bankIdSet = <String>{};
+    if (listBankEnableVoice.isNotEmpty) {
+      for (BankAccountDTO dto in listBankEnableVoice) {
+        bankIdSet.add(dto.bankId);
+      }
+    }
+    js.context.callMethod(
+        'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
     await getColors();
   }
 

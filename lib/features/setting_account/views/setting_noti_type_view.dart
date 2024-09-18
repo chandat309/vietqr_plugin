@@ -45,6 +45,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
     return Scaffold(
       backgroundColor: AppColor.WHITE,
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: const Text(
           'Cấu hình thông báo',
           style: TextStyle(
@@ -71,20 +72,22 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
         width: width,
         height: height,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
-            const Text(
-              'Chọn tài khoản cấu hình',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-                height: 1.4,
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Tùy chỉnh cấu hình nhận BĐSD cho từng tài khoản ngân hàng',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  height: 1.4,
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -92,7 +95,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
               child: ListView.separated(
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 shrinkWrap: true,
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemBuilder: (context, index) {
                   return _itemBank(
                     listBank[index],
@@ -146,16 +149,15 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
                       children: [
                         Text(dto.bankAccount,
                             style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                                fontSize: 12, fontWeight: FontWeight.bold)),
                         Text(dto.userBankName,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 15)),
+                            style: const TextStyle(fontSize: 12)),
                       ],
                     ),
                   ),
                 ],
               ),
-
             ],
           ),
           const SizedBox(height: 10),
@@ -163,8 +165,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
               title: 'GD đến (+) có đối soát', color: AppColor.GREEN),
           _buildDescriptionWidget(
               title: 'GD đến (+) không đối soát', color: AppColor.BLUE_TEXT),
-          _buildDescriptionWidget(
-              title: 'GD đi (-)', color: AppColor.RED_TEXT)
+          _buildDescriptionWidget(title: 'GD đi (-)', color: AppColor.RED_TEXT)
         ],
       ),
     );
@@ -201,9 +202,10 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
               ),
             ],
           ),
-          Checkbox(value: false, onChanged: (value) {
-            
-          },)
+          Checkbox(
+            value: false,
+            onChanged: (value) {},
+          )
         ],
       ),
     );

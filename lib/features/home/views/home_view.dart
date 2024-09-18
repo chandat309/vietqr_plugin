@@ -65,7 +65,7 @@ class HomeView extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 4),
             const SettingNotificationView(),
             const SizedBox(height: 10),
             Expanded(

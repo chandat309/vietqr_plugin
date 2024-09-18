@@ -87,8 +87,10 @@ class UserHelper {
     if (!sharedPrefs.containsKey('LIST_BANK_ID_VOICE') ||
         sharedPrefs.getString('LIST_BANK_ID_VOICE') == null) {
       await sharedPrefs.setString('LIST_BANK_ID_VOICE', jsonString);
+      print('isSetList');
       return;
     }
+      print('isSetList2');
     await sharedPrefs.setString('LIST_BANK_ID_VOICE', jsonString);
   }
 
@@ -98,8 +100,10 @@ class UserHelper {
     if (jsonString == null) {
       return list;
     }
-    list = jsonDecode(jsonString);
-    return list;
+    List<dynamic> jsonDecoded = jsonDecode(jsonString);
+    print(jsonDecoded);
+    // Return the list as List<String>
+    return List<String>.from(jsonDecoded);
   }
 
   // Future<void> setAccountSetting(SettingAccountDTO dto) async {
