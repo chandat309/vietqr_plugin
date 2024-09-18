@@ -46,10 +46,7 @@ span.vietqr-close {
 }
 
 .vietqr-amount {
-  display: flex;
   text-align: center;
-  justify-content: center;
-  align-items: center;
   font-size: 40px;
   font-weight: bold;
   color: #4CAF50;

@@ -105,11 +105,30 @@ const createDialogHTML = (transaction, transType) => {
             <span class="vietqr-value">${transaction?.bankName || ''}</span>
           </div>
           <div class="vietqr-detail-row">
-            <span class="vietqr-label">Thời gian</span>
+            <span class="vietqr-label">Thời gian thanh toán</span>
             <span class="vietqr-value">${formatTransactionDate(
               transaction?.timePaid * 1000
             )}</span> 
           </div>
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Mã đơn hàng</span>
+            <span class="vietqr-value">${transaction?.orderId || '-'}</span>
+          </div>
+          <div class="vietqr-detail-row">
+            <span class="vietqr-label">Mã cửa hàng</span>
+            <span class="vietqr-value">${
+              transaction?.terminalCode || '-'
+            }</span>
+          </div>
+          ${
+            transaction?.terminalName &&
+            `
+              <div class="vietqr-detail-row">
+                <span class="vietqr-label">Mã đơn hàng</span>
+                <span class="vietqr-value">${transaction?.terminalName}</span>
+              </div>
+            `
+          }
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Nội dung chuyển khoản</span>
             <span class="vietqr-value">${transaction?.content || ''}</span>
@@ -148,11 +167,15 @@ const addDialogEventListeners = (dialog) => {
 
 // Function to speak the transaction amount using Web Speech API
 const speakTransactionAmount = (amount) => {
-  const speechText = `Tôi là Kiên mập ${amount} kí.`;
-  const utterance = new SpeechSynthesisUtterance(speechText);
-  utterance.lang = 'vi-VN'; // Set to Vietnamese
+  if ('speechSynthesis' in window) {
+    const speechText = `Tôi là Kiên mập ${amount} kí.`;
+    const utterance = new SpeechSynthesisUtterance(speechText);
+    utterance.lang = 'vi-VN'; // Set to Vietnamese
 
-  // Stop any previous speech and speak the new text
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+    // Stop any previous speech and speak the new text
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  } else {
+    console.warn('Web Speech API is not supported in this browser.');
+  }
 };

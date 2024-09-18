@@ -1,4 +1,6 @@
 let getLocalStorageInterval;
+let reconnectAttempts = 0;
+let socketInstance = null;
 
 async function setUserId(userId) {
   // idUser = userId;
@@ -27,71 +29,82 @@ const clearLocalStorageInterval = () => {
 };
 
 const listenWebSocket = ({ token, userId, listId }) => {
-  let socket;
-  if (userId) {
-    socket = new WebSocket(`wss://api.vietqr.org/vqr/socket?userId=${userId}`);
-    socket.onopen = () => {
-      const message = JSON.stringify({
-        type: 'auth',
-        token,
-        listId
-      });
-      socket.send(message);
-      console.log('WebSocket connection established');
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('WebSocket message received:', data);
-      if (data.notificationType === 'N05') {
-        // TODO: Show dialog
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs.length > 0) {
-            const activeTab = tabs[0].id;
-            // Inject content.js into the active tab (if needed)
-            chrome.scripting.executeScript(
-              {
-                target: { tabId: activeTab },
-                files: ['content.js']
-              },
-              () => {
-                // Send message to content script to show dialog
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'showDialog',
-                  transaction: data
-                });
-
-                // Send message to content script to speak the amount
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'speak',
-                  text: data.amount // Assuming amount is in the data
-                });
-
-                console.log(
-                  'Content script injected and messages sent successfully'
-                );
-              }
-            );
-          } else {
-            console.log('No active tab found.');
-          }
-        });
-      } else {
-        console.log('No userId provided. WebSocket not initialized.');
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    socket.onclose = (event) => {
-      console.log('WebSocket connection closed:', event);
-    };
+  // Check if WebSocket is already initialized
+  if (socketInstance) {
+    console.log('WebSocket already initialized');
+    return;
   }
-  return {
-    closeSocket: () => {
-      if (socket) socket.close();
+
+  socketInstance = new WebSocket(
+    `wss://api.vietqr.org/vqr/socket?userId=${userId}`
+  );
+
+  socketInstance.onopen = () => {
+    const message = JSON.stringify({
+      type: 'auth',
+      token,
+      listId
+    });
+    socketInstance.send(message);
+    console.log('WebSocket connection established');
+    console.log('WebSocket message sent:', message);
+  };
+
+  socketInstance.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('WebSocket message received:', data);
+
+    if (data.notificationType === 'N05') {
+      // TODO: Show dialog
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length > 0) {
+          const activeTab = tabs[0].id;
+          // Inject content.js into the active tab (if needed)
+          chrome.scripting.executeScript(
+            {
+              target: { tabId: activeTab },
+              files: ['content.js']
+            },
+            () => {
+              // Send message to content script to show dialog
+              chrome.tabs.sendMessage(activeTab, {
+                action: 'showDialog',
+                transaction: data
+              });
+
+              // Send message to content script to speak the amount
+              chrome.tabs.sendMessage(activeTab, {
+                action: 'speak',
+                text: data.amount // Assuming amount is in the data
+              });
+
+              console.log(
+                'Content script injected and messages sent successfully'
+              );
+            }
+          );
+        } else {
+          console.log('No active tab found.');
+        }
+      });
+    } else {
+      console.log('No userId provided. WebSocket not initialized.');
+    }
+  };
+
+  socketInstance.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+
+  socketInstance.onclose = (event) => {
+    console.log('WebSocket closed:', event);
+    socketInstance = null;
+    // Try reconnecting using exponential backoff
+    if (reconnectAttempts < 5) {
+      setTimeout(() => {
+        reconnectAttempts++;
+        listenWebSocket({ token, userId, listId });
+      }, Math.pow(2, reconnectAttempts) * 1000); // Retry with exponential backoff
     }
   };
 };
@@ -122,6 +135,12 @@ const checkStorageAndListenWebSocket = async () => {
               }
             );
           }, 2000);
+        } else {
+          listenWebSocket({
+            token: bearerToken,
+            userId: idUser,
+            listId: listId
+          });
         }
       }
     );
@@ -140,6 +159,14 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onStartup.addListener(() => {
   console.log('Extension started');
   checkStorageAndListenWebSocket();
+});
+
+chrome.runtime.onSuspend.addListener(() => {
+  console.log('Extension is being suspended. Cleaning up...');
+  if (socketInstance) {
+    socketInstance.close();
+    socketInstance = null;
+  }
 });
 
 // // Listen for changes in storage
