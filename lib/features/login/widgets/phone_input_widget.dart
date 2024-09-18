@@ -36,7 +36,7 @@ class _PhoneInputWidget extends State<PhoneInputWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      height: widget.height,
+      height:400,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
