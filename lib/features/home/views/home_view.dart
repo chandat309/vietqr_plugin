@@ -43,20 +43,6 @@ class HomeView extends StatelessWidget {
                     height: 50,
                   ),
                   const Spacer(),
-                  // IconButton(
-                  //     onPressed: () {
-                  //       // Navigator.of(context).pushNamed(Routes.SETTING);
-                  //       Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //           builder: (_) => const SettingAccountView(),
-                  //         ),
-                  //       );
-                  //     },
-                  //     icon: const Icon(
-                  //       Icons.settings,
-                  //       color: AppColor.GREY_TEXT,
-                  //     )),
                   const SizedBox(width: 8),
                   InkWell(
                     onTap: () {
