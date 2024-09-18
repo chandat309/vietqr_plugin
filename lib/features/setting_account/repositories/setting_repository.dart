@@ -54,7 +54,7 @@ class SettingRepository {
     return list;
   }
 
-  Future<bool> setListBankNotify(String bankId, List<String> types) async {
+  Future<bool> setListBankNotify(String bankId, String types) async {
     try {
       Map<String, dynamic> data = {};
       data['userId'] = userId;
@@ -67,8 +67,7 @@ class SettingRepository {
         url: url,
         type: AuthenticationType.SYSTEM,
       );
-      if (response.statusCode == 200) {
-      } else {}
+
       return response.statusCode == 200;
     } catch (e) {
       LOG.error(e.toString());
