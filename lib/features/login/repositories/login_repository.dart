@@ -9,6 +9,7 @@ import 'package:viet_qr_plugin/models/response_message_dto.dart';
 import 'package:viet_qr_plugin/services/js/js_interop_services.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
+import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -82,6 +83,7 @@ class LoginRepository {
         await UserHelper.instance.setPhoneNo(dto.phoneNo);
         await UserHelper.instance.setUserId(accountInformationDTO.userId);
         await UserHelper.instance.setAccountInformation(accountInformationDTO);
+        SocketService.instance.init();
         result = true;
       }
     } catch (e) {

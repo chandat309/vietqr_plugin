@@ -2,6 +2,7 @@ import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
+import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
 // import 'dart:js' as js;
@@ -30,5 +31,7 @@ class LogoutRepository {
   Future<void> _resetServices() async {
     await UserHelper.instance.initialUserInformationHelper();
     await AccountHelper.instance.initialAccountHelper();
+
+    SocketService.instance.closeListenTransaction();
   }
 }

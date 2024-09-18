@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viet_qr_plugin/features/home/views/home_view.dart';
 import 'package:viet_qr_plugin/features/login/views/login_view.dart';
@@ -32,7 +33,15 @@ Future<void> _initialServiceHelper() async {
       sharedPrefs.getString('USER_ID') == null) {
     await UserHelper.instance.initialUserInformationHelper();
   }
+
+  SocketService.instance.init();
+
+  if (notificationController.isClosed) {
+    notificationController = BehaviorSubject<bool>();
+  }
 }
+
+var notificationController = BehaviorSubject<bool>();
 
 class VietQRPlugin extends StatefulWidget {
   const VietQRPlugin({super.key});

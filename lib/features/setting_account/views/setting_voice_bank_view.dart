@@ -32,7 +32,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   bool isChecked6 = false;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     getBanks();
   }
