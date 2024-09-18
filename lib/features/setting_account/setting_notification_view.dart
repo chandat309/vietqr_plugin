@@ -124,7 +124,7 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
                     ),
                   ),
                 ),
-                 const MySeparator(
+                const MySeparator(
                   color: AppColor.GREY_DADADA,
                 ),
                 InkWell(
@@ -149,6 +149,58 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
                         const Expanded(
                           child: Text(
                             'Cấu hình loại thông báo BĐSD',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right)
+                      ],
+                    ),
+                  ),
+                ),
+                const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),
+                InkWell(
+                  onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const SettingPopupBankView(),
+                    //   ),
+                    // );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                            child: ShaderMask(
+                              blendMode: BlendMode.srcIn,
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [
+                                  Color(0xFF00C6FF),
+                                  Color(0xFF0072FF),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ).createShader(bounds),
+                              child: const Icon(
+                                Icons.language,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: Text(
+                            'Hướng dẫn cài đặt giọng nói bằng Tiếng Việt',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,

@@ -1449,6 +1449,7 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/features/qr/views/qr_bank_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/qr/widgets/viet_qr_widget.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/repositories/setting_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/setting_notification_view.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_noti_type_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_popup_bank_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_voice_bank_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/main.dart

@@ -46,12 +46,27 @@ span.vietqr-close {
 }
 
 .vietqr-amount {
+  display: flex;
   text-align: center;
+  justify-content: center;
+  align-items: center;
   font-size: 40px;
   font-weight: bold;
   color: #4CAF50;
   margin-bottom: 10px;
   transition: color 0.3s ease;
+}
+
+.vietqr-amount.incoming-unclassified {
+  color: blue !important;
+}
+
+.vietqr-amount.incoming-classified {
+  color: green !important;
+}
+
+.vietqr-amount.outgoing {
+  color: red !important;
 }
 
 .vietqr-transaction-details {

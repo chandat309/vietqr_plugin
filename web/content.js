@@ -85,8 +85,16 @@ const createDialogHTML = (transaction, transType) => {
               : 'Giao dịch đi (-)'
           }
         </h3>
-        <div class="vietqr-amount">
-        ${transType === 'C' ? '+' : '-'} ${transaction?.amount} VND</div>
+        <div class="vietqr-amount ${
+          transType === 'C'
+            ? isUnclassified
+              ? 'incoming-unclassified'
+              : 'incoming-classified'
+            : 'outgoing'
+        }">
+        ${transType === 'C' ? '&#43;' : '&minus;'} ${
+    transaction?.amount
+  } VND</div>
         <div class="vietqr-transaction-details">
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Tới tài khoản</span>

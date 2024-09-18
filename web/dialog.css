@@ -54,6 +54,18 @@ span.vietqr-close {
   transition: color 0.3s ease;
 }
 
+.vietqr-amount.incoming-unclassified {
+  color: blue !important;
+}
+
+.vietqr-amount.incoming-classified {
+  color: green !important;
+}
+
+.vietqr-amount.outgoing {
+  color: red !important;
+}
+
 .vietqr-transaction-details {
   margin-bottom: 10px;
 }
