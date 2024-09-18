@@ -1,6 +1,7 @@
 let getLocalStorageInterval;
 let reconnectAttempts = 0;
 let socketInstance = null;
+let currentListId = null;
 
 async function setUserId(userId) {
   // idUser = userId;
@@ -20,6 +21,15 @@ async function setListBankEnableVoiceId(list) {
   console.log('List:', list);
 }
 
+// Get list of bank notification types
+async function getListBankNotificationTypes(userId) {
+  const res =
+    await fetch(`https://dev.vietqr.org/vqr/api/bank-notification/${userId}
+`);
+  const data = await res.json();
+  return data;
+}
+
 async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
 }
@@ -32,8 +42,19 @@ const listenWebSocket = ({ token, userId, listId }) => {
   // Check if WebSocket is already initialized
   if (socketInstance) {
     console.log('WebSocket already initialized');
-    return;
+    if (currentListId !== listId) {
+      console.log('listId has changed. Updating WebSocket...');
+      currentListId = listId;
+      // Close the current WebSocket and reinitialize
+      socketInstance.close();
+      socketInstance = null;
+    } else {
+      console.log('No changes in listId');
+      return;
+    }
   }
+
+  currentListId = listId;
 
   socketInstance = new WebSocket(
     `wss://api.vietqr.org/vqr/socket?userId=${userId}`
@@ -66,18 +87,29 @@ const listenWebSocket = ({ token, userId, listId }) => {
               files: ['content.js']
             },
             () => {
+              // Check if listId has changed
+              if (data.listId !== currentListId) {
+                console.log('listId has changed. Updating...');
+                currentListId = data.listId;
+              }
+
               // Send message to content script to show dialog
               chrome.tabs.sendMessage(activeTab, {
                 action: 'showDialog',
                 transaction: data
               });
-
-              // Send message to content script to speak the amount
-              chrome.tabs.sendMessage(activeTab, {
-                action: 'speak',
-                text: data.amount // Assuming amount is in the data
-              });
-
+              if (data.listId !== undefined && data.listId !== null) {
+                // Send message to content script to speak the amount
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'speak',
+                  text: data.amount.toLocaleDateString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                  }) // Assuming amount is in the data
+                });
+              } else {
+                console.warn('listId not found or is null');
+              }
               console.log(
                 'Content script injected and messages sent successfully'
               );
@@ -148,6 +180,8 @@ const checkStorageAndListenWebSocket = async () => {
     console.error('Error:', error);
   }
 };
+
+// Call
 
 // Run the function on extension install/reload
 chrome.runtime.onInstalled.addListener(() => {

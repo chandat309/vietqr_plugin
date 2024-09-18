@@ -138,7 +138,8 @@ const createDialogHTML = (transaction, transType) => {
           <button class="vietqr-close-btn-bottom">Đóng</button>
         </div>
       </div>
-    </div>`;
+    </div>
+    `;
 };
 
 // Function to handle dialog events like close
