@@ -16,9 +16,9 @@ async function setToken(token) {
   // console.log("Bearer:", bearerToken);
 }
 
-async function setListBankEnableVoiceId(list) {
+async function setListBankNotify(list) {
   // bearerToken = token;
-  await chrome.storage.local.set({ listId: list });
+  await chrome.storage.local.set({ listBank: list });
   console.log('List:', list);
 }
 
@@ -30,33 +30,16 @@ const clearLocalStorageInterval = () => {
   if (getLocalStorageInterval) clearInterval(getLocalStorageInterval);
 };
 
-const listenWebSocket = ({ token, userId, listId }) => {
-  // Check if WebSocket is already initialized
-  if (socketInstance) {
-    console.log('WebSocket already initialized');
-    if (currentListId !== listId) {
-      console.log('listId has changed. Updating WebSocket...');
-      currentListId = listId;
-      // Close the current WebSocket and reinitialize
-      socketInstance.close();
-      socketInstance = null;
-    } else {
-      console.log('No changes in listId');
-      return;
-    }
-  }
-
-  currentListId = listId;
-
+const listenWebSocket = ({ token, userId, listBank }) => {
   socketInstance = new WebSocket(
-    `wss://api.vietqr.org/vqr/socket?userId=${userId}`
+    `wss://dev.vietqr.org/vqr/socket?userId=${userId}`
   );
 
   socketInstance.onopen = () => {
     const message = JSON.stringify({
       type: 'auth',
       token,
-      listId
+      listBank
     });
     socketInstance.send(message);
     console.log('WebSocket connection established');
@@ -123,52 +106,98 @@ const listenWebSocket = ({ token, userId, listId }) => {
       setTimeout(() => {
         reconnectAttempts++;
         listenWebSocket({ token, userId, listId });
-      }, Math.pow(2, reconnectAttempts) * 1000); // Retry with exponential backoff
+      }, 1000); // Retry with exponential backoff
     }
   };
 };
 
+let result;
+
 const checkStorageAndListenWebSocket = async () => {
   try {
-    await chrome.storage.local.get(
-      ['idUser', 'bearerToken', 'listId'],
-      (result) => {
-        const { idUser, bearerToken, listId } = result;
-        console.log('Storage retrieved', result);
+    const getStorageData = () => {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get(
+          ['idUser', 'bearerToken', 'listBank'],
+          (result) => {
+            if (chrome.runtime.lastError) {
+              reject(new Error(chrome.runtime.lastError));
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      });
+    };
 
-        // Check if idUser is available in storage
-        if (!idUser) {
-          getLocalStorageInterval = setInterval(async () => {
-            await chrome.storage.local.get(
-              ['idUser', 'bearerToken', 'listId'],
-              (result) => {
-                const { idUser, bearerToken, listId } = result;
-                if (idUser) {
-                  listenWebSocket({
-                    token: bearerToken,
-                    userId: idUser,
-                    listId: listId
-                  });
-                  clearLocalStorageInterval(); // Clear the interval if it's running
-                }
-              }
-            );
-          }, 2000);
-        } else {
-          listenWebSocket({
-            token: bearerToken,
-            userId: idUser,
-            listId: listId
-          });
-        }
+    const retrieveAndProcessData = async () => {
+      result = await getStorageData();
+      const { idUser, bearerToken, listBank } = result;
+      console.log('Storage retrieved', result);
+
+      if (!idUser) {
+        getLocalStorageInterval = setInterval(async () => {
+          try {
+            const result = await getStorageData();
+            const { idUser, bearerToken, listBank } = result;
+            if (idUser) {
+              listenWebSocket({
+                token: bearerToken,
+                userId: idUser,
+                listId: listBank
+              });
+              clearInterval(getLocalStorageInterval); // Clear the interval if idUser is found
+            }
+          } catch (error) {
+            console.error('Error retrieving storage data:', error);
+          }
+        }, 1000);
+      } else {
+        listenWebSocket({
+          token: bearerToken,
+          userId: idUser,
+          listBank: listBank
+        });
       }
-    );
+    };
+    await retrieveAndProcessData();
+    // await chrome.storage.local.get(
+    //   ['idUser', 'bearerToken', 'listBank'],
+    //   (result) => {
+    //     const { idUser, bearerToken, listBank } = result;
+    //     console.log('Storage retrieved', result);
+
+    //     // Check if idUser is available in storage
+    //     if (!idUser) {
+    //       getLocalStorageInterval = setInterval(async () => {
+    //         await chrome.storage.local.get(
+    //           ['idUser', 'bearerToken', 'listBank'],
+    //           (result) => {
+    //             const { idUser, bearerToken, listBank } = result;
+    //             if (idUser) {
+    //               listenWebSocket({
+    //                 token: bearerToken,
+    //                 userId: idUser,
+    //                 listId: listBank
+    //               });
+    //               clearLocalStorageInterval(); // Clear the interval if it's running
+    //             }
+    //           }
+    //         );
+    //       }, 1000);
+    //     } else {
+    //       listenWebSocket({
+    //         token: bearerToken,
+    //         userId: idUser,
+    //         listId: listBank
+    //       });
+    //     }
+    //   }
+    // );
   } catch (error) {
     console.error('Error:', error);
   }
 };
-
-// Call
 
 // Run the function on extension install/reload
 chrome.runtime.onInstalled.addListener(() => {

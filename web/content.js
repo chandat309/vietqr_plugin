@@ -71,14 +71,14 @@ const createDialogHTML = (transaction, transType) => {
       <div class="vietqr-popup-content">
         <span class="vietqr-close">&times;</span>
       <h3 class="transaction-title ${
-        transType === 'C'
+        transaction?.transType === 'C'
           ? isUnclassified
             ? 'incoming-unclassified'
             : 'incoming-classified'
           : 'outgoing'
       }">
           ${
-            transType === 'C'
+            transaction?.transType === 'C'
               ? isUnclassified
                 ? 'Giao dịch đến (+) không đối soát'
                 : 'Giao dịch đến (+) có đối soát'
@@ -86,13 +86,13 @@ const createDialogHTML = (transaction, transType) => {
           }
         </h3>
         <div class="vietqr-amount ${
-          transType === 'C'
+          transaction?.transType === 'C'
             ? isUnclassified
               ? 'incoming-unclassified'
               : 'incoming-classified'
             : 'outgoing'
         }">
-        ${transType === 'C' ? '&#43;' : '&minus;'} ${
+        ${transaction?.transType === 'C' ? '&#43;' : '&minus;'} ${
     transaction?.amount
   } VND</div>
         <div class="vietqr-transaction-details">
@@ -162,18 +162,19 @@ const addDialogEventListeners = (dialog) => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDialog();
   });
-  // Close the dialog after 15 seconds
-  setTimeout(closeDialog, 15000);
+  // Close the dialog after 10 seconds
+  setTimeout(closeDialog, 10000);
 };
 
 // Function to speak the transaction amount using Web Speech API
 const speakTransactionAmount = (transaction) => {
   if ('speechSynthesis' in window) {
+    const amountInText = formatAmount(transaction.amount.split(',').join(''));
     const speechText = `${
       transaction?.transType === 'C'
         ? 'Bạn đã được cộng số tiền là'
         : 'Bạn đã bị trừ số tiền là'
-    } ${formatAmount(transaction.amount)} đồng, xin cảm ơn!`;
+    } ${amountInText} Việt Nam đồng, xin cảm ơn!`;
     const utterance = new SpeechSynthesisUtterance(speechText);
     utterance.lang = 'vi-VN'; // Set to Vietnamese
     utterance.rate = 1; // Set speech rate
@@ -187,7 +188,9 @@ const speakTransactionAmount = (transaction) => {
 };
 
 const formatAmount = (amount) => {
-  return amount.toLocaleString('vi-VN', {
+  const number = parseInt(amount);
+  console.log('number', number);
+  return number.toLocaleString('vi-VN', {
     style: 'currency',
     currency: 'VND'
   });
