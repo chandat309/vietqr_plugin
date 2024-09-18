@@ -17,7 +17,7 @@ class GuildingChangeLanguage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColor.WHITE,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(80.0),
+          preferredSize: const Size.fromHeight(80.0),
           child: AppBar(
             bottom: const TabBar(
               tabs: <Widget>[
