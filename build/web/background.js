@@ -13,25 +13,63 @@ async function setToken(token) {
 
 async function setListBankVoice(list) {
   await chrome.storage.local.set({ listBank: list });
-  console.log('ListVoice:', list);
+  // console.log('ListVoice:', list);
 }
 
 async function setListBankNotify(list) {
-  await chrome.storage.local.set({ listBank: list });
-  console.log('ListEnable:', list);
+  await chrome.storage.local.set({ listBankNotify: list });
+  // console.log('ListEnable:', list);
 }
 
 async function logoutUser() {
-  await chrome.storage.local.remove(['idUser', 'bearerToken']);
+  await chrome.storage.local.remove([
+    'idUser',
+    'bearerToken',
+    'listBank',
+    'listBankNotify'
+  ]);
 }
 
 const clearLocalStorageInterval = () => {
   if (getLocalStorageInterval) clearInterval(getLocalStorageInterval);
 };
 
-const listenWebSocket = ({ token, userId, listBank }) => {
+const isPopupOpen = (listBankNotify, transaction) => {
+  // Parse listBankNotify if it's a string
+  const arrayBankNotify =
+    typeof listBankNotify === 'string'
+      ? JSON.parse(listBankNotify)
+      : listBankNotify;
+
+  return arrayBankNotify?.some((bankNotify) => {
+    const listNotificationTypes = bankNotify.notificationTypes
+      .replaceAll(/[\[\]]/g, '')
+      .split(',');
+    const isMatchingBank = bankNotify.bankId === transaction.bankId;
+    // console.log('isMatchingBank:', isMatchingBank);
+    return (
+      isMatchingBank &&
+      listNotificationTypes?.some((notificationType) => {
+        // console.log('notificationType', notificationType);
+        switch (notificationType.trim()) {
+          case 'CREDIT':
+            return transaction.transType === 'C';
+          case 'DEBIT':
+            return transaction.transType === 'D';
+          case 'RECON':
+            return (
+              transaction.transType === 'C' &&
+              (transaction.type === 1 || transaction.type === 0)
+            );
+        }
+      })
+    );
+  });
+};
+
+const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
   if (socketInstance) {
-    console.log('WebSocket already initialized');
+    // console.log('WebSocket already initialized');
     socketInstance.close();
     socketInstance = null;
   }
@@ -44,16 +82,21 @@ const listenWebSocket = ({ token, userId, listBank }) => {
     const message = JSON.stringify({
       type: 'auth',
       token,
-      listBank
+      listBank,
+      listBankNotify
     });
-    socketInstance?.send(message);
-    console.log('WebSocket connection established');
-    console.log('WebSocket message sent:', message);
+    if (socketInstance) {
+      socketInstance.send(message);
+    } else {
+      console.warn('WebSocket instance is null when sending message');
+    }
+    // console.log('WebSocket connection established');
+    // console.log('WebSocket message sent:', message);
   };
 
   socketInstance.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log('WebSocket message received:', data);
+    // console.log('WebSocket message received:', data);
 
     if (data.notificationType === 'N05') {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -65,23 +108,34 @@ const listenWebSocket = ({ token, userId, listBank }) => {
               files: ['content.js']
             },
             () => {
+              console.log(listBankNotify);
+              // console.log('list bank:', listBank);
 
-              chrome.tabs.sendMessage(activeTab, {
-                action: 'showDialog',
-                transaction: data
-              });
+              // console.log(isPopupOpen(listBankNotify, data));
 
-              console.log('list bank include:', listBank.includes(data.bankId));
-
-              // Check if listBank is not null
-              if (listBank && listBank.includes(data.bankId)) {
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'speak',
-                  transaction: data,
-                  text: data.amount
-                });
-              } else {
-                console.warn('Bank not in list:', data.bankId);
+              if (isPopupOpen(listBankNotify, data)) {
+                if (listBank || !listBank) {
+                  chrome.tabs.sendMessage(activeTab, {
+                    action: 'showDialog',
+                    transaction: data
+                  });
+                }
+                // console.log('list bank:', listBank);
+                // console.log('bankId:', data.bankId);
+                // console.log(
+                //   'list bank include:',
+                //   listBank.includes(data.bankId)
+                // );
+                // Check if listBank is not null
+                if (listBank && listBank.includes(data.bankId)) {
+                  chrome.tabs.sendMessage(activeTab, {
+                    action: 'speak',
+                    transaction: data,
+                    text: data.amount
+                  });
+                } else {
+                  console.warn('Bank not in list:', data.bankId);
+                }
               }
             }
           );
@@ -91,17 +145,17 @@ const listenWebSocket = ({ token, userId, listBank }) => {
   };
 
   socketInstance.onerror = (error) => {
-    console.error('WebSocket error:', error);
+    console.warn('WebSocket error:', error);
   };
 
   socketInstance.onclose = (event) => {
-    console.log('WebSocket closed:', event);
+    // console.log('WebSocket closed:', event);
     socketInstance = null;
     if (reconnectAttempts < 5) {
       setTimeout(() => {
         reconnectAttempts++;
         listenWebSocket({ token, userId, listBank });
-      }, Math.pow(2, reconnectAttempts) * 1000); // Exponential backoff
+      }, Math.pow(2, reconnectAttempts) * 2000); // Exponential backoff
     }
   };
 };
@@ -111,7 +165,7 @@ const checkStorageAndListenWebSocket = async () => {
     const getStorageData = () => {
       return new Promise((resolve, reject) => {
         chrome.storage.local.get(
-          ['idUser', 'bearerToken', 'listBank'],
+          ['idUser', 'bearerToken', 'listBank', 'listBankNotify'],
           (result) => {
             if (chrome.runtime.lastError) {
               reject(new Error(chrome.runtime.lastError));
@@ -120,36 +174,38 @@ const checkStorageAndListenWebSocket = async () => {
             }
           }
         );
-      });  
+      });
     };
 
     const retrieveAndProcessData = async () => {
       result = await getStorageData();
-      const { idUser, bearerToken, listBank } = result;
-      console.log('Storage retrieved', result);
+      const { idUser, bearerToken, listBank, listBankNotify } = result;
+      // console.log('Storage retrieved', result);
 
       if (!idUser) {
         getLocalStorageInterval = setInterval(async () => {
           try {
             const result = await getStorageData();
-            const { idUser, bearerToken, listBank } = result;
+            const { idUser, bearerToken, listBank, listBankNotify } = result;
             if (idUser) {
               listenWebSocket({
                 token: bearerToken,
                 userId: idUser,
-                listId: listBank
+                listId: listBank,
+                listBankNotify: listBankNotify
               });
               clearInterval(getLocalStorageInterval); // Clear the interval if idUser is found
             }
           } catch (error) {
             console.error('Error retrieving storage data:', error);
           }
-        }, 1000);
+        }, 3000);
       } else {
         listenWebSocket({
           token: bearerToken,
           userId: idUser,
-          listBank: listBank
+          listBank: listBank,
+          listBankNotify: listBankNotify
         });
       }
     };
@@ -162,18 +218,18 @@ const checkStorageAndListenWebSocket = async () => {
 
 // Handle extension installation and startup
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('Extension installed/reloaded');
+  // console.log('Extension installed/reloaded');
   checkStorageAndListenWebSocket();
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Extension started');
+  // console.log('Extension started');
   checkStorageAndListenWebSocket();
 });
 
 // Clean up WebSocket when the extension is suspended
 chrome.runtime.onSuspend.addListener(() => {
-  console.log('Extension is being suspended. Cleaning up...');
+  // console.log('Extension is being suspended. Cleaning up...');
   if (socketInstance) {
     socketInstance.close();
     socketInstance = null;
@@ -182,8 +238,13 @@ chrome.runtime.onSuspend.addListener(() => {
 
 // Watch for changes in localStorage and recheck WebSocket connection
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (changes.idUser || changes.bearerToken || changes.listBank) {
-    console.log('LocalStorage changed:', changes);
+  if (
+    changes.idUser ||
+    changes.bearerToken ||
+    changes.listBank ||
+    changes.listBankNotify
+  ) {
+    // console.log('LocalStorage changed:', changes);
     checkStorageAndListenWebSocket();
   }
 });
