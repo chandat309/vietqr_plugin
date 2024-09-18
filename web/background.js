@@ -65,12 +65,12 @@ const listenWebSocket = ({ token, userId, listBank }) => {
               files: ['content.js']
             },
             () => {
-
-              chrome.tabs.sendMessage(activeTab, {
-                action: 'showDialog',
-                transaction: data
-              });
-
+              if (listBank || !listBank) {
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'showDialog',
+                  transaction: data
+                });
+              }
               console.log('list bank include:', listBank.includes(data.bankId));
 
               // Check if listBank is not null
@@ -101,7 +101,7 @@ const listenWebSocket = ({ token, userId, listBank }) => {
       setTimeout(() => {
         reconnectAttempts++;
         listenWebSocket({ token, userId, listBank });
-      }, Math.pow(2, reconnectAttempts) * 1000); // Exponential backoff
+      }, Math.pow(2, reconnectAttempts) * 2000); // Exponential backoff
     }
   };
 };
@@ -120,7 +120,7 @@ const checkStorageAndListenWebSocket = async () => {
             }
           }
         );
-      });  
+      });
     };
 
     const retrieveAndProcessData = async () => {
@@ -144,7 +144,7 @@ const checkStorageAndListenWebSocket = async () => {
           } catch (error) {
             console.error('Error retrieving storage data:', error);
           }
-        }, 1000);
+        }, 3000);
       } else {
         listenWebSocket({
           token: bearerToken,
