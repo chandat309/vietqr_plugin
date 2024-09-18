@@ -6,8 +6,6 @@ import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/home/repositories/bank_list_repository.dart';
 import 'package:viet_qr_plugin/features/setting_account/repositories/setting_repository.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_popup_bank_view.dart';
-import 'package:viet_qr_plugin/models/setting_account_sto.dart';
-import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/widgets/separator_widget.dart';
@@ -327,6 +325,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       final list =
           listBankAuthen.where((element) => element.value == true).toList();
       for (BankSelection selection in list) {
+        // ignore: unnecessary_null_comparison
         if (selection.bank != null) {
           bankIdSet.add(selection.bank.bankId);
         }

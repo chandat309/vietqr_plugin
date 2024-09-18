@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/commons/widgets/my_separator_widget.dart';
+import 'package:viet_qr_plugin/features/setting_account/views/guiding_change_language.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_noti_type_view.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_popup_bank_view.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_voice_bank_view.dart';
@@ -50,11 +51,63 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeInOut,
-          height: isExpand ? 0 : 168,
+          height: isExpand ? 0 : 224,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
               children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const GuildingChangeLanguage(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                            child: ShaderMask(
+                              blendMode: BlendMode.srcIn,
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [
+                                  Color(0xFF00C6FF),
+                                  Color(0xFF0072FF),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ).createShader(bounds),
+                              child: const Icon(
+                                Icons.language,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: Text(
+                            'Hướng dẫn cài đặt giọng nói bằng Tiếng Việt',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right)
+                      ],
+                    ),
+                  ),
+                ),
+                const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),  
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -149,58 +202,6 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
                         const Expanded(
                           child: Text(
                             'Cấu hình loại thông báo BĐSD',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        const Icon(Icons.chevron_right)
-                      ],
-                    ),
-                  ),
-                ),
-                const MySeparator(
-                  color: AppColor.GREY_DADADA,
-                ),
-                InkWell(
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const SettingPopupBankView(),
-                    //   ),
-                    // );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Center(
-                            child: ShaderMask(
-                              blendMode: BlendMode.srcIn,
-                              shaderCallback: (bounds) => const LinearGradient(
-                                colors: [
-                                  Color(0xFF00C6FF),
-                                  Color(0xFF0072FF),
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ).createShader(bounds),
-                              child: const Icon(
-                                Icons.language,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Expanded(
-                          child: Text(
-                            'Hướng dẫn cài đặt giọng nói bằng Tiếng Việt',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
