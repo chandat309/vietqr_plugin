@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       showTransactionDialog(request?.transaction, request?.transType);
       break;
     case 'speak':
-      speakTransactionAmount(request?.transaction);
+      speakTransactionAmount(request?.transaction, request?.isSpeech);
       break;
     default:
       console.warn('Unknown action:', request?.action);
@@ -63,7 +63,7 @@ const isTransUnclassified = (transaction) => {
 
 // Generate HTML content for the dialog
 const createDialogHTML = (transaction, transType) => {
-  console.log('transaction', transaction);
+  // console.log('transaction', transaction);
   const isUnclassified = isTransUnclassified(transaction);
 
   return `
@@ -148,7 +148,10 @@ const addDialogEventListeners = (dialog) => {
   const closeBtnBottom = dialog.querySelector('.vietqr-close-btn-bottom');
 
   // Close the dialog when close buttons are clicked
-  const closeDialog = () => dialog.remove();
+  const closeDialog = () => {
+    dialog.remove();
+    window.speechSynthesis.cancel();
+  };
 
   // Add event listeners to close buttons
   closeBtn.addEventListener('click', closeDialog);
@@ -156,40 +159,48 @@ const addDialogEventListeners = (dialog) => {
 
   // Close the dialog when clicking outside the dialog
   dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) closeDialog();
+    if (e.target === dialog) {
+      closeDialog();
+    }
   });
   // Close the dialog when pressing the Escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeDialog();
+    if (e.key === 'Escape') {
+      closeDialog();
+    }
   });
   // Close the dialog after 10 seconds
-  setTimeout(closeDialog, 5000);
+  setTimeout(closeDialog, 10000);
 };
 
 // Function to speak the transaction amount using Web Speech API
-const speakTransactionAmount = (transaction) => {
-  if ('speechSynthesis' in window) {
-    const amountInText = formatAmount(transaction.amount.split(',').join(''));
-    const speechText = `${
-      transaction?.transType === 'C'
-        ? 'Bạn đã được cộng số tiền là'
-        : 'Bạn đã bị trừ số tiền là'
-    } ${amountInText} Việt Nam đồng, xin cảm ơn!`;
-    const utterance = new SpeechSynthesisUtterance(speechText);
-    utterance.lang = 'vi-VN'; // Set to Vietnamese
-    utterance.rate = 1; // Set speech rate
+const speakTransactionAmount = (transaction, isSpeech) => {
+  if (!isSpeech) return;
+  if (isSpeech) {
+    if ('speechSynthesis' in window) {
+      const amountInText = formatAmount(transaction.amount.split(',').join(''));
+      const speechText = `${
+        transaction?.transType === 'C'
+          ? 'Bạn được nhận số tiền là' // LinhNPN _ KienNH
+          : 'Bạn vừa chuyển số tiền là' // KienNH
+      } ${amountInText} đồng, xin cảm ơn!`;
+      const utterance = new SpeechSynthesisUtterance(speechText);
+      utterance.lang = 'vi-VN'; // Set to Vietnamese
+      utterance.rate = 0.98; // Set speech rate
+      utterance.volume = 0.8; // Set speech volume
 
-    // Stop any previous speech and speak the new text
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  } else {
-    console.warn('Web Speech API is not supported in this browser.');
+      // Stop any previous speech and speak the new text
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn('Web Speech API is not supported in this browser.');
+    }
   }
 };
 
 const formatAmount = (amount) => {
   const number = parseInt(amount);
-  console.log('number', number);
+  // console.log('number', number);
   return number.toLocaleString('vi-VN', {
     style: 'currency',
     currency: 'VND'

@@ -18,7 +18,6 @@ class SettingNotiTypeView extends StatefulWidget {
 class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   SettingRepository _settingRepository = SettingRepository();
   List<BankAccountDTO> listBank = [];
-  List<BankEnableType> listType = [];
 
   @override
   void initState() {
@@ -27,24 +26,9 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   }
 
   Future<void> getBanks() async {
-    BankListRepository bankListRepository = const BankListRepository();
-
-    String userId = UserHelper.instance.getUserId();
-
-    final result = await bankListRepository.getListBankAccount(userId);
-
+    final result = await _settingRepository.getListBankNotify();
     setState(() {
-      listBank = result
-          .where(
-            (element) => element.isOwner && element.isAuthenticated,
-          )
-          .toList();
-    });
-
-    final resultNotify = await _settingRepository.getListBankNotify();
-
-    setState(() {
-      listType = resultNotify;
+      listBank = result;
     });
   }
 
@@ -125,11 +109,6 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   }
 
   Widget _itemBank(BankAccountDTO dto, int index) {
-    BankEnableType? enableType = listType.firstWhere(
-      (element) => element.bankId == dto.bankId,
-      orElse: () => BankEnableType(bankId: ''),
-    );
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -182,17 +161,27 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           _buildDescriptionWidget(
             title: 'GD đến (+) có đối soát',
             color: AppColor.GREEN,
-            isEnable: enableType.notificationTypes == 'RECON',
+            isEnable: dto.notificationTypes.contains('RECON'),
             onChange: (value) {
-              Set<String> types = <String>{};
-              types.add(value ? 'RECON' : '');
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
+              if (value) {
+                types.add('RECON');
+              } else {
+                types.remove('RECON');
+              }
+
               _settingRepository
                   .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
                   setState(() {
-                    listType = listRes;
+                    listBank = listRes;
                   });
                 },
               );
@@ -201,17 +190,26 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           _buildDescriptionWidget(
             title: 'GD đến (+) không đối soát',
             color: AppColor.BLUE_TEXT,
-            isEnable: enableType.notificationTypes == 'CREDIT',
+            isEnable: dto.notificationTypes.contains('CREDIT'),
             onChange: (value) {
-              Set<String> types = <String>{};
-              types.add(value ? 'CREDIT' : '');
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
+              if (value) {
+                types.add('CREDIT');
+              } else {
+                types.remove('CREDIT');
+              }
               _settingRepository
                   .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
                   setState(() {
-                    listType = listRes;
+                    listBank = listRes;
                   });
                 },
               );
@@ -220,17 +218,26 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           _buildDescriptionWidget(
             title: 'GD đi (-)',
             color: AppColor.RED_TEXT,
-            isEnable: enableType.notificationTypes == 'DEBIT',
+            isEnable: dto.notificationTypes.contains('DEBIT'),
             onChange: (value) {
-              Set<String> types = <String>{};
-              types.add(value ? 'DEBIT' : '');
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
+              if (value) {
+                types.add('DEBIT');
+              } else {
+                types.remove('DEBIT');
+              }
               _settingRepository
                   .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
                   setState(() {
-                    listType = listRes;
+                    listBank = listRes;
                   });
                 },
               );
@@ -275,6 +282,8 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             ],
           ),
           Checkbox(
+            activeColor: AppColor.BLUE_TEXT,
+            focusColor: AppColor.BLUE_BGR,
             value: isEnable,
             onChanged: (value) {
               if (value != null) {
@@ -286,10 +295,4 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
       ),
     );
   }
-}
-
-class BankSelectType {
-  BankAccountDTO bank;
-  BankEnableType bankType;
-  BankSelectType({required this.bank, required this.bankType});
 }
