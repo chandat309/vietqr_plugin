@@ -19,6 +19,7 @@ class SettingVoiceBankView extends StatefulWidget {
 }
 
 class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
+  String userId = UserHelper.instance.getUserId();
   final SettingRepository _settingRepository = SettingRepository();
   List<BankSelection> _listBankAuthen = [];
   List<String> _listBankId = [];
@@ -38,8 +39,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
 
   Future<void> getBanks() async {
     BankListRepository bankListRepository = const BankListRepository();
-
-    String userId = UserHelper.instance.getUserId();
 
     final result = await bankListRepository.getListBankAccount(userId);
     final filterListAuten = result
@@ -121,7 +120,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                         if (isSuccess) {
                           // js.context.callMethod('setListBankEnableVoiceId',
                           //     [jsonEncode(_listBankId)]);
-                          js.context.callMethod('getListBankNotification', []);
+                          js.context.callMethod(
+                              'getListBankNotificationTypes', [userId]);
                         }
                       },
                     );
@@ -310,7 +310,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                   if (isSuccess) {
                     // js.context.callMethod(
                     //     'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
-                    js.context.callMethod('getListBankNotification', []);
+                    js.context
+                        .callMethod('getListBankNotificationTypes', [userId]);
                   }
                 },
               );
@@ -337,7 +338,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       });
       // js.context.callMethod(
       //     'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
-      js.context.callMethod('getListBankNotification', []);
+      js.context.callMethod('getListBankNotificationTypes', [userId]);
     }
   }
 

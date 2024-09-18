@@ -40,17 +40,17 @@ class _BankListWidget extends State<BankListWidget> {
   Future<void> getBanks() async {
     String userId = UserHelper.instance.getUserId();
     _banks = await widget.bankListRepository.getListBankAccount(userId);
-    final listBankEnableVoice = _banks.where(
-      (element) =>
-          element.isOwner && element.isAuthenticated && element.enableVoice,
-    );
-    Set<String> bankIdSet = <String>{};
-    if (listBankEnableVoice.isNotEmpty) {
-      for (BankAccountDTO dto in listBankEnableVoice) {
-        bankIdSet.add(dto.bankId);
-      }
-    }
-    js.context.callMethod('getListBankNotification', []);
+    // final listBankEnableVoice = _banks.where(
+    //   (element) =>
+    //       element.isOwner && element.isAuthenticated && element.enableVoice,
+    // );
+    // Set<String> bankIdSet = <String>{};
+    // if (listBankEnableVoice.isNotEmpty) {
+    //   for (BankAccountDTO dto in listBankEnableVoice) {
+    //     bankIdSet.add(dto.bankId);
+    //   }
+    // }
+    js.context.callMethod('getListBankNotificationTypes', [userId]);
     await getColors();
   }
 
