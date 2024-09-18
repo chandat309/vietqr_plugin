@@ -11,6 +11,7 @@ async function setToken(token) {
 }
 
 async function setListBankVoice(list) {
+  console.log('test');
   await chrome.storage.local.set({ listBank: list });
 }
 
