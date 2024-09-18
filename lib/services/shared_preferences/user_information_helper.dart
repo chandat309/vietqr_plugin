@@ -81,6 +81,27 @@ class UserHelper {
         'ACCOUNT_INFORMATION', dto.toSPJson().toString());
   }
 
+  Future<void> storeList(List<String> list) async {
+    String jsonString = jsonEncode(list);
+    // Get the instance of SharedPreferences
+    if (!sharedPrefs.containsKey('LIST_BANK_ID_VOICE') ||
+        sharedPrefs.getString('LIST_BANK_ID_VOICE') == null) {
+      await sharedPrefs.setString('LIST_BANK_ID_VOICE', jsonString);
+      return;
+    }
+    await sharedPrefs.setString('LIST_BANK_ID_VOICE', jsonString);
+  }
+
+  Future<List<String>> retrieveList() async {
+    List<String> list = [];
+    String? jsonString = sharedPrefs.getString('LIST_BANK_ID_VOICE');
+    if (jsonString == null) {
+      return list;
+    }
+    list = jsonDecode(jsonString);
+    return list;
+  }
+
   // Future<void> setAccountSetting(SettingAccountDTO dto) async {
   //   await sharedPrefs.setString('ACCOUNT_SETTING', dto.toSPJson().toString());
   // }

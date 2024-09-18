@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -54,9 +56,8 @@ class _VietQRPlugin extends State<VietQRPlugin> {
     if (userId.isNotEmpty && token.isNotEmpty) {
       js.context.callMethod('setUserId', [UserHelper.instance.getUserId()]);
       js.context.callMethod('setToken', [AccountHelper.instance.getToken()]);
-      // js.context.callMethod('connectWebSocket',
-      //     [UserHelper.instance.getUserId(), AccountHelper.instance.getToken()]);
-      // js.context.callMethod('listenWss');
+      js.context.callMethod('setListBankEnableVoiceId',
+          [jsonEncode(UserHelper.instance.retrieveList())]);
     }
   }
 

@@ -89,7 +89,8 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 itemBuilder: (context, index) {
@@ -145,25 +146,25 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
                       children: [
                         Text(dto.bankAccount,
                             style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.w600)),
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                         Text(dto.userBankName,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 10)),
+                            style: const TextStyle(fontSize: 15)),
                       ],
                     ),
                   ),
                 ],
               ),
-              const Icon(Icons.chevron_right),
+
             ],
           ),
           const SizedBox(height: 10),
           _buildDescriptionWidget(
-              title: 'Giao dịch đến (+) có đối soát', color: AppColor.GREEN),
+              title: 'GD đến (+) có đối soát', color: AppColor.GREEN),
           _buildDescriptionWidget(
-              title: 'Giao dịch đến (+) không đối soát', color: AppColor.BLUE_TEXT),
+              title: 'GD đến (+) không đối soát', color: AppColor.BLUE_TEXT),
           _buildDescriptionWidget(
-              title: 'Giao dịch đi (-)', color: AppColor.RED_TEXT)
+              title: 'GD đi (-)', color: AppColor.RED_TEXT)
         ],
       ),
     );
@@ -173,29 +174,36 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
     required String title,
     Color? color,
   }) {
-    return SizedBox(
-      height: 20,
+    return Container(
+      // height: 20,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(
-            Icons.circle,
-            color: color,
-            size: 15,
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          SizedBox(
-            width: 80,
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: AppColor.GREY_TEXT,
-                fontSize: 12,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.circle,
+                color: color,
+                size: 15,
               ),
-            ),
+              const SizedBox(
+                width: 6,
+              ),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: AppColor.BLACK,
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
+          Checkbox(value: false, onChanged: (value) {
+            
+          },)
         ],
       ),
     );
