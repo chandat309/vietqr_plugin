@@ -34,7 +34,7 @@ span.vietqr-close {
 }
 
 .vietqr-popup h3.transaction-title.incoming-unclassified {
-  color: red !important;
+  color: blue !important;
 }
 
 .vietqr-popup h3.transaction-title.incoming-classified {
@@ -42,7 +42,7 @@ span.vietqr-close {
 }
 
 .vietqr-popup h3.transaction-title.outgoing {
-  color: blue !important;
+  color: red !important;
 }
 
 .vietqr-amount {

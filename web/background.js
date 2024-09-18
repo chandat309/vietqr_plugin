@@ -15,7 +15,7 @@ async function setToken(token) {
 async function setListBankEnableVoiceId(list) {
   // bearerToken = token;
   await chrome.storage.local.set({ listId: list });
-  console.log("List:", list);
+  console.log('List:', list);
 }
 
 async function logoutUser() {
@@ -26,14 +26,15 @@ const clearLocalStorageInterval = () => {
   if (getLocalStorageInterval) clearInterval(getLocalStorageInterval);
 };
 
-const listenWebSocket = ({ token, userId }) => {
+const listenWebSocket = ({ token, userId, listId }) => {
   let socket;
   if (userId) {
     socket = new WebSocket(`wss://api.vietqr.org/vqr/socket?userId=${userId}`);
     socket.onopen = () => {
       const message = JSON.stringify({
         type: 'auth',
-        token
+        token,
+        listId
       });
       socket.send(message);
       console.log('WebSocket connection established');
@@ -97,26 +98,33 @@ const listenWebSocket = ({ token, userId }) => {
 
 const checkStorageAndListenWebSocket = async () => {
   try {
-    await chrome.storage.local.get(['idUser', 'bearerToken'], (result) => {
-      const { idUser, bearerToken } = result;
-      console.log('Storage retrieved', result);
+    await chrome.storage.local.get(
+      ['idUser', 'bearerToken', 'listId'],
+      (result) => {
+        const { idUser, bearerToken, listId } = result;
+        console.log('Storage retrieved', result);
 
-      // Check if idUser is available in storage
-      if (!idUser) {
-        getLocalStorageInterval = setInterval(async () => {
-          await chrome.storage.local.get(
-            ['idUser', 'bearerToken'],
-            (result) => {
-              const { idUser, bearerToken } = result;
-              if (idUser) {
-                listenWebSocket({ token: bearerToken, userId: idUser });
-                clearLocalStorageInterval(); // Clear the interval if it's running
+        // Check if idUser is available in storage
+        if (!idUser) {
+          getLocalStorageInterval = setInterval(async () => {
+            await chrome.storage.local.get(
+              ['idUser', 'bearerToken', 'listId'],
+              (result) => {
+                const { idUser, bearerToken, listId } = result;
+                if (idUser) {
+                  listenWebSocket({
+                    token: bearerToken,
+                    userId: idUser,
+                    listId: listId
+                  });
+                  clearLocalStorageInterval(); // Clear the interval if it's running
+                }
               }
-            }
-          );
-        }, 2000);
+            );
+          }, 2000);
+        }
       }
-    });
+    );
   } catch (error) {
     console.error('Error:', error);
   }
