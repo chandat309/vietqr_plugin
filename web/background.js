@@ -17,7 +17,7 @@ async function setListBankVoice(list) {
 }
 
 async function setListBankNotify(list) {
-  await chrome.storage.local.set({ listBank: list });
+  await chrome.storage.local.set({ listBankNotify: list });
   console.log('ListEnable:', list);
 }
 

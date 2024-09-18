@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:js' as js;
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
+import 'package:viet_qr_plugin/models/bank_account_dto.dart';
 import 'package:viet_qr_plugin/models/bank_notify_dto.dart';
 import 'package:viet_qr_plugin/models/bank_type_enable_dto.dart';
 import 'package:viet_qr_plugin/models/setting_account_sto.dart';
@@ -31,8 +32,8 @@ class SettingRepository {
     return result;
   }
 
-  Future<List<BankEnableType>> getListBankNotify() async {
-    List<BankEnableType> list = [];
+  Future<List<BankAccountDTO>> getListBankNotify() async {
+    List<BankAccountDTO> list = [];
     try {
       String url = '${EnvConfig.getBaseUrl()}bank-notification/$userId';
       final response = await BaseAPIClient.getAPI(
@@ -40,16 +41,26 @@ class SettingRepository {
         type: AuthenticationType.SYSTEM,
       );
       if (response.statusCode == 200) {
-        js.context.callMethod('setListBankNotify', [response.body]);
         var data = jsonDecode(response.body);
+
         list = data
-            .map<BankEnableType>((json) => BankEnableType.fromJson(json))
+            .map<BankAccountDTO>((json) => BankAccountDTO.fromJson(json))
             .toList();
+        List<BankEnableType> listEnable = List.generate(
+          list.length,
+          (index) => BankEnableType(
+              bankId: list[index].bankId,
+              notificationTypes: list[index].notificationTypes),
+        );
+        String jsonString =
+            jsonEncode(listEnable.map((bank) => bank.toJson()).toList());
+        js.context.callMethod('setListBankNotify', [jsonString]);
       } else {
         js.context.callMethod('setListBankNotify', ['']);
       }
     } catch (e) {
       LOG.error(e.toString());
+      js.context.callMethod('setListBankNotify', ['']);
     }
     return list;
   }
