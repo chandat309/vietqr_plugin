@@ -336,6 +336,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       setState(() {
         _listBankId = bankIdSet.toList();
       });
+      UserHelper.instance.storeList(bankIdSet.toList());
+      js.context
+          .callMethod('setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
     }
   }
 
