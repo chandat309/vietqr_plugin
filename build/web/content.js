@@ -10,6 +10,14 @@ const formatTransactionDate = (date) => {
   return new Date(date).toLocaleDateString('vi-VN', options);
 };
 
+// Function to dynamically load the CSS file
+const loadStyles = (href) => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+};
+
 // Listen for messages from background.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
@@ -26,6 +34,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Function to show the transaction dialog
 const showTransactionDialog = (transaction, type) => {
+  // Load the CSS file
+  loadStyles(chrome.runtime.getURL('dialog.css'));
+
   // Remove any existing dialog to prevent duplication
   const existingDialog = document.querySelector('.vietqr-dialog');
   if (existingDialog) existingDialog.remove();
@@ -54,7 +65,6 @@ const isTransUnclassified = (transaction) => {
 const createDialogHTML = (transaction, transType) => {
   console.log('transaction', transaction);
   const isUnclassified = isTransUnclassified(transaction);
-  let timePaid = formatTransactionDate(transaction?.timePaid * 1000);
 
   return `
     <div class="vietqr-popup">
@@ -88,7 +98,9 @@ const createDialogHTML = (transaction, transType) => {
           </div>
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Thời gian</span>
-            <span class="vietqr-value">${timePaid}</span> 
+            <span class="vietqr-value">${formatTransactionDate(
+              transaction?.timePaid * 1000
+            )}</span> 
           </div>
           <div class="vietqr-detail-row">
             <span class="vietqr-label">Nội dung chuyển khoản</span>
