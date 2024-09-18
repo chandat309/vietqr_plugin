@@ -24,13 +24,6 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
   List<BankSelection> _listBankAuthen = [];
   // List<String> _listBankId = [];
 
-  bool isChecked1 = false;
-  bool isChecked2 = false;
-  bool isChecked3 = false;
-  bool isChecked4 = false;
-  bool isChecked5 = false;
-  bool isChecked6 = false;
-
   @override
   void initState() async {
     super.initState();
