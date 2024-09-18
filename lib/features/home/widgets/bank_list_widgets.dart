@@ -50,8 +50,7 @@ class _BankListWidget extends State<BankListWidget> {
         bankIdSet.add(dto.bankId);
       }
     }
-    js.context.callMethod(
-        'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
+    js.context.callMethod('getListBankNotification', []);
     await getColors();
   }
 

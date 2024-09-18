@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:viet_qr_plugin/enums/text_data.dart';
 
 class StringUtils {
@@ -19,6 +20,17 @@ class StringUtils {
       }
       return numericString;
     }
+  }
+
+  String capitalFirstCharacter(String paragraph) {
+    String result = '';
+    result = paragraph
+        .toLowerCase()
+        .trim()
+        .split(" ")
+        .map((str) => toBeginningOfSentenceCase(str))
+        .join(" ");
+    return result;
   }
 
   String removeDiacritic(String input) {

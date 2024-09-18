@@ -119,8 +119,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                     _settingRepository.enableVoiceSetting(paramEnable).then(
                       (isSuccess) {
                         if (isSuccess) {
-                          js.context.callMethod('setListBankEnableVoiceId',
-                              [jsonEncode(_listBankId)]);
+                          // js.context.callMethod('setListBankEnableVoiceId',
+                          //     [jsonEncode(_listBankId)]);
+                          js.context.callMethod('getListBankNotification', []);
                         }
                       },
                     );
@@ -307,8 +308,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
               _settingRepository.enableVoiceSetting(paramEnable).then(
                 (isSuccess) {
                   if (isSuccess) {
-                    js.context.callMethod(
-                        'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
+                    // js.context.callMethod(
+                    //     'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
+                    js.context.callMethod('getListBankNotification', []);
                   }
                 },
               );
@@ -333,8 +335,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       setState(() {
         _listBankId = bankIdSet.toList();
       });
-      js.context.callMethod(
-          'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
+      // js.context.callMethod(
+      //     'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
+      js.context.callMethod('getListBankNotification', []);
     }
   }
 
