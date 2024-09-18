@@ -20,6 +20,8 @@ class GuildingChangeLanguage extends StatelessWidget {
           preferredSize: const Size.fromHeight(80.0),
           child: AppBar(
             bottom: const TabBar(
+              labelColor: AppColor.BLUE_TEXT,
+              indicatorColor: AppColor.BLUE_TEXT,
               tabs: <Widget>[
                 Tab(
                   text: 'Windows',
