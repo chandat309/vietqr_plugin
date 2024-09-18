@@ -66,6 +66,8 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
             value: filterListAuten[index].enableVoice),
       );
     });
+    List<String> ids = getListId();
+    js.context.callMethod('setListBankVoice', [jsonEncode(ids)]);
   }
 
   @override
@@ -133,8 +135,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                     _settingRepository.enableVoiceSetting(paramEnable).then(
                       (isSuccess) {
                         if (isSuccess) {
+                          List<String> ids = getListId();
                           js.context.callMethod(
-                              'setListBankVoice', [jsonEncode(getListId)]);
+                              'setListBankVoice', [jsonEncode(ids)]);
                           // _settingRepository.getListBankNotify();
                         }
                       },
@@ -322,8 +325,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
               _settingRepository.enableVoiceSetting(paramEnable).then(
                 (isSuccess) {
                   if (isSuccess) {
-                    js.context.callMethod(
-                        'setListBankVoice', [jsonEncode(getListId)]);
+                    List<String> ids = getListId();
+                    js.context
+                        .callMethod('setListBankVoice', [jsonEncode(ids)]);
                     // _settingRepository.getListBankNotify();
                   }
                 },

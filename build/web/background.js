@@ -120,7 +120,7 @@ const checkStorageAndListenWebSocket = async () => {
             }
           }
         );
-      });
+      });  
     };
 
     const retrieveAndProcessData = async () => {
