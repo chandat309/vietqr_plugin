@@ -1467,10 +1467,12 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_account_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_account_insert_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_name_information_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_name_search_dto.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_notify_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_type_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/confirm_otp_bank_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/info_user_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/notify_trans_dto.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/models/register_authentication_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/response_message_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/setting_account_sto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/vietqr_widget_dto.dart
