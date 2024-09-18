@@ -161,7 +161,12 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.GREEN,
             isEnable: dto.notificationTypes.contains('RECON'),
             onChange: (value) {
-              Set<String> types = dto.notificationTypes.split(',').toSet();
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
               if (value) {
                 types.add('RECON');
               } else {
@@ -185,7 +190,12 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.BLUE_TEXT,
             isEnable: dto.notificationTypes.contains('CREDIT'),
             onChange: (value) {
-              Set<String> types = dto.notificationTypes.split(',').toSet();
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
               if (value) {
                 types.add('CREDIT');
               } else {
@@ -208,7 +218,12 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.RED_TEXT,
             isEnable: dto.notificationTypes.contains('DEBIT'),
             onChange: (value) {
-              Set<String> types = dto.notificationTypes.split(',').toSet();
+              Set<String> types = dto.notificationTypes
+                  .replaceAll(RegExp(r'[\[\]]'), '')
+                  .split(',')
+                  .map((e) => e.trim())
+                  .where((e) => e.isNotEmpty)
+                  .toSet();
               if (value) {
                 types.add('DEBIT');
               } else {
