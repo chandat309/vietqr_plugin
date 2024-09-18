@@ -6,6 +6,7 @@ import 'package:viet_qr_plugin/features/add_bank/views/add_bank_s1_view.dart';
 import 'package:viet_qr_plugin/features/home/repositories/bank_list_repository.dart';
 import 'package:viet_qr_plugin/features/linked_bank/linked_bank_view.dart';
 import 'package:viet_qr_plugin/features/qr/views/qr_bank_view.dart';
+import 'package:viet_qr_plugin/features/setting_account/repositories/setting_repository.dart';
 import 'package:viet_qr_plugin/models/bank_account_dto.dart';
 import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
@@ -35,22 +36,17 @@ class _BankListWidget extends State<BankListWidget> {
   void initState() {
     super.initState();
     getBanks();
+    getListBankNotify();
+  }
+
+  void getListBankNotify() async {
+    SettingRepository repo = SettingRepository();
+    await repo.getListBankNotify();
   }
 
   Future<void> getBanks() async {
     String userId = UserHelper.instance.getUserId();
     _banks = await widget.bankListRepository.getListBankAccount(userId);
-    // final listBankEnableVoice = _banks.where(
-    //   (element) =>
-    //       element.isOwner && element.isAuthenticated && element.enableVoice,
-    // );
-    // Set<String> bankIdSet = <String>{};
-    // if (listBankEnableVoice.isNotEmpty) {
-    //   for (BankAccountDTO dto in listBankEnableVoice) {
-    //     bankIdSet.add(dto.bankId);
-    //   }
-    // }
-    js.context.callMethod('getListBankNotificationTypes', [userId]);
     await getColors();
   }
 
@@ -366,6 +362,12 @@ class _BankListWidget extends State<BankListWidget> {
                                               dto: _banks[index],
                                             ),
                                           ),
+                                        ).then(
+                                          (value) {
+                                            if (value == true) {
+                                              getBanks();
+                                            }
+                                          },
                                         );
                                       },
                                       child: const Text(

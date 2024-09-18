@@ -120,8 +120,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                         if (isSuccess) {
                           // js.context.callMethod('setListBankEnableVoiceId',
                           //     [jsonEncode(_listBankId)]);
-                          js.context.callMethod(
-                              'getListBankNotificationTypes', [userId]);
+                          _settingRepository.getListBankNotify();
                         }
                       },
                     );
@@ -310,8 +309,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                   if (isSuccess) {
                     // js.context.callMethod(
                     //     'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
-                    js.context
-                        .callMethod('getListBankNotificationTypes', [userId]);
+                    _settingRepository.getListBankNotify();
                   }
                 },
               );
@@ -338,7 +336,7 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
       });
       // js.context.callMethod(
       //     'setListBankEnableVoiceId', [jsonEncode(bankIdSet.toList())]);
-      js.context.callMethod('getListBankNotificationTypes', [userId]);
+      _settingRepository.getListBankNotify();
     }
   }
 

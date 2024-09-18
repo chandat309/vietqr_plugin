@@ -15,9 +15,9 @@ async function setToken(token) {
   // console.log("Bearer:", bearerToken);
 }
 
-async function setListBankEnableVoiceId(list) {
+async function setListBankNotify(list) {
   // bearerToken = token;
-  await chrome.storage.local.set({ listId: list });
+  await chrome.storage.local.set({ listBank: list });
   console.log('List:', list);
 }
 

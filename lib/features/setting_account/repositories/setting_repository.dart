@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'dart:js' as js;
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
+import 'package:viet_qr_plugin/models/bank_notify_dto.dart';
 import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
@@ -27,6 +28,24 @@ class SettingRepository {
       return result;
     }
     return result;
+  }
+
+  Future<void> getListBankNotify() async {
+    try {
+      String url = '${EnvConfig.getBaseUrl()}bank-notification/update';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        js.context.callMethod('setListBankNotify', [response.body]);
+        // var data = jsonDecode(response.body);
+      } else {
+        js.context.callMethod('setListBankNotify', ['']);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
   }
 
   Future<bool> setNotificationBDSD(int value) async {
@@ -65,7 +84,6 @@ class SettingRepository {
     return false;
   }
 
-  
   Future<bool> enableVoiceSetting(Map<String, dynamic> param) async {
     try {
       final String url =
@@ -75,13 +93,10 @@ class SettingRepository {
         type: AuthenticationType.SYSTEM,
         body: param,
       );
-    return response.statusCode == 200;
+      return response.statusCode == 200;
     } catch (e) {
       LOG.error(e.toString());
       return false;
     }
   }
-
 }
-
-
