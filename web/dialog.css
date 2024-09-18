@@ -28,7 +28,9 @@ span.vietqr-close {
 
 /* Tag h3 transaction title */
 .vietqr-popup h3.transaction-title {
+  font-size: 1.5rem;
   font-weight: bold;
+  margin: 1rem 0;
 }
 
 .vietqr-popup h3.transaction-title.incoming-unclassified {

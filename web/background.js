@@ -12,6 +12,12 @@ async function setToken(token) {
   // console.log("Bearer:", bearerToken);
 }
 
+async function setListBankEnableVoiceId(list) {
+  // bearerToken = token;
+  await chrome.storage.local.set({ listId: list });
+  console.log("List:", list);
+}
+
 async function logoutUser() {
   await chrome.storage.local.remove(['idUser', 'bearerToken']);
 }

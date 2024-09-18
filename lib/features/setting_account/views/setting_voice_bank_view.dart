@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/numeral.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
@@ -9,6 +11,7 @@ import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/widgets/separator_widget.dart';
+import 'dart:js' as js;
 
 class SettingVoiceBankView extends StatefulWidget {
   const SettingVoiceBankView({super.key});
@@ -115,7 +118,14 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
                     Map<String, dynamic> paramEnable = {};
                     paramEnable['bankIds'] = _listBankId;
                     paramEnable['userId'] = UserHelper.instance.getUserId();
-                    _settingRepository.enableVoiceSetting(paramEnable);
+                    _settingRepository.enableVoiceSetting(paramEnable).then(
+                      (isSuccess) {
+                        if (isSuccess) {
+                          js.context.callMethod('setListBankEnableVoiceId',
+                              [jsonEncode(_listBankId)]);
+                        }
+                      },
+                    );
                   },
                 ),
               ],
@@ -296,7 +306,14 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
               Map<String, dynamic> paramEnable = {};
               paramEnable['bankIds'] = _listBankId;
               paramEnable['userId'] = UserHelper.instance.getUserId();
-              _settingRepository.enableVoiceSetting(paramEnable);
+              _settingRepository.enableVoiceSetting(paramEnable).then(
+                (isSuccess) {
+                  if (isSuccess) {
+                    js.context.callMethod(
+                        'setListBankEnableVoiceId', [jsonEncode(_listBankId)]);
+                  }
+                },
+              );
             },
           ),
         ],
