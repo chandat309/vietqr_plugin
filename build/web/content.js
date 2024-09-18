@@ -71,14 +71,14 @@ const createDialogHTML = (transaction, transType) => {
       <div class="vietqr-popup-content">
         <span class="vietqr-close">&times;</span>
       <h3 class="transaction-title ${
-        transType === 'C'
+        transaction?.transType === 'C'
           ? isUnclassified
             ? 'incoming-unclassified'
             : 'incoming-classified'
           : 'outgoing'
       }">
           ${
-            transType === 'C'
+            transaction?.transType === 'C'
               ? isUnclassified
                 ? 'Giao dịch đến (+) không đối soát'
                 : 'Giao dịch đến (+) có đối soát'
@@ -86,13 +86,13 @@ const createDialogHTML = (transaction, transType) => {
           }
         </h3>
         <div class="vietqr-amount ${
-          transType === 'C'
+          transaction?.transType === 'C'
             ? isUnclassified
               ? 'incoming-unclassified'
               : 'incoming-classified'
             : 'outgoing'
         }">
-        ${transType === 'C' ? '&#43;' : '&minus;'} ${
+        ${transaction?.transType === 'C' ? '&#43;' : '&minus;'} ${
     transaction?.amount
   } VND</div>
         <div class="vietqr-transaction-details">
@@ -162,24 +162,22 @@ const addDialogEventListeners = (dialog) => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDialog();
   });
-  // Close the dialog after 15 seconds
-  setTimeout(closeDialog, 15000);
+  // Close the dialog after 10 seconds
+  setTimeout(closeDialog, 5000);
 };
 
 // Function to speak the transaction amount using Web Speech API
 const speakTransactionAmount = (transaction) => {
   if ('speechSynthesis' in window) {
+    const amountInText = formatAmount(transaction.amount.split(',').join(''));
     const speechText = `${
       transaction?.transType === 'C'
         ? 'Bạn đã được cộng số tiền là'
         : 'Bạn đã bị trừ số tiền là'
-    } ${transaction?.amount.toLocaleString('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    })} đồng, xin cảm ơn!`;
+    } ${amountInText} Việt Nam đồng, xin cảm ơn!`;
     const utterance = new SpeechSynthesisUtterance(speechText);
     utterance.lang = 'vi-VN'; // Set to Vietnamese
-    utterance.rate = 0.95; // Set speech rate
+    utterance.rate = 1; // Set speech rate
 
     // Stop any previous speech and speak the new text
     window.speechSynthesis.cancel();
@@ -187,4 +185,13 @@ const speakTransactionAmount = (transaction) => {
   } else {
     console.warn('Web Speech API is not supported in this browser.');
   }
+};
+
+const formatAmount = (amount) => {
+  const number = parseInt(amount);
+  console.log('number', number);
+  return number.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  });
 };

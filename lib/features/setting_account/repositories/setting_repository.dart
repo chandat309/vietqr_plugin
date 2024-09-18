@@ -62,13 +62,12 @@ class SettingRepository {
       data['notificationTypes'] = types;
 
       String url = '${EnvConfig.getBaseUrl()}bank-notification/update';
-      final response = await BaseAPIClient.postAPI(
+      final response = await BaseAPIClient.putAPI(
         body: data,
         url: url,
         type: AuthenticationType.SYSTEM,
       );
-      if (response.statusCode == 200) {
-      } else {}
+
       return response.statusCode == 200;
     } catch (e) {
       LOG.error(e.toString());

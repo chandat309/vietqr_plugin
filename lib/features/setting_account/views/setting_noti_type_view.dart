@@ -18,7 +18,7 @@ class SettingNotiTypeView extends StatefulWidget {
 class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   SettingRepository _settingRepository = SettingRepository();
   List<BankAccountDTO> listBank = [];
-  List<BankSelectType> listType = [];
+  List<BankEnableType> listType = [];
 
   @override
   void initState() {
@@ -41,10 +41,11 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           .toList();
     });
 
-//     final resultNotify = await _settingRepository.getListBankNotify();
-// setState(() {
-//   listType = List.generate(length, generator)
-// });
+    final resultNotify = await _settingRepository.getListBankNotify();
+
+    setState(() {
+      listType = resultNotify;
+    });
   }
 
   @override
@@ -124,6 +125,11 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   }
 
   Widget _itemBank(BankAccountDTO dto, int index) {
+    BankEnableType? enableType = listType.firstWhere(
+      (element) => element.bankId == dto.bankId,
+      orElse: () => BankEnableType(bankId: ''),
+    );
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
@@ -176,17 +182,59 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           _buildDescriptionWidget(
             title: 'GD đến (+) có đối soát',
             color: AppColor.GREEN,
-            onChange: (value) {},
+            isEnable: enableType.notificationTypes == 'RECON',
+            onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'RECON' : '');
+              _settingRepository
+                  .setListBankNotify(dto.bankId, types.toList())
+                  .then(
+                (value) async {
+                  final listRes = await _settingRepository.getListBankNotify();
+                  setState(() {
+                    listType = listRes;
+                  });
+                },
+              );
+            },
           ),
           _buildDescriptionWidget(
             title: 'GD đến (+) không đối soát',
             color: AppColor.BLUE_TEXT,
-            onChange: (value) {},
+            isEnable: enableType.notificationTypes == 'CREDIT',
+            onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'CREDIT' : '');
+              _settingRepository
+                  .setListBankNotify(dto.bankId, types.toList())
+                  .then(
+                (value) async {
+                  final listRes = await _settingRepository.getListBankNotify();
+                  setState(() {
+                    listType = listRes;
+                  });
+                },
+              );
+            },
           ),
           _buildDescriptionWidget(
             title: 'GD đi (-)',
             color: AppColor.RED_TEXT,
-            onChange: (value) {},
+            isEnable: enableType.notificationTypes == 'DEBIT',
+            onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'DEBIT' : '');
+              _settingRepository
+                  .setListBankNotify(dto.bankId, types.toList())
+                  .then(
+                (value) async {
+                  final listRes = await _settingRepository.getListBankNotify();
+                  setState(() {
+                    listType = listRes;
+                  });
+                },
+              );
+            },
           )
         ],
       ),
@@ -196,6 +244,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
   Widget _buildDescriptionWidget({
     required String title,
     required Function(bool) onChange,
+    required bool isEnable,
     Color? color,
   }) {
     return Container(
@@ -226,10 +275,10 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             ],
           ),
           Checkbox(
-            value: false,
+            value: isEnable,
             onChanged: (value) {
               if (value != null) {
-                onChange;
+                onChange(value);
               }
             },
           )
