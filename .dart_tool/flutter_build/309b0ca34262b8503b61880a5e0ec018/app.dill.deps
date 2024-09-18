@@ -1423,9 +1423,13 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/commons/env/evn.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/commons/env/prod_evn.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/commons/env/stg_env.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/commons/widgets/my_separator_widget.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/commons/widgets/text_field_custom.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/commons/widgets/vietqr_button.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/enums/authentication_type.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/enums/env_type.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/enums/error_type.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/enums/text_data.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/enums/textfield_type.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/add_bank/repositories/bank_name_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/add_bank/repositories/bank_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/add_bank/repositories/bank_type_repository.dart
@@ -1439,6 +1443,8 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/features/add_bank/widgets/input_bank
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/home/repositories/bank_list_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/home/views/home_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/home/widgets/bank_list_widgets.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/features/linked_bank/linked_bank_view.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/features/linked_bank/repositories/linked_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/login/repositories/login_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/login/views/login_password_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/login/views/login_view.dart
@@ -1449,6 +1455,7 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/features/qr/views/qr_bank_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/qr/widgets/viet_qr_widget.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/repositories/setting_repository.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/setting_notification_view.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/guiding_change_language.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_noti_type_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_popup_bank_view.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/features/setting_account/views/setting_voice_bank_view.dart
@@ -1461,6 +1468,7 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_account_insert_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_name_information_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_name_search_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/bank_type_dto.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/models/confirm_otp_bank_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/info_user_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/notify_trans_dto.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/models/response_message_dto.dart
@@ -1474,6 +1482,7 @@ file:///D:/Sources%20Code/vietqr_plugin/lib/services/socket_services.dart/socket
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/base_api.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/currency_utils.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/encrypt_utils.dart
+file:///D:/Sources%20Code/vietqr_plugin/lib/utils/error_utils.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/image_utils.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/log.dart
 file:///D:/Sources%20Code/vietqr_plugin/lib/utils/share_utils.dart

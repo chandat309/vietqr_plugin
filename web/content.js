@@ -1,4 +1,4 @@
-// Utility function to format date (assuming it's a Unix timestamp)
+// Utility function to format date
 const formatTransactionDate = (date) => {
   const options = {
     year: 'numeric',
@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       showTransactionDialog(request?.transaction, request?.transType);
       break;
     case 'speak':
-      speakTransactionAmount(request?.text);
+      speakTransactionAmount(request?.transaction);
       break;
     default:
       console.warn('Unknown action:', request?.action);
@@ -167,11 +167,16 @@ const addDialogEventListeners = (dialog) => {
 };
 
 // Function to speak the transaction amount using Web Speech API
-const speakTransactionAmount = (amount) => {
+const speakTransactionAmount = (transaction) => {
   if ('speechSynthesis' in window) {
-    const speechText = `Tôi là Kiên mập ${amount} kí.`;
+    const speechText = `${
+      transaction?.transType === 'C'
+        ? 'Bạn đã được cộng số tiền là'
+        : 'Bạn đã bị trừ số tiền là'
+    } ${formatAmount(transaction.amount)} đồng, xin cảm ơn!`;
     const utterance = new SpeechSynthesisUtterance(speechText);
     utterance.lang = 'vi-VN'; // Set to Vietnamese
+    utterance.rate = 1; // Set speech rate
 
     // Stop any previous speech and speak the new text
     window.speechSynthesis.cancel();
@@ -179,4 +184,11 @@ const speakTransactionAmount = (amount) => {
   } else {
     console.warn('Web Speech API is not supported in this browser.');
   }
+};
+
+const formatAmount = (amount) => {
+  return amount.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  });
 };

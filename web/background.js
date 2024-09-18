@@ -2,6 +2,7 @@ let getLocalStorageInterval;
 let reconnectAttempts = 0;
 let socketInstance = null;
 let currentListId = null;
+let getListBankNotificationTypes;
 
 async function setUserId(userId) {
   // idUser = userId;
@@ -19,15 +20,6 @@ async function setListBankEnableVoiceId(list) {
   // bearerToken = token;
   await chrome.storage.local.set({ listId: list });
   console.log('List:', list);
-}
-
-// Get list of bank notification types
-async function getListBankNotificationTypes(userId) {
-  const res =
-    await fetch(`https://dev.vietqr.org/vqr/api/bank-notification/${userId}
-`);
-  const data = await res.json();
-  return data;
 }
 
 async function logoutUser() {
@@ -98,18 +90,13 @@ const listenWebSocket = ({ token, userId, listId }) => {
                 action: 'showDialog',
                 transaction: data
               });
-              if (data.listId !== undefined && data.listId !== null) {
-                // Send message to content script to speak the amount
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'speak',
-                  text: data.amount.toLocaleDateString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                  }) // Assuming amount is in the data
-                });
-              } else {
-                console.warn('listId not found or is null');
-              }
+
+              // Send message to content script to speak the amount
+              chrome.tabs.sendMessage(activeTab, {
+                action: 'speak',
+                transaction: data,
+                text: data.amount
+              });
               console.log(
                 'Content script injected and messages sent successfully'
               );
