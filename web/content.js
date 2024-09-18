@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       showTransactionDialog(request?.transaction, request?.transType);
       break;
     case 'speak':
-      speakTransactionAmount(request?.transaction);
+      speakTransactionAmount(request?.transaction, request?.isSpeech);
       break;
     default:
       console.warn('Unknown action:', request?.action);
@@ -174,24 +174,27 @@ const addDialogEventListeners = (dialog) => {
 };
 
 // Function to speak the transaction amount using Web Speech API
-const speakTransactionAmount = (transaction) => {
-  if ('speechSynthesis' in window) {
-    const amountInText = formatAmount(transaction.amount.split(',').join(''));
-    const speechText = `${
-      transaction?.transType === 'C'
-        ? 'Bạn được nhận số tiền là' // LinhNPN _ KienNH
-        : 'Bạn vừa chuyển số tiền là' // KienNH
-    } ${amountInText} đồng, xin cảm ơn!`;
-    const utterance = new SpeechSynthesisUtterance(speechText);
-    utterance.lang = 'vi-VN'; // Set to Vietnamese
-    utterance.rate = 0.98; // Set speech rate
-    utterance.volume = 0.8; // Set speech volume
+const speakTransactionAmount = (transaction, isSpeech) => {
+  if (!isSpeech) return;
+  if (isSpeech) {
+    if ('speechSynthesis' in window) {
+      const amountInText = formatAmount(transaction.amount.split(',').join(''));
+      const speechText = `${
+        transaction?.transType === 'C'
+          ? 'Bạn được nhận số tiền là' // LinhNPN _ KienNH
+          : 'Bạn vừa chuyển số tiền là' // KienNH
+      } ${amountInText} đồng, xin cảm ơn!`;
+      const utterance = new SpeechSynthesisUtterance(speechText);
+      utterance.lang = 'vi-VN'; // Set to Vietnamese
+      utterance.rate = 0.98; // Set speech rate
+      utterance.volume = 0.8; // Set speech volume
 
-    // Stop any previous speech and speak the new text
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  } else {
-    console.warn('Web Speech API is not supported in this browser.');
+      // Stop any previous speech and speak the new text
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn('Web Speech API is not supported in this browser.');
+    }
   }
 };
 
