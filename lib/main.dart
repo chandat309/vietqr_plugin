@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -19,6 +20,7 @@ late SharedPreferences sharedPrefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   sharedPrefs = await SharedPreferences.getInstance();
   await _initialServiceHelper();
   //
@@ -37,6 +39,7 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.setTitle('VietQR VN');
   });
   runApp(const VietQRPlugin());
 }
@@ -93,6 +96,14 @@ class _VietQRPlugin extends State<VietQRPlugin> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.navigatorKey,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('vi'),
+      ],
       initialRoute: '/',
       onGenerateRoute: NavigationService.onIniRoute,
       home: _mainScreen,

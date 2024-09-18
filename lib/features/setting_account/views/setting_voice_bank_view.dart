@@ -352,9 +352,9 @@ class _SettingVoiceBankViewState extends State<SettingVoiceBankView> {
           bankIdSet.add(selection.bank.bankId);
         }
       }
-      setState(() {
-        _listBankId = bankIdSet.toList();
-      });
+      // setState(() {
+      //   _listBankId = bankIdSet.toList();
+      // });
       // js.context.callMethod('setListBankVoice', [jsonEncode(_listBankId)]);
       // _settingRepository.getListBankNotify();
     }

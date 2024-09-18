@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:viet_qr_plugin/commons/configurations/app_images.dart';
+import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/utils/currency_utils.dart';
 
 class NotifyTransDTO {
@@ -84,11 +86,17 @@ class NotifyTransDTO {
   bool get isTransUnclassified =>
       terminalName.isEmpty && terminalCode.isEmpty && orderId.isEmpty;
 
-  // String get icon => (transType.trim() == 'C')
-  //     ? isTransUnclassified
-  //         ? AppImages.icSuccessInBlue
-  //         : AppImages.icSuccessInGreen
-  //     : AppImages.icSuccessOut;
+  String get icon => (transType.trim() == 'C')
+      ? isTransUnclassified
+          ? AppImages.icSuccessInBlue
+          : AppImages.icSuccessInGreen
+      : AppImages.icSuccessOut;
+
+  Color get colorAmount => (transType.trim() == 'C')
+      ? isTransUnclassified
+          ? AppColor.BLUE_TEXT
+          : AppColor.GREEN
+      : AppColor.RED_CALENDAR;
 
   factory NotifyTransDTO.fromJson(Map<String, dynamic> json) {
     return NotifyTransDTO(

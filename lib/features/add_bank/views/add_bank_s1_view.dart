@@ -5,8 +5,8 @@ import 'package:viet_qr_plugin/features/add_bank/widgets/find_bank_type_widget.d
 import 'package:viet_qr_plugin/widgets/header_widget.dart';
 
 class AddBankS1View extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
 
   const AddBankS1View({
     super.key,
@@ -14,6 +14,8 @@ class AddBankS1View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,

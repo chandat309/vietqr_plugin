@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/login/views/login_view.dart';
@@ -62,6 +64,52 @@ class DialogWidget {
             );
           }).then((value) => isPopLoading = false);
     }
+  }
+
+  Future showModelBottomSheet({
+    BuildContext? context,
+    required Widget widget,
+    double? height,
+    double? width,
+    double radius = 15,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
+    BorderRadiusGeometry? borderRadius,
+    Color? bgrColor,
+    bool isDismissible = true,
+    double sigmaX = 5.0,
+    double sigmaY = 5.0,
+  }) async {
+    context ??= NavigationService.context!;
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      enableDrag: false,
+      isDismissible: isDismissible,
+      useRootNavigator: true,
+      context: context,
+      backgroundColor: AppColor.TRANSPARENT,
+      builder: (context) {
+        final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
+          child: ClipRRect(
+            child: Container(
+              margin: margin ?? const EdgeInsets.only(top: kToolbarHeight),
+              padding: padding ??
+                  EdgeInsets.only(left: 20, right: 20, bottom: keyboardHeight),
+              width: width ?? MediaQuery.of(context).size.width - 10,
+              height: height != null ? (height + keyboardHeight) : null,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius ??
+                    BorderRadius.vertical(top: Radius.circular(radius)),
+                color: bgrColor ?? Theme.of(context).cardColor,
+              ),
+              child: widget,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void openSettingDialog() async {

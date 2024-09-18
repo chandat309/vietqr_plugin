@@ -8,6 +8,7 @@ import 'package:viet_qr_plugin/models/notify_trans_dto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
 import 'package:viet_qr_plugin/widgets/dialog_widget.dart';
+import 'package:viet_qr_plugin/widgets/notify_trans_widget.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../navigator/app_navigator.dart';
@@ -59,30 +60,18 @@ class SocketService {
                   Stringify.NOTI_TYPE_UPDATE_TRANSACTION) {
             print('---------kaka $data');
 
-            // DialogWidget.instance.showModelBottomSheet(
-            //   isDismissible: true,
-            //   margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-            //   height: MediaQuery.of(context).size.height * 0.9,
-            //   borderRadius: BorderRadius.circular(16),
-            //   widget: NotifyTransWidget(
-            //     dto: NotifyTransDTO.fromJson(data),
-            //   ),
-            // );
+            DialogWidget.instance.showModelBottomSheet(
+              isDismissible: true,
+              margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+              height: MediaQuery.of(context).size.height * 0.9,
+              width: 400,
+              borderRadius: BorderRadius.circular(16),
+              widget: NotifyTransWidget(
+                dto: NotifyTransDTO.fromJson(data),
+              ),
+            );
 
             // MediaHelper.instance.playAudio(data);
-            final FlutterTts flutterTts = FlutterTts();
-               await flutterTts.stop(); // Dừng phát âm thanh trước đó
-              // if (voiceMobile && isValidAmount) {
-              //   // Kiểm tra trạng thái trước khi đọc văn bản
-              //   await flutterTts.setLanguage("vi-VN");
-              //   await flutterTts.setPitch(1.0);
-              //   await flutterTts.speak(text);
-              // }
-                 // Kiểm tra trạng thái trước khi đọc văn bản
-                await flutterTts.setLanguage("vi-VN");
-                await flutterTts.setPitch(1.0);
-                final  text = '${NotifyTransDTO.fromJson(data).amount.replaceAll(',', '')} đồng';
-                await flutterTts.speak(text);
           }
           notificationController.sink.add(true);
         }).onError(

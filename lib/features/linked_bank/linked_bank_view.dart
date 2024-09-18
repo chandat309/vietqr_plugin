@@ -69,8 +69,10 @@ class _LinkedBankViewState extends State<LinkedBankView> {
 
   @override
   Widget build(BuildContext context) {
-    const double width = Numeral.DEFAULT_SCREEN_WIDTH;
-    const double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+    // const double width = Numeral.DEFAULT_SCREEN_WIDTH;
+    // const double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColor.WHITE,
       appBar: AppBar(

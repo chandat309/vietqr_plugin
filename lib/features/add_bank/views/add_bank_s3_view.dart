@@ -7,8 +7,8 @@ import 'package:viet_qr_plugin/models/bank_type_dto.dart';
 import 'package:viet_qr_plugin/widgets/header_widget.dart';
 
 class AddBankS3View extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
   final BankTypeDTO bankTypeDTO;
   final String bankAccount;
 
@@ -20,6 +20,8 @@ class AddBankS3View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,

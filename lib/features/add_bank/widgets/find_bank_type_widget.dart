@@ -174,7 +174,7 @@ class _FindBankTypeWidget extends State<FindBankTypeWidget> {
                           const Padding(padding: EdgeInsets.only(left: 10)),
                           Expanded(
                             child: SizedBox(
-                              height: 30,
+                              height: 40,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,

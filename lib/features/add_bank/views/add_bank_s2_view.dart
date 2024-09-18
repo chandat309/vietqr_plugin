@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:viet_qr_plugin/commons/configurations/numeral.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/features/add_bank/widgets/input_bank_account_widget.dart';
@@ -7,14 +6,16 @@ import 'package:viet_qr_plugin/models/bank_type_dto.dart';
 import 'package:viet_qr_plugin/widgets/header_widget.dart';
 
 class AddBankS2View extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
   final BankTypeDTO bankTypeDTO;
 
   const AddBankS2View({super.key, required this.bankTypeDTO});
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,

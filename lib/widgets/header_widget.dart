@@ -17,7 +17,7 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: 50,
+      height: 80,
       padding: (padding == null)
           ? EdgeInsets.zero
           : EdgeInsets.symmetric(
@@ -52,7 +52,7 @@ class HeaderWidget extends StatelessWidget {
           const Spacer(),
           Image.asset(
             'assets/images/logo-vietqr.png',
-            height: 50,
+            height: 100,
           ),
         ],
       ),
