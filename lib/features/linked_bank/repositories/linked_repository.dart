@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
 import 'package:viet_qr_plugin/models/confirm_otp_bank_dto.dart';
+import 'package:viet_qr_plugin/models/register_authentication_dto.dart';
 import 'package:viet_qr_plugin/models/response_message_dto.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
 import 'package:viet_qr_plugin/utils/log.dart';
@@ -62,6 +63,31 @@ class LinkedRepository {
       }
     } catch (e) {
       LOG.error(e.toString());
+    }
+    return result;
+  }
+
+  Future<ResponseMessageDTO> updateRegisterAuthenticationBank(
+      RegisterAuthenticationDTO dto) async {
+    ResponseMessageDTO result =
+        const ResponseMessageDTO(status: '', message: '');
+    try {
+      final String url =
+          '${EnvConfig.getBaseUrl()}account-bank/register-authentication';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: dto.toJson(),
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200 || response.statusCode == 400) {
+        var data = jsonDecode(response.body);
+        result = ResponseMessageDTO.fromJson(data);
+      } else {
+        result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
     }
     return result;
   }
