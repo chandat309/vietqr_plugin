@@ -77,7 +77,7 @@ const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
   }
 
   socketInstance = new WebSocket(
-    `wss://dev.vietqr.org/vqr/socket?userId=${userId}`
+    `wss://api.vietqr.org/vqr/socket?userId=${userId}`
   );
 
   socketInstance.onopen = () => {
@@ -106,25 +106,26 @@ const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
               files: ['content.js']
             },
             () => {
-              if (isPopupOpen(listBankNotify, data)) {
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'showDialog',
-                  transaction: data
-                });
-              }
-              console.log('list bank include:', listBank.includes(data.bankId));
+              chrome.tabs.sendMessage(activeTab, {
+                action: 'showDialog',
+                transaction: data
+              });
 
-              // Check if listBank is not null
-              if (listBank && listBank.includes(data.bankId)) {
-                chrome.tabs.sendMessage(activeTab, {
-                  action: 'speak',
-                  transaction: data,
-                  text: data.amount,
-                  isSpeech: listBank?.includes(data.bankId)
-                });
-              } else {
-                console.warn('Bank not in list:', data.bankId);
-              }
+              // if (isPopupOpen(listBankNotify, data)) {
+              // }
+              // console.log('list bank include:', listBank.includes(data.bankId));
+
+              chrome.tabs.sendMessage(activeTab, {
+                action: 'speak',
+                transaction: data,
+                text: data.amount,
+                // isSpeech: listBank?.includes(data.bankId)
+              });
+              // // Check if listBank is not null
+              // if (listBank && listBank.includes(data.bankId)) {
+              // } else {
+              //   console.warn('Bank not in list:', data.bankId);
+              // }
             }
           );
         }
