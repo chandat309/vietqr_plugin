@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/commons/widgets/my_separator_widget.dart';
+import 'package:viet_qr_plugin/features/setting_account/views/setting_noti_type_view.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_popup_bank_view.dart';
 import 'package:viet_qr_plugin/features/setting_account/views/setting_voice_bank_view.dart';
 
@@ -49,7 +50,7 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeInOut,
-          height: isExpand ? 0 : 115,
+          height: isExpand ? 0 : 168,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
@@ -112,6 +113,42 @@ class _SettingNotificationViewState extends State<SettingNotificationView> {
                         const Expanded(
                           child: Text(
                             'Hiển thị Pop-up thông báo BĐSD',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right)
+                      ],
+                    ),
+                  ),
+                ),
+                 const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SettingNotiTypeView(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/ic-gear.png',
+                          height: 40,
+                          // color: AppColor.BLUE_TEXT,
+                        ),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: Text(
+                            'Cấu hình loại thông báo BĐSD',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
