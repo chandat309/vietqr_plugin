@@ -2,24 +2,23 @@ let getLocalStorageInterval;
 let reconnectAttempts = 0;
 let socketInstance = null;
 let currentListId = null;
-let getListBankNotificationTypes;
 
 async function setUserId(userId) {
-  // idUser = userId;
   await chrome.storage.local.set({ idUser: userId });
-  // console.log("UserId:", userId);
 }
 
 async function setToken(token) {
-  // bearerToken = token;
   await chrome.storage.local.set({ bearerToken: token });
-  // console.log("Bearer:", bearerToken);
+}
+
+async function setListBankVoice(list) {
+  await chrome.storage.local.set({ listBank: list });
+  console.log('ListVoice:', list);
 }
 
 async function setListBankNotify(list) {
-  // bearerToken = token;
   await chrome.storage.local.set({ listBank: list });
-  console.log('List:', list);
+  console.log('ListEnable:', list);
 }
 
 async function logoutUser() {
@@ -31,6 +30,12 @@ const clearLocalStorageInterval = () => {
 };
 
 const listenWebSocket = ({ token, userId, listBank }) => {
+  if (socketInstance) {
+    console.log('WebSocket already initialized');
+    socketInstance.close();
+    socketInstance = null;
+  }
+
   socketInstance = new WebSocket(
     `wss://dev.vietqr.org/vqr/socket?userId=${userId}`
   );
@@ -41,7 +46,7 @@ const listenWebSocket = ({ token, userId, listBank }) => {
       token,
       listBank
     });
-    socketInstance.send(message);
+    socketInstance?.send(message);
     console.log('WebSocket connection established');
     console.log('WebSocket message sent:', message);
   };
@@ -51,46 +56,37 @@ const listenWebSocket = ({ token, userId, listBank }) => {
     console.log('WebSocket message received:', data);
 
     if (data.notificationType === 'N05') {
-      // TODO: Show dialog
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length > 0) {
           const activeTab = tabs[0].id;
-          // Inject content.js into the active tab (if needed)
           chrome.scripting.executeScript(
             {
               target: { tabId: activeTab },
               files: ['content.js']
             },
             () => {
-              // Check if listId has changed
-              if (data.listId !== currentListId) {
-                console.log('listId has changed. Updating...');
-                currentListId = data.listId;
-              }
 
-              // Send message to content script to show dialog
               chrome.tabs.sendMessage(activeTab, {
                 action: 'showDialog',
                 transaction: data
               });
 
-              // Send message to content script to speak the amount
-              chrome.tabs.sendMessage(activeTab, {
-                action: 'speak',
-                transaction: data,
-                text: data.amount
-              });
-              console.log(
-                'Content script injected and messages sent successfully'
-              );
+              console.log('list bank include:', listBank.includes(data.bankId));
+
+              // Check if listBank is not null
+              if (listBank && listBank.includes(data.bankId)) {
+                chrome.tabs.sendMessage(activeTab, {
+                  action: 'speak',
+                  transaction: data,
+                  text: data.amount
+                });
+              } else {
+                console.warn('Bank not in list:', data.bankId);
+              }
             }
           );
-        } else {
-          console.log('No active tab found.');
         }
       });
-    } else {
-      console.log('No userId provided. WebSocket not initialized.');
     }
   };
 
@@ -101,17 +97,14 @@ const listenWebSocket = ({ token, userId, listBank }) => {
   socketInstance.onclose = (event) => {
     console.log('WebSocket closed:', event);
     socketInstance = null;
-    // Try reconnecting using exponential backoff
     if (reconnectAttempts < 5) {
       setTimeout(() => {
         reconnectAttempts++;
-        listenWebSocket({ token, userId, listId });
-      }, 1000); // Retry with exponential backoff
+        listenWebSocket({ token, userId, listBank });
+      }, Math.pow(2, reconnectAttempts) * 1000); // Exponential backoff
     }
   };
 };
-
-let result;
 
 const checkStorageAndListenWebSocket = async () => {
   try {
@@ -160,57 +153,25 @@ const checkStorageAndListenWebSocket = async () => {
         });
       }
     };
-    await retrieveAndProcessData();
-    // await chrome.storage.local.get(
-    //   ['idUser', 'bearerToken', 'listBank'],
-    //   (result) => {
-    //     const { idUser, bearerToken, listBank } = result;
-    //     console.log('Storage retrieved', result);
 
-    //     // Check if idUser is available in storage
-    //     if (!idUser) {
-    //       getLocalStorageInterval = setInterval(async () => {
-    //         await chrome.storage.local.get(
-    //           ['idUser', 'bearerToken', 'listBank'],
-    //           (result) => {
-    //             const { idUser, bearerToken, listBank } = result;
-    //             if (idUser) {
-    //               listenWebSocket({
-    //                 token: bearerToken,
-    //                 userId: idUser,
-    //                 listId: listBank
-    //               });
-    //               clearLocalStorageInterval(); // Clear the interval if it's running
-    //             }
-    //           }
-    //         );
-    //       }, 1000);
-    //     } else {
-    //       listenWebSocket({
-    //         token: bearerToken,
-    //         userId: idUser,
-    //         listId: listBank
-    //       });
-    //     }
-    //   }
-    // );
+    await retrieveAndProcessData();
   } catch (error) {
     console.error('Error:', error);
   }
 };
 
-// Run the function on extension install/reload
+// Handle extension installation and startup
 chrome.runtime.onInstalled.addListener(() => {
   console.log('Extension installed/reloaded');
   checkStorageAndListenWebSocket();
 });
 
-// Run the function on extension startup
 chrome.runtime.onStartup.addListener(() => {
   console.log('Extension started');
   checkStorageAndListenWebSocket();
 });
 
+// Clean up WebSocket when the extension is suspended
 chrome.runtime.onSuspend.addListener(() => {
   console.log('Extension is being suspended. Cleaning up...');
   if (socketInstance) {
@@ -219,13 +180,10 @@ chrome.runtime.onSuspend.addListener(() => {
   }
 });
 
-// // Listen for changes in storage
-// ! Duplicated interval check for idUser
-// chrome.storage.onChanged.addListener((changes, namespace) => {
-//   console.log('Storage changed:', changes, namespace);
-//   checkStorageAndListenWebSocket();
-// });
-
-// // Runs every time the background script starts
-// ! Duplicate of the interval check for idUser
-// checkStorageAndListenWebSocket();
+// Watch for changes in localStorage and recheck WebSocket connection
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (changes.idUser || changes.bearerToken || changes.listBank) {
+    console.log('LocalStorage changed:', changes);
+    checkStorageAndListenWebSocket();
+  }
+});

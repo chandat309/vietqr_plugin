@@ -163,7 +163,7 @@ const addDialogEventListeners = (dialog) => {
     if (e.key === 'Escape') closeDialog();
   });
   // Close the dialog after 10 seconds
-  setTimeout(closeDialog, 10000);
+  setTimeout(closeDialog, 5000);
 };
 
 // Function to speak the transaction amount using Web Speech API
