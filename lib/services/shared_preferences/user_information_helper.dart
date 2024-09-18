@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:viet_qr_plugin/main.dart';
 import 'package:viet_qr_plugin/models/account_information_dto.dart';
+import 'package:viet_qr_plugin/models/bank_type_dto.dart';
+import 'package:viet_qr_plugin/models/bank_type_enable_dto.dart';
 
 class UserHelper {
   const UserHelper._privateConstructor();
@@ -90,8 +92,32 @@ class UserHelper {
       print('isSetList');
       return;
     }
-      print('isSetList2');
+    print('isSetList2');
     await sharedPrefs.setString('LIST_BANK_ID_VOICE', jsonString);
+  }
+
+  Future<void> saveListBankType(String listBankType) async {
+    if (!sharedPrefs.containsKey('LIST_BANK_TYPE') ||
+        sharedPrefs.getString('LIST_BANK_TYPE') == null) {
+      await sharedPrefs.setString('LIST_BANK_TYPE', listBankType);
+      print('isSetList');
+      return;
+    }
+    print('isSetList2');
+    await sharedPrefs.setString('LIST_BANK_TYPE', listBankType);
+  }
+
+  Future<List<BankEnableType>?> getListBankTypes() async {
+    String? jsonString = sharedPrefs.getString('LIST_BANK_TYPE');
+    if (jsonString == null) {
+      return null;
+    } else {
+      final List<dynamic> jsonList = jsonDecode(jsonString);
+      List<BankEnableType> listBankType = jsonList
+          .map((e) => BankEnableType.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return listBankType;
+    }
   }
 
   Future<List<String>> retrieveList() async {

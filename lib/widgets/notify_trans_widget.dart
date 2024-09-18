@@ -25,6 +25,7 @@ import 'package:viet_qr_plugin/commons/configurations/app_images.dart';
 // import 'package:vierqr/services/socket_service/socket_service.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/models/notify_trans_dto.dart';
+import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
 import 'package:viet_qr_plugin/widgets/horizontal_dashed_line.dart';
 import 'package:viet_qr_plugin/widgets/m_button_icon_widget.dart';
@@ -99,16 +100,8 @@ class _TransactionSuccessWidget extends State<NotifyTransWidget> {
     countdownProvider = CountdownProvider(30);
 
     // check tài khoản có bật đọc voice không
-    // final stringBanks = SharePrefUtils.getListEnableVoiceBank();
-    // if (stringBanks != null) {
-    //   final listBanks = jsonDecode(stringBanks).split(',');
-    //   if (listBanks.isNotEmpty) {
-    //     if (listBanks.contains(widget.dto.bankId)) {
-    //       _speak();
-    //     }
-    //   }
-    // }
-    _speak();
+    checkSpeak();
+    // _speak();
 
     countdownProvider.countDown(callback: () {
       if (!mounted) return;
@@ -118,6 +111,17 @@ class _TransactionSuccessWidget extends State<NotifyTransWidget> {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   onRole();
     // });
+  }
+
+  void checkSpeak() async {
+    List<String> listBankId = await UserHelper.instance.retrieveList();
+    if (listBankId != null) {
+      if (listBankId.isNotEmpty) {
+        if (listBankId.contains(widget.dto.bankId)) {
+          _speak();
+        }
+      }
+    }
   }
 
   // void onRole() {

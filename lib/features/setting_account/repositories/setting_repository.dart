@@ -55,6 +55,9 @@ class SettingRepository {
         String jsonString =
             jsonEncode(listEnable.map((bank) => bank.toJson()).toList());
         // js.context.callMethod('setListBankNotify', [jsonString]);
+        UserHelper.instance.saveListBankType(jsonString);
+        // final listBankTypes = await UserHelper.instance.getListBankTypes();
+        // print(listBankTypes);
       } else {
         // js.context.callMethod('setListBankNotify', ['']);
       }

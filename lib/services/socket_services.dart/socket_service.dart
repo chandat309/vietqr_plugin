@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:viet_qr_plugin/commons/configurations/stringify.dart';
@@ -42,7 +43,7 @@ class SocketService {
       return;
     }
     try {
-      Uri wsUrl = Uri.parse('wss://api.vietqr.org/vqr/socket?userId=$userId');
+      Uri wsUrl = Uri.parse('wss://dev.api.vietqr.org/vqr/socket?userId=$userId');
 
       _channelTransaction = WebSocketChannel.connect(wsUrl);
 
@@ -60,16 +61,33 @@ class SocketService {
                   Stringify.NOTI_TYPE_UPDATE_TRANSACTION) {
             print('---------kaka $data');
 
-            DialogWidget.instance.showModelBottomSheet(
-              isDismissible: true,
-              margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-              height: MediaQuery.of(context).size.height * 0.9,
-              width: 400,
-              borderRadius: BorderRadius.circular(16),
-              widget: NotifyTransWidget(
-                dto: NotifyTransDTO.fromJson(data),
-              ),
-            );
+            final listBankTypes = await UserHelper.instance.getListBankTypes();
+            final dto = NotifyTransDTO.fromJson(data);
+            if (listBankTypes != null) {
+              final bankType = listBankTypes.firstWhereOrNull(
+                (element) => element.bankId == dto.bankId,
+              );
+              if (bankType != null) {
+                Set<String> types = bankType.notificationTypes
+                    .replaceAll(RegExp(r'[\[\]]'), '')
+                    .split(',')
+                    .map((e) => e.trim())
+                    .where((e) => e.isNotEmpty)
+                    .toSet();
+                for (var type in types.toList()) {
+                  DialogWidget.instance.showModelBottomSheet(
+                    isDismissible: true,
+                    margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    width: 400,
+                    borderRadius: BorderRadius.circular(16),
+                    widget: NotifyTransWidget(
+                      dto: dto,
+                    ),
+                  );
+                }
+              }
+            }
 
             // MediaHelper.instance.playAudio(data);
           }
