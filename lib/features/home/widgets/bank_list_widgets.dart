@@ -158,7 +158,7 @@ class _BankListWidget extends State<BankListWidget> {
             ),
             Container(
               width: widget.width,
-              height: 40,
+              height: 50,
               padding: const EdgeInsets.only(left: 20, right: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -274,7 +274,7 @@ class _BankListWidget extends State<BankListWidget> {
                             children: [
                               SizedBox(
                                 width: widget.width,
-                                height: 30,
+                                height: 40,
                                 child: Row(
                                   children: [
                                     Container(

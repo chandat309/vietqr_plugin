@@ -6,8 +6,8 @@ import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
 import 'package:viet_qr_plugin/widgets/header_widget.dart';
 
 class QRBankView extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
 
   final String widgetKey;
   final VietQRWidgetDTO dto;
@@ -20,6 +20,8 @@ class QRBankView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColor.WHITE,
       body: Hero(

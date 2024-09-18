@@ -8,8 +8,8 @@ import 'package:viet_qr_plugin/widgets/header_widget.dart';
 
 class LoginPasswordView extends StatelessWidget {
   final InfoUserDTO infoUser;
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
 
   const LoginPasswordView({
     super.key,
@@ -18,6 +18,8 @@ class LoginPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js' as js;
+// import 'dart:js' as js;
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
 import 'package:viet_qr_plugin/models/bank_notify_dto.dart';
@@ -40,13 +40,13 @@ class SettingRepository {
         type: AuthenticationType.SYSTEM,
       );
       if (response.statusCode == 200) {
-        js.context.callMethod('setListBankNotify', [response.body]);
+        // js.context.callMethod('setListBankNotify', [response.body]);
         var data = jsonDecode(response.body);
         list = data
             .map<BankEnableType>((json) => BankEnableType.fromJson(json))
             .toList();
       } else {
-        js.context.callMethod('setListBankNotify', ['']);
+        // js.context.callMethod('setListBankNotify', ['']);
       }
     } catch (e) {
       LOG.error(e.toString());

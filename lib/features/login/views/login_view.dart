@@ -4,13 +4,15 @@ import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/login/widgets/phone_input_widget.dart';
 
 class LoginView extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
 
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.WHITE,

@@ -10,13 +10,15 @@ import 'package:viet_qr_plugin/utils/image_utils.dart';
 import 'package:viet_qr_plugin/widgets/dialog_widget.dart';
 
 class HomeView extends StatelessWidget {
-  final double width = Numeral.DEFAULT_SCREEN_WIDTH;
-  final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
+  // final double width = Numeral.DEFAULT_SCREEN_WIDTH;
+  // final double height = Numeral.DEFAULT_SCREEN_HEIGHT;
 
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
     final String imgId = UserHelper.instance.getAccountInformation().imgId;
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -73,7 +73,7 @@
 //   @override
 //   void initState() {
 //     super.initState();
-//     // text = '${widget.dto.amount} đồng';
+//     text = '${widget.dto.amount} đồng';
 //     // voiceMobile = SharePrefUtils.getAccountSetting().voiceMobile;
 
 //     if (widget.dto.amount == "*****") {

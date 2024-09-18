@@ -11,6 +11,7 @@ import 'package:viet_qr_plugin/navigator/app_navigator.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/account_helper.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/services/socket_services.dart/socket_service.dart';
+import 'package:window_manager/window_manager.dart';
 // import 'dart:js' as js;
 
 //Share Preferences
@@ -21,6 +22,22 @@ void main() async {
   sharedPrefs = await SharedPreferences.getInstance();
   await _initialServiceHelper();
   //
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(1024, 768),
+    fullScreen: false,
+    minimumSize: Size(800, 600),
+    maximumSize: Size(1024, 768),
+    center: true,
+    windowButtonVisibility: true,
+    titleBarStyle: TitleBarStyle.normal,
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
   runApp(const VietQRPlugin());
 }
 
