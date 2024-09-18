@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/add_bank/views/add_bank_s1_view.dart';
 import 'package:viet_qr_plugin/features/home/repositories/bank_list_repository.dart';
+import 'package:viet_qr_plugin/features/linked_bank/linked_bank_view.dart';
 import 'package:viet_qr_plugin/features/qr/views/qr_bank_view.dart';
 import 'package:viet_qr_plugin/models/bank_account_dto.dart';
 import 'package:viet_qr_plugin/models/vietqr_widget_dto.dart';
@@ -298,14 +299,20 @@ class _BankListWidget extends State<BankListWidget> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            _banks[index].bankShortName,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13,
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                _banks[index].bankShortName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           Text(
                                             _banks[index].bankName,
@@ -346,6 +353,34 @@ class _BankListWidget extends State<BankListWidget> {
                                           : AppColor.BLACK,
                                     )
                                   : const SizedBox(),
+                              if (_banks[index].bankTypeStatus == 1 &&
+                                  !_banks[index].isAuthenticated) ...[
+                                const SizedBox(height: 8),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => LinkedBankView(
+                                              dto: _banks[index],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Liên kết ngay',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: AppColor.ORANGE_DARK,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: AppColor.ORANGE_DARK,
+                                          height: 1.5,
+                                        ),
+                                      )),
+                                )
+                              ]
                             ],
                           ),
                         ),

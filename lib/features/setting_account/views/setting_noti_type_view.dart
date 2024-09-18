@@ -104,7 +104,8 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
                 },
                 itemCount: listBank.length,
               ),
-            )
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
