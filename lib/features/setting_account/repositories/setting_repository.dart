@@ -3,6 +3,7 @@ import 'dart:js' as js;
 import 'package:viet_qr_plugin/commons/env/env_config.dart';
 import 'package:viet_qr_plugin/enums/authentication_type.dart';
 import 'package:viet_qr_plugin/models/bank_notify_dto.dart';
+import 'package:viet_qr_plugin/models/bank_type_enable_dto.dart';
 import 'package:viet_qr_plugin/models/setting_account_sto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/base_api.dart';
@@ -30,22 +31,49 @@ class SettingRepository {
     return result;
   }
 
-  Future<void> getListBankNotify() async {
+  Future<List<BankEnableType>> getListBankNotify() async {
+    List<BankEnableType> list = [];
     try {
-      String url = '${EnvConfig.getBaseUrl()}bank-notification/update';
+      String url = '${EnvConfig.getBaseUrl()}bank-notification/$userId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
       );
       if (response.statusCode == 200) {
         js.context.callMethod('setListBankNotify', [response.body]);
-        // var data = jsonDecode(response.body);
+        var data = jsonDecode(response.body);
+        list = data
+            .map<BankEnableType>((json) => BankEnableType.fromJson(json))
+            .toList();
       } else {
         js.context.callMethod('setListBankNotify', ['']);
       }
     } catch (e) {
       LOG.error(e.toString());
     }
+    return list;
+  }
+
+  Future<bool> setListBankNotify(String bankId, List<String> types) async {
+    try {
+      Map<String, dynamic> data = {};
+      data['userId'] = userId;
+      data['bankId'] = bankId;
+      data['notificationTypes'] = types;
+
+      String url = '${EnvConfig.getBaseUrl()}bank-notification/update';
+      final response = await BaseAPIClient.postAPI(
+        body: data,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+      } else {}
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
   }
 
   Future<bool> setNotificationBDSD(int value) async {

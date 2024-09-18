@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:viet_qr_plugin/commons/configurations/numeral.dart';
 import 'package:viet_qr_plugin/commons/configurations/theme.dart';
 import 'package:viet_qr_plugin/features/home/repositories/bank_list_repository.dart';
+import 'package:viet_qr_plugin/features/setting_account/repositories/setting_repository.dart';
 import 'package:viet_qr_plugin/models/bank_account_dto.dart';
+import 'package:viet_qr_plugin/models/bank_type_enable_dto.dart';
 import 'package:viet_qr_plugin/services/shared_preferences/user_information_helper.dart';
 import 'package:viet_qr_plugin/utils/image_utils.dart';
 
@@ -14,7 +16,9 @@ class SettingNotiTypeView extends StatefulWidget {
 }
 
 class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
+  SettingRepository _settingRepository = SettingRepository();
   List<BankAccountDTO> listBank = [];
+  List<BankSelectType> listType = [];
 
   @override
   void initState() {
@@ -36,6 +40,11 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           )
           .toList();
     });
+
+//     final resultNotify = await _settingRepository.getListBankNotify();
+// setState(() {
+//   listType = List.generate(length, generator)
+// });
   }
 
   @override
@@ -163,10 +172,20 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           ),
           const SizedBox(height: 10),
           _buildDescriptionWidget(
-              title: 'GD đến (+) có đối soát', color: AppColor.GREEN),
+            title: 'GD đến (+) có đối soát',
+            color: AppColor.GREEN,
+            onChange: (value) {},
+          ),
           _buildDescriptionWidget(
-              title: 'GD đến (+) không đối soát', color: AppColor.BLUE_TEXT),
-          _buildDescriptionWidget(title: 'GD đi (-)', color: AppColor.RED_TEXT)
+            title: 'GD đến (+) không đối soát',
+            color: AppColor.BLUE_TEXT,
+            onChange: (value) {},
+          ),
+          _buildDescriptionWidget(
+            title: 'GD đi (-)',
+            color: AppColor.RED_TEXT,
+            onChange: (value) {},
+          )
         ],
       ),
     );
@@ -174,6 +193,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
 
   Widget _buildDescriptionWidget({
     required String title,
+    required Function(bool) onChange,
     Color? color,
   }) {
     return Container(
@@ -205,10 +225,20 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
           ),
           Checkbox(
             value: false,
-            onChanged: (value) {},
+            onChanged: (value) {
+              if (value != null) {
+                onChange;
+              }
+            },
           )
         ],
       ),
     );
   }
+}
+
+class BankSelectType {
+  BankAccountDTO bank;
+  BankEnableType bankType;
+  BankSelectType({required this.bank, required this.bankType});
 }

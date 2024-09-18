@@ -15,10 +15,16 @@ async function setToken(token) {
   // console.log("Bearer:", bearerToken);
 }
 
+async function setListBankVoice(list) {
+  // bearerToken = token;
+  await chrome.storage.local.set({ listBank: list });
+  console.log('ListVoice:', list);
+}
+
 async function setListBankNotify(list) {
   // bearerToken = token;
   await chrome.storage.local.set({ listBank: list });
-  console.log('List:', list);
+  console.log('ListEnable:', list);
 }
 
 // Get list of bank notification types

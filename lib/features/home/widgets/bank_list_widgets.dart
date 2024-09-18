@@ -47,6 +47,19 @@ class _BankListWidget extends State<BankListWidget> {
   Future<void> getBanks() async {
     String userId = UserHelper.instance.getUserId();
     _banks = await widget.bankListRepository.getListBankAccount(userId);
+    final filter = _banks.where(
+      (element) =>
+          element.isOwner && element.isAuthenticated && element.enableVoice,
+    );
+    Set<String> bankIdSet = <String>{};
+    for (BankAccountDTO selection in filter) {
+      // ignore: unnecessary_null_comparison
+      if (selection != null) {
+        bankIdSet.add(selection.bankId);
+      }
+    }
+    js.context.callMethod(
+        'setListBankVoice', [jsonEncode(bankIdSet.toList())]);
     await getColors();
   }
 
