@@ -53,9 +53,9 @@ const isTransUnclassified = (transaction) => {
 // Generate HTML content for the dialog
 const createDialogHTML = (transaction, transType) => {
   console.log('transaction', transaction);
-
   const isUnclassified = isTransUnclassified(transaction);
-  const timePaid = formatTransactionDate(transaction?.timePaid * 1000);
+  let timePaid = formatTransactionDate(transaction?.timePaid * 1000);
+
   return `
     <div class="vietqr-popup">
       <div class="vietqr-popup-content">
