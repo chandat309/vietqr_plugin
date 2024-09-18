@@ -179,8 +179,10 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.GREEN,
             isEnable: enableType.notificationTypes == 'RECON',
             onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'RECON' : '');
               _settingRepository
-                  .setListBankNotify(dto.bankId, value ? 'RECON' : '')
+                  .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
@@ -196,8 +198,10 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.BLUE_TEXT,
             isEnable: enableType.notificationTypes == 'CREDIT',
             onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'CREDIT' : '');
               _settingRepository
-                  .setListBankNotify(dto.bankId, value ? 'CREDIT' : '')
+                  .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
@@ -213,8 +217,10 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             color: AppColor.RED_TEXT,
             isEnable: enableType.notificationTypes == 'DEBIT',
             onChange: (value) {
+              Set<String> types = <String>{};
+              types.add(value ? 'DEBIT' : '');
               _settingRepository
-                  .setListBankNotify(dto.bankId, value ? 'DEBIT' : '')
+                  .setListBankNotify(dto.bankId, types.toList())
                   .then(
                 (value) async {
                   final listRes = await _settingRepository.getListBankNotify();
@@ -267,7 +273,7 @@ class _SettingNotiTypeViewState extends State<SettingNotiTypeView> {
             value: isEnable,
             onChanged: (value) {
               if (value != null) {
-                onChange;
+                onChange(value);
               }
             },
           )
