@@ -49,32 +49,40 @@ const clearLocalStorageInterval = () => {
 
 // Boolean to check if the popup is open
 const isPopupOpen = (listBankNotify, transaction) => {
+  // Ensure listBankNotify is parsed as an array, whether it's a stringified JSON or already an array
   const arrayBankNotify =
     typeof listBankNotify === "string"
       ? JSON.parse(listBankNotify)
       : listBankNotify;
 
+  // Iterate through each bank notification in the array
   return arrayBankNotify?.some((bankNotify) => {
+    // Clean up the notificationTypes by removing brackets and splitting into an array
     const listNotificationTypes = bankNotify.notificationTypes
       .replace(/[\[\]]/g, "")
       .split(",");
-    const isMatchingBank = bankNotify.bankId === transaction.bankId;
 
+    console.log("listNotificationTypes", listNotificationTypes);
+    // Check if the bankId matches the transaction's bankId
+    const isMatchingBank = bankNotify.bankId === transaction.bankId;
+    console.log("isMatchingBank", isMatchingBank);
+
+    // If there's a matching bankId, check if the transaction type matches the notification types
     return (
       isMatchingBank &&
       listNotificationTypes.some((notificationType) => {
         switch (notificationType.trim()) {
           case "CREDIT":
-            return transaction.transType === "C";
+            return transaction.transType === "C"; // Transaction is a credit
           case "DEBIT":
-            return transaction.transType === "D";
+            return transaction.transType === "D"; // Transaction is a debit
           case "RECON":
             return (
               transaction.transType === "C" &&
-              (transaction.type === 1 || transaction.type === 0)
+              (transaction.type === 1 || transaction.type === 0) // RECON specific logic
             );
           default:
-            return false;
+            return false; // For any unrecognized notificationType
         }
       })
     );
@@ -115,7 +123,7 @@ const formatAmount = (amount) => {
   });
 };
 
-const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
+const listenWebSocket = ({ token, userId }) => {
   if (socketInstance) {
     console.log("WebSocket already initialized");
     socketInstance.close();
@@ -149,32 +157,39 @@ const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
               target: { tabId: activeTab },
               files: ["content.js"],
             },
-            () => {
+            async () => {
               // chrome.tabs.sendMessage(activeTab, {
               //   action: 'showDialog',
               //   transaction: data
               // });
+              const getStorage = await getStorageData();
+              const { listBank, listBankNotify } = getStorage;
 
-              chrome.tabs.sendMessage(activeTab, {
-                action: "showDialog",
-                transaction: data,
-              });
-              const bankList = listBank
-                .replace(/[\[\]]/g, "")
-                .split(",")
-                .map((item) => item.replace(/['"]/g, "").trim());
-              console.log("bankList", bankList);
+              console.log("listBankNotify", listBankNotify);
+              console.log("isPopupOpen", isPopupOpen(listBankNotify, data));
 
-              const bankFound = bankList.includes(data.bankId);
-              console.log("bankFound", bankFound);
-              if (bankFound && bankFound === true) {
-                // speakTransactionAmount(data, bankFound && bankFound === true);
+              if (isPopupOpen(listBankNotify, data) === true) {
                 chrome.tabs.sendMessage(activeTab, {
-                  action: "speak",
+                  action: "showDialog",
                   transaction: data,
-                  text: data.amount,
-                  isSpeech: bankFound && bankFound === true,
                 });
+                const bankList = listBank
+                  .replace(/[\[\]]/g, "")
+                  .split(",")
+                  .map((item) => item.replace(/['"]/g, "").trim());
+                console.log("bankList", bankList);
+
+                const bankFound = bankList.includes(data.bankId);
+                console.log("bankFound", bankFound === true);
+                if (bankFound && bankFound === true) {
+                  // speakTransactionAmount(data, bankFound && bankFound === true);
+                  chrome.tabs.sendMessage(activeTab, {
+                    action: "speak",
+                    transaction: data,
+                    text: data.amount,
+                    isSpeech: bankFound && bankFound === true,
+                  });
+                }
               }
 
               //   chrome.tabs.sendMessage(activeTab, {
@@ -221,27 +236,13 @@ const listenWebSocket = ({ token, userId, listBank, listBankNotify }) => {
     if (reconnectAttempts < 5) {
       setTimeout(() => {
         reconnectAttempts++;
-        listenWebSocket({ token, userId, listBank, listBankNotify });
+        listenWebSocket({ token, userId });
       }, Math.pow(2, reconnectAttempts) * 1000); // Exponential backoff
     }
   };
 };
 
 const checkStorageAndListenWebSocket = async () => {
-  const getStorageData = () => {
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.get(
-        ["idUser", "bearerToken", "listBank", "listBankNotify"],
-        (result) => {
-          if (chrome.runtime.lastError) {
-            reject(new Error(chrome.runtime.lastError));
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
-  };
   try {
     const retrieveAndProcessData = async () => {
       const result = await getStorageData();
@@ -252,15 +253,16 @@ const checkStorageAndListenWebSocket = async () => {
         getLocalStorageInterval = setInterval(async () => {
           try {
             const getStorage = await getStorageData();
-            const { idUser, bearerToken, listBank, listBankNotify } = getStorage;
+            const { idUser, bearerToken, listBank, listBankNotify } =
+              getStorage;
             // const result = await getStorageData();
             // const { idUser, bearerToken, listBank, listBankNotify } = result;
             if (idUser) {
               listenWebSocket({
                 token: bearerToken,
                 userId: idUser,
-                listId: listBank,
-                listBankNotify: listBankNotify,
+                // listId: listBank,
+                // listBankNotify: listBankNotify,
               });
               clearInterval(getLocalStorageInterval); // Clear the interval if idUser is found
             }
@@ -272,8 +274,8 @@ const checkStorageAndListenWebSocket = async () => {
         listenWebSocket({
           token: bearerToken,
           userId: idUser,
-          listBank: listBank,
-          listBankNotify: listBankNotify,
+          // listBank: listBank,
+          // listBankNotify: listBankNotify,
         });
       }
     };
@@ -282,6 +284,21 @@ const checkStorageAndListenWebSocket = async () => {
   } catch (error) {
     console.error("Error:", error);
   }
+};
+
+const getStorageData = () => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(
+      ["idUser", "bearerToken", "listBank", "listBankNotify"],
+      (result) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError));
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
 };
 
 // Handle extension installation and startup
