@@ -15,6 +15,12 @@
       "css": ["dialog.css"]
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["dialog.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' ; object-src 'self'"
   },
