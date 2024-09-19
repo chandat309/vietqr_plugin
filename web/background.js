@@ -5,33 +5,14 @@ let socketInstance = null;
 async function setUserId(userId) {
   await chrome.storage.local.set({ idUser: userId });
 }
-
 async function setToken(token) {
   await chrome.storage.local.set({ bearerToken: token });
 }
-
 async function setListBankVoice(list) {
-  // const result = await chrome.storage.local.get("listBank");
-
-  // if (result.listBank) {
-  //   console.log("Check", result);
-  //   await chrome.storage.local.remove("listBank");
-  // }
-
-  // Set the new listBank
   await chrome.storage.local.set({ listBank: list });
-  // const newResult = await chrome.storage.local.get("listBank");
-  // console.log("Check", newResult);
 }
 async function setListBankNotify(list) {
-  // const result = await chrome.storage.local.get("listBankNotify");
-
-  // if (result.listBank) {
-  //   await chrome.storage.local.remove("listBankNotify");
-  // }
-
   await chrome.storage.local.set({ listBankNotify: list });
-  console.log("ListEnable:", list);
 }
 
 async function logoutUser() {
@@ -86,40 +67,6 @@ const isPopupOpen = (listBankNotify, transaction) => {
         }
       })
     );
-  });
-};
-
-const speakTransactionAmount = (transaction, isSpeech) => {
-  console.log("isSpeech", isSpeech);
-  if (!isSpeech) return;
-  if (isSpeech) {
-    if ("speechSynthesis" in window) {
-      const amountInText = formatAmount(transaction.amount.split(",").join(""));
-      const speechText = `${
-        transaction?.transType === "C"
-          ? "Bạn được nhận số tiền là" // LinhNPN _ KienNH
-          : "Bạn vừa chuyển số tiền là" // KienNH
-      } ${amountInText} đồng, xin cảm ơn!`;
-      const utterance = new SpeechSynthesisUtterance(speechText);
-      utterance.lang = "vi-VN"; // Set to Vietnamese
-      utterance.rate = 0.98; // Set speech rate
-      utterance.volume = 0.8; // Set speech volume
-
-      // Stop any previous speech and speak the new text
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    } else {
-      console.warn("Web Speech API is not supported in this browser.");
-    }
-  }
-};
-
-const formatAmount = (amount) => {
-  const number = parseInt(amount);
-  // console.log('number', number);
-  return number.toLocaleString("vi-VN", {
-    style: "currency",
-    currency: "VND",
   });
 };
 
