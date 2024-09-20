@@ -86,7 +86,13 @@ const listenWebSocket = ({ token, userId }) => {
       type: 'auth',
       token
     });
-    socketInstance?.send(message);
+    if (socketInstance.readyState === WebSocket.OPEN) {
+      // Only send if the connection is open
+      socketInstance.send(message);
+      console.log('WebSocket message sent:', message);
+    } else {
+      console.warn('WebSocket not ready, unable to send message.');
+    }
     // console.log('WebSocket connection established');
     // console.log('WebSocket message sent:', message);
   };
@@ -164,20 +170,28 @@ const listenWebSocket = ({ token, userId }) => {
     }
   };
 
-  socketInstance.onerror = (error) => {
-    console.error('WebSocket error:', error); // Original logging
-    if (error instanceof ErrorEvent) {
-      console.error(
-        'ErrorEvent:',
-        error.message,
-        error.filename,
-        error.lineno,
-        error.colno
-      );
-    } else if (error instanceof CloseEvent) {
-      console.error('CloseEvent:', error.code, error.reason);
+  socketInstance.onerror = (event) => {
+    console.error('WebSocket error occurred:', event);
+
+    // Check if it's an instance of ErrorEvent
+    if (event instanceof ErrorEvent) {
+      console.error('ErrorEvent Details:', {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        error: event.error
+      });
+    } else if (event instanceof CloseEvent) {
+      // Handling for WebSocket closure events
+      console.error('WebSocket closed unexpectedly:', {
+        code: event.code,
+        reason: event.reason,
+        wasClean: event.wasClean
+      });
     } else {
-      console.error('WebSocket error (generic):', error);
+      // General WebSocket error
+      console.error('WebSocket error (unknown type):', event.type);
     }
   };
 
