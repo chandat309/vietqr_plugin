@@ -192,7 +192,7 @@ const listenWebSocket = ({ token, userId }) => {
     }
   };
 
-  socketInstance.onclose = () => {
+  socketInstance.onclose = (event) => {
     console.log('WebSocket closed:', event);
     socketInstance = null;
     if (reconnectAttempts < 5) {
