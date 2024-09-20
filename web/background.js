@@ -104,7 +104,12 @@ const listenWebSocket = ({ token, userId }) => {
 
     if (data.notificationType === 'N05') {
       await chrome.tabs.query(
-        { active: true, currentWindow: true, lastFocusedWindow: true },
+        {
+          active: true,
+          currentWindow: true,
+          lastFocusedWindow: true,
+          windowId: chrome.windows.WINDOW_ID_CURRENT
+        },
         async (tabs) => {
           console.log('tabs', tabs);
 
