@@ -103,9 +103,9 @@ const listenWebSocket = ({ token, userId }) => {
     console.log('WebSocket message received:', data);
 
     if (data.notificationType === 'N05') {
-     await chrome.tabs.query(
+      await chrome.tabs.query(
         { active: true, currentWindow: true, lastFocusedWindow: true },
-        (tabs) => {
+        async (tabs) => {
           console.log('tabs', tabs);
 
           if (tabs.length > 0) {
@@ -123,7 +123,7 @@ const listenWebSocket = ({ token, userId }) => {
               return; // Exit early if the URL is restricted
             }
 
-            chrome.scripting.executeScript(
+            await chrome.scripting.executeScript(
               {
                 target: { tabId: activeTab.id },
                 files: ['content.js']
@@ -136,7 +136,7 @@ const listenWebSocket = ({ token, userId }) => {
                 console.log('isPopupOpen', isPopupOpen(listBankNotify, data));
 
                 if (isPopupOpen(listBankNotify, data) === true) {
-                  chrome.tabs.sendMessage(activeTab.id, {
+                  await chrome.tabs.sendMessage(activeTab.id, {
                     action: 'showDialog',
                     transaction: data
                   });
@@ -154,7 +154,7 @@ const listenWebSocket = ({ token, userId }) => {
 
                   if (bankFound && bankFound === true) {
                     // speakTransactionAmount(data, bankFound && bankFound === true);
-                    chrome.tabs.sendMessage(activeTab.id, {
+                    await chrome.tabs.sendMessage(activeTab.id, {
                       action: 'speak',
                       transaction: data,
                       text: data.amount,
