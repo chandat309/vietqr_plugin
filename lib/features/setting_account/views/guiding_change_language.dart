@@ -28,7 +28,7 @@ class GuildingChangeLanguage extends StatelessWidget {
                   height: 30,
                 ),
                 Tab(
-                  text: 'MacOs',
+                  text: 'macOS',
                   height: 30,
                 ),
                 Tab(
