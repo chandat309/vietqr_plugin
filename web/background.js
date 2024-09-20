@@ -204,7 +204,7 @@ const listenWebSocket = ({ token, userId }) => {
       setTimeout(() => {
         reconnectAttempts++;
         listenWebSocket({ token, userId });
-      }, Math.pow(2, reconnectAttempts) * 1000); // Exponential backoff
+      }, Math.pow(2, reconnectAttempts) * 500); // Exponential backoff
     }
   };
 };
@@ -216,7 +216,12 @@ const checkStorageAndListenWebSocket = async () => {
       const { idUser, bearerToken } = result;
       // console.log('Storage retrieved', result);
 
-      if (!idUser) {
+      if (idUser) {
+        listenWebSocket({
+          token: bearerToken,
+          userId: idUser
+        });
+      } else {
         getLocalStorageInterval = setInterval(async () => {
           try {
             const getStorage = await getStorageData();
@@ -232,11 +237,6 @@ const checkStorageAndListenWebSocket = async () => {
             console.warn('Error retrieving storage data:', error);
           }
         }, 500);
-      } else {
-        listenWebSocket({
-          token: bearerToken,
-          userId: idUser
-        });
       }
     };
 
