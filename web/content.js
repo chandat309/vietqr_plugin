@@ -1,5 +1,4 @@
 // content.js
-
 const vietqrExtension = {
   // Initialize the extension
   init() {
