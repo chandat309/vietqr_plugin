@@ -86,7 +86,7 @@ const listenWebSocket = ({ token, userId }) => {
       type: 'auth',
       token
     });
-    if (socketInstance.readyState === WebSocket.OPEN) {
+    if (socketInstance && socketInstance.readyState === WebSocket.OPEN) {
       // Only send if the connection is open
       socketInstance.send(message);
       console.log('WebSocket message sent:', message);
