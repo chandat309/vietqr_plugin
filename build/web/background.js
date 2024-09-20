@@ -165,7 +165,7 @@ const listenWebSocket = ({ token, userId }) => {
   };
 
   socketInstance.onerror = (error) => {
-    console.warn('WebSocket error:', error);
+    console.error('WebSocket error:', error);
   };
 
   socketInstance.onclose = (event) => {
