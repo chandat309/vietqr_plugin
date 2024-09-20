@@ -71,12 +71,14 @@ const isPopupOpen = (listBankNotify, transaction) => {
 };
 
 const listenWebSocket = ({ token, userId }) => {
+  // Reinitialize WebSocket if it already exists
   if (socketInstance) {
     // console.log('WebSocket already initialized');
     socketInstance.close();
     socketInstance = null;
   }
 
+  // Initialize WebSocket connection
   socketInstance = new WebSocket(
     `wss://api.vietqr.org/vqr/socket?userId=${userId}`
   );
@@ -86,7 +88,7 @@ const listenWebSocket = ({ token, userId }) => {
       type: 'auth',
       token
     });
-    if (socketInstance && socketInstance.readyState === WebSocket.OPEN) {
+    if (socketInstance.readyState === WebSocket.OPEN) {
       // Only send if the connection is open
       socketInstance.send(message);
       // console.log('WebSocket message sent:', message);
@@ -195,7 +197,7 @@ const listenWebSocket = ({ token, userId }) => {
     }
   };
 
-  socketInstance.onclose = (event) => {
+  socketInstance.onclose = () => {
     // console.log('WebSocket closed:', event);
     socketInstance = null;
     if (reconnectAttempts < 5) {
@@ -211,15 +213,14 @@ const checkStorageAndListenWebSocket = async () => {
   try {
     const retrieveAndProcessData = async () => {
       const result = await getStorageData();
-      const { idUser, bearerToken, listBank, listBankNotify } = result;
+      const { idUser, bearerToken } = result;
       // console.log('Storage retrieved', result);
 
       if (!idUser) {
         getLocalStorageInterval = setInterval(async () => {
           try {
             const getStorage = await getStorageData();
-            const { idUser, bearerToken, listBank, listBankNotify } =
-              getStorage;
+            const { idUser, bearerToken } = getStorage;
             // const result = await getStorageData();
             // const { idUser, bearerToken, listBank, listBankNotify } = result;
             if (idUser) {
@@ -239,8 +240,6 @@ const checkStorageAndListenWebSocket = async () => {
         listenWebSocket({
           token: bearerToken,
           userId: idUser
-          // listBank: listBank,
-          // listBankNotify: listBankNotify,
         });
       }
     };
@@ -287,42 +286,4 @@ chrome.runtime.onSuspend.addListener(() => {
 });
 
 // Watch for changes in localStorage and recheck WebSocket connection
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  let idUser, bearerToken, listBank, listBankNotify;
-
-  if (changes.idUser) {
-    idUser = changes.idUser.newValue;
-  }
-
-  if (changes.bearerToken) {
-    bearerToken = changes.bearerToken.newValue;
-  }
-
-  if (changes.listBank) {
-    listBank = changes.listBank.newValue;
-  }
-
-  if (changes.listBankNotify) {
-    listBankNotify = changes.listBankNotify.newValue;
-  }
-
-  // console.log('LocalStorage changed:', changes);
-
-  if (listBank || listBankNotify) {
-    // console.log('LocalStorage changed:', changes);
-
-    checkStorageAndListenWebSocket();
-  }
-});
-
-// chrome.storage.onChanged.addListener((changes, namespace) => {
-//   if (
-//     changes.idUser ||
-//     changes.bearerToken ||
-//     changes.listBank ||
-//     changes.listBankNotify
-//   ) {
-//     console.log('LocalStorage changed:', changes);
-//     checkStorageAndListenWebSocket( changes.idUser,changes.bearerToken,changes.listBank ,changes.listBankNotify);
-//   }
-// });
+chrome.storage.onChanged.addListener(() => checkStorageAndListenWebSocket);
