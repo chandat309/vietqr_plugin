@@ -1,44 +1,45 @@
-// content.js
-const vietqrExtension = {
-  // Initialize the extension
-  init() {
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      switch (request.action) {
-        case 'showDialog':
-          this.showTransactionDialog(request.transaction, request.transType);
-          break;
-        case 'speak':
-          this.speakTransactionAmount(request.transaction, request.isSpeech);
-          break;
-        default:
-          console.warn('Unknown action:', request.action);
-      }
-    });
-  },
+if (typeof vietqrExtension === 'undefined') {
+  // content.js
+  const vietqrExtension = {
+    // Initialize the extension
+    init() {
+      chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        switch (request.action) {
+          case 'showDialog':
+            this.showTransactionDialog(request.transaction, request.transType);
+            break;
+          case 'speak':
+            this.speakTransactionAmount(request.transaction, request.isSpeech);
+            break;
+          default:
+            console.warn('Unknown action:', request.action);
+        }
+      });
+    },
 
-  // Function to show the transaction dialog
-  showTransactionDialog(transaction, type) {
-    this.loadStyles(chrome.runtime.getURL('dialog.css'));
+    // Function to show the transaction dialog
+    showTransactionDialog(transaction, type) {
+      this.loadStyles(chrome.runtime.getURL('dialog.css'));
 
-    const existingDialog = document.querySelector('.vietqr-dialog');
-    if (existingDialog) existingDialog.remove();
+      const existingDialog = document.querySelector('.vietqr-dialog');
+      if (existingDialog) existingDialog.remove();
 
-    const dialog = document.createElement('div');
-    dialog.className = 'vietqr-dialog';
-    dialog.innerHTML = this.createDialogHTML(transaction, type);
+      const dialog = document.createElement('div');
+      dialog.className = 'vietqr-dialog';
+      dialog.innerHTML = this.createDialogHTML(transaction, type);
 
-    document.body.appendChild(dialog);
-    this.addDialogEventListeners(dialog);
-  },
+      document.body.appendChild(dialog);
+      this.addDialogEventListeners(dialog);
+    },
 
-  isTransUnclassified(transaction) {
-    return !transaction.terminalCode && !transaction.orderId;
-  },
+    isTransUnclassified(transaction) {
+      return !transaction.terminalCode && !transaction.orderId;
+    },
 
-  createDialogHTML(transaction, transType) {
-    const isUnclassified = this.isTransUnclassified(transaction);
+    createDialogHTML(transaction, transType) {
+      const isUnclassified = this.isTransUnclassified(transaction);
 
-    return `
+      return `
       <div class="vietqr-popup">
         <div class="vietqr-popup-content">
           <span class="vietqr-close">&times;</span>
@@ -65,8 +66,8 @@ const vietqrExtension = {
               : 'outgoing'
           }">
           ${transaction.transType === 'C' ? '&#43;' : '&minus;'} ${
-      transaction.amount
-    } VND</div>
+        transaction.amount
+      } VND</div>
           <div class="vietqr-transaction-details">
             <div class="vietqr-detail-row">
               <span class="vietqr-label">Tới tài khoản</span>
@@ -112,81 +113,82 @@ const vietqrExtension = {
         </div>
       </div>
       `;
-  },
+    },
 
-  addDialogEventListeners(dialog) {
-    const closeBtn = dialog.querySelector('.vietqr-close');
-    const closeBtnBottom = dialog.querySelector('.vietqr-close-btn-bottom');
+    addDialogEventListeners(dialog) {
+      const closeBtn = dialog.querySelector('.vietqr-close');
+      const closeBtnBottom = dialog.querySelector('.vietqr-close-btn-bottom');
 
-    const closeDialog = () => {
-      dialog.remove();
-      window.speechSynthesis.cancel();
-    };
+      const closeDialog = () => {
+        dialog.remove();
+        window.speechSynthesis.cancel();
+      };
 
-    closeBtn.addEventListener('click', closeDialog);
-    closeBtnBottom.addEventListener('click', closeDialog);
+      closeBtn.addEventListener('click', closeDialog);
+      closeBtnBottom.addEventListener('click', closeDialog);
 
-    dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) closeDialog();
-    });
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) closeDialog();
+      });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDialog();
-    });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDialog();
+      });
 
-    setTimeout(closeDialog, 10000);
-  },
+      setTimeout(closeDialog, 10000);
+    },
 
-  speakTransactionAmount(transaction, isSpeech) {
-    if (!isSpeech) return;
+    speakTransactionAmount(transaction, isSpeech) {
+      if (!isSpeech) return;
 
-    if ('speechSynthesis' in window) {
-      const amountInText = this.formatAmount(
-        transaction.amount.split(',').join('')
-      );
-      const speechText = `${
-        transaction.transType === 'C'
-          ? 'Bạn được nhận số tiền là'
-          : 'Bạn vừa chuyển số tiền là'
-      } ${amountInText} đồng, xin cảm ơn!`;
-      const utterance = new SpeechSynthesisUtterance(speechText);
-      utterance.lang = 'vi-VN';
-      utterance.rate = 0.98;
-      utterance.volume = 0.8;
+      if ('speechSynthesis' in window) {
+        const amountInText = this.formatAmount(
+          transaction.amount.split(',').join('')
+        );
+        const speechText = `${
+          transaction.transType === 'C'
+            ? 'Bạn được nhận số tiền là'
+            : 'Bạn vừa chuyển số tiền là'
+        } ${amountInText} đồng, xin cảm ơn!`;
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        utterance.lang = 'vi-VN';
+        utterance.rate = 0.98;
+        utterance.volume = 0.8;
 
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    } else {
-      console.warn('Web Speech API is not supported in this browser.');
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      } else {
+        console.warn('Web Speech API is not supported in this browser.');
+      }
+    },
+
+    formatAmount(amount) {
+      const number = parseInt(amount);
+      return number.toLocaleString('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+      });
+    },
+
+    loadStyles(href) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      document.head.appendChild(link);
+    },
+
+    formatTransactionTimePaid(date) {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      return new Date(date).toLocaleDateString('vi-VN', options);
     }
-  },
+  };
 
-  formatAmount(amount) {
-    const number = parseInt(amount);
-    return number.toLocaleString('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    });
-  },
-
-  loadStyles(href) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-  },
-
-  formatTransactionTimePaid(date) {
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    return new Date(date).toLocaleDateString('vi-VN', options);
-  }
-};
-
-// Initialize the extension
-vietqrExtension.init();
+  // Initialize the extension
+  vietqrExtension.init();
+}

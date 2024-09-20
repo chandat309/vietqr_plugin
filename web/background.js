@@ -165,7 +165,20 @@ const listenWebSocket = ({ token, userId }) => {
   };
 
   socketInstance.onerror = (error) => {
-    console.error('WebSocket error:', error);
+    console.error('WebSocket error:', error); // Original logging
+    if (error instanceof ErrorEvent) {
+      console.error(
+        'ErrorEvent:',
+        error.message,
+        error.filename,
+        error.lineno,
+        error.colno
+      );
+    } else if (error instanceof CloseEvent) {
+      console.error('CloseEvent:', error.code, error.reason);
+    } else {
+      console.error('WebSocket error (generic):', error);
+    }
   };
 
   socketInstance.onclose = (event) => {
