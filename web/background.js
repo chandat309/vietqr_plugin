@@ -221,21 +221,17 @@ const checkStorageAndListenWebSocket = async () => {
           try {
             const getStorage = await getStorageData();
             const { idUser, bearerToken } = getStorage;
-            // const result = await getStorageData();
-            // const { idUser, bearerToken, listBank, listBankNotify } = result;
             if (idUser) {
               listenWebSocket({
                 token: bearerToken,
                 userId: idUser
-                // listId: listBank,
-                // listBankNotify: listBankNotify,
               });
               clearInterval(getLocalStorageInterval); // Clear the interval if idUser is found
             }
           } catch (error) {
             console.warn('Error retrieving storage data:', error);
           }
-        }, 3000);
+        }, 500);
       } else {
         listenWebSocket({
           token: bearerToken,
