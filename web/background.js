@@ -98,72 +98,75 @@ const listenWebSocket = ({ token, userId }) => {
     }
   };
 
-  socketInstance.onmessage = (event) => {
+  socketInstance.onmessage = async (event) => {
     const data = JSON.parse(event.data);
     console.log('WebSocket message received:', data);
 
     if (data.notificationType === 'N05') {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        console.log('tabs', tabs);
+     await chrome.tabs.query(
+        { active: true, currentWindow: true, lastFocusedWindow: true },
+        (tabs) => {
+          console.log('tabs', tabs);
 
-        if (tabs.length > 0) {
-          const activeTab = tabs[0];
+          if (tabs.length > 0) {
+            const activeTab = tabs[0];
 
-          console.log('activeTab', activeTab);
+            console.log('activeTab', activeTab);
 
-          // Check if the URL is a restricted URL
-          const restrictedUrls = ['chrome://', 'edge://'];
-          if (restrictedUrls.some((url) => activeTab.url.startsWith(url))) {
-            console.warn(
-              'Cannot inject script into restricted URL:',
-              activeTab
-            );
-            return; // Exit early if the URL is restricted
-          }
+            // Check if the URL is a restricted URL
+            const restrictedUrls = ['chrome://', 'edge://'];
+            if (restrictedUrls.some((url) => activeTab.url.startsWith(url))) {
+              console.warn(
+                'Cannot inject script into restricted URL:',
+                activeTab
+              );
+              return; // Exit early if the URL is restricted
+            }
 
-          chrome.scripting.executeScript(
-            {
-              target: { tabId: activeTab.id },
-              files: ['content.js']
-            },
-            async () => {
-              const getStorage = await getStorageData();
-              const { listBank, listBankNotify } = getStorage;
+            chrome.scripting.executeScript(
+              {
+                target: { tabId: activeTab.id },
+                files: ['content.js']
+              },
+              async () => {
+                const getStorage = await getStorageData();
+                const { listBank, listBankNotify } = getStorage;
 
-              console.log('listBankNotify', listBankNotify);
-              console.log('isPopupOpen', isPopupOpen(listBankNotify, data));
+                console.log('listBankNotify', listBankNotify);
+                console.log('isPopupOpen', isPopupOpen(listBankNotify, data));
 
-              if (isPopupOpen(listBankNotify, data) === true) {
-                chrome.tabs.sendMessage(activeTab.id, {
-                  action: 'showDialog',
-                  transaction: data
-                });
-
-                const bankList = listBank
-                  .replace(/[\[\]]/g, '')
-                  .split(',')
-                  .map((item) => item.replace(/['"]/g, '').trim());
-
-                console.log('bankList', bankList);
-
-                const bankFound = bankList.includes(data.bankId);
-
-                console.log('bankFound', bankFound === true);
-
-                if (bankFound && bankFound === true) {
-                  // speakTransactionAmount(data, bankFound && bankFound === true);
+                if (isPopupOpen(listBankNotify, data) === true) {
                   chrome.tabs.sendMessage(activeTab.id, {
-                    action: 'speak',
-                    transaction: data,
-                    text: data.amount,
-                    isSpeech: bankFound && bankFound === true
+                    action: 'showDialog',
+                    transaction: data
                   });
+
+                  const bankList = listBank
+                    .replace(/[\[\]]/g, '')
+                    .split(',')
+                    .map((item) => item.replace(/['"]/g, '').trim());
+
+                  console.log('bankList', bankList);
+
+                  const bankFound = bankList.includes(data.bankId);
+
+                  console.log('bankFound', bankFound === true);
+
+                  if (bankFound && bankFound === true) {
+                    // speakTransactionAmount(data, bankFound && bankFound === true);
+                    chrome.tabs.sendMessage(activeTab.id, {
+                      action: 'speak',
+                      transaction: data,
+                      text: data.amount,
+                      isSpeech: bankFound && bankFound === true
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     }
   };
 
